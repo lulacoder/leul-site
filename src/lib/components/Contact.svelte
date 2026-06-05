@@ -36,8 +36,7 @@
 					<GithubIcon size={16} />
 					GitHub
 				</a>
-				<!-- TODO: drop your CV at static/resume.pdf so this link resolves. -->
-				<a href="/resume.pdf" download class="btn btn-tertiary">
+				<a href="/resume.pdf" download="Leul_Tesfaye_Resume.pdf" class="btn btn-tertiary">
 					<Download size={16} />
 					Résumé
 				</a>

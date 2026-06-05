@@ -47,33 +47,66 @@
 }
 
 /* ───────────────────────────────────────────────────────────────
- *  Light mode overrides — applied when <html data-theme="light">
+ *  Light mode — applied when <html data-theme="light">
  * ─────────────────────────────────────────────────────────────── */
 [data-theme='light'] {
 	color-scheme: light;
 
-	/* Surfaces */
-	--color-canvas: #f8f7f5;
-	--color-panel: #f0eeec;
-	--color-surface: #e8e6e3;
+	/* Surfaces — warm off-white, not blinding white */
+	--color-canvas: #f5f4f0;
+	--color-panel: #eeece7;
+	--color-surface: #e5e3dd;
 
-	/* Text */
-	--color-ink: #18181b;
-	--color-muted: #52525b;
-	--color-faint: #a1a1aa;
+	/* Text — deep charcoal for high contrast */
+	--color-ink: #1c1b18;
+	--color-muted: #4a4845;
+	--color-faint: #8c8a84;
 
 	/* Hairlines */
-	--color-line: #d4d4d8;
+	--color-line: #d8d5cd;
 
-	/* Accent — slightly darker for legibility on light bg */
-	--color-accent: #d4144f;
-	--color-accent-2: #e04030;
-	--color-accent-strong: #b01040;
+	/* Accent — slightly muted for light bg */
+	--color-accent: #c8114a;
+	--color-accent-2: #d93820;
+	--color-accent-strong: #a50d3d;
 }
 
-/* In light mode, pill-accent text should be the accent color (darker) */
+/* pill-accent in light mode */
 [data-theme='light'] .pill-accent {
-	color: var(--color-accent);
+	color: var(--color-accent-strong);
+	background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
+	border-color: color-mix(in srgb, var(--color-accent) 28%, transparent);
+}
+
+/* Hero code card: always stay dark — it's intentionally a dark terminal */
+[data-theme='light'] .code-card {
+	background-color: #0f0f13 !important;
+	border-color: rgba(255,255,255,0.08) !important;
+	/* Force text white so keys are visible against the dark bg */
+	color: #e8e6e1 !important;
+}
+[data-theme='light'] .code-card-titlebar {
+	border-color: rgba(255,255,255,0.07) !important;
+	color: #9d9b97 !important;
+}
+
+/* Glass in light mode: soft white tint instead of near-invisible ink mix */
+[data-theme='light'] .glass {
+	background-color: rgba(255, 255, 255, 0.55);
+	border: 1px solid rgba(0, 0, 0, 0.07);
+	box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+/* Pill in light mode: clean subtle bg */
+[data-theme='light'] .pill {
+	background-color: rgba(0, 0, 0, 0.05);
+	border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* btn-ghost in light mode */
+[data-theme='light'] .btn-ghost {
+	border-color: rgba(0, 0, 0, 0.15);
+	background-color: rgba(255, 255, 255, 0.6);
 }
 
 html {
@@ -242,31 +275,6 @@ h3 {
 	.link-underline:hover {
 		background-size: 100% 1.5px;
 	}
-
-	/* --- Theme toggle button --- */
-	.theme-toggle-btn {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		border-radius: 9999px;
-		padding: 0.25rem;
-		background: transparent;
-		border: none;
-		cursor: pointer;
-		transition:
-			color 0.2s ease,
-			transform 0.3s ease,
-			box-shadow 0.2s ease;
-	}
-	.theme-toggle-btn:hover {
-		box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-accent) 12%, transparent);
-	}
-	.theme-toggle-btn svg {
-		transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-	}
-	.theme-toggle-btn:hover svg {
-		transform: rotate(20deg) scale(1.1);
-	}
 }
 
 /*
@@ -323,7 +331,7 @@ h3 {
 	background-size: 26px 26px;
 }
 
-/* Glowing orb — blurred radial blob. Position + hue set inline per use. */
+/* Glowing orb — blurred radial blob. */
 .orb {
 	position: absolute;
 	border-radius: 9999px;
@@ -331,6 +339,16 @@ h3 {
 	pointer-events: none;
 	will-change: transform;
 }
+
+/* Dark mode orbs — vivid neon */
+.orb-1 { background: radial-gradient(circle at center, #ff2d6e, transparent 60%); opacity: 0.30; }
+.orb-2 { background: radial-gradient(circle at center, #ff6a5e, transparent 60%); opacity: 0.20; }
+.orb-3 { background: radial-gradient(circle at center, #e11d5a, transparent 60%); opacity: 0.15; }
+
+/* Light mode orbs — soft blush/peach, lower opacity */
+[data-theme='light'] .orb-1 { background: radial-gradient(circle at center, #e8607a, transparent 60%); opacity: 0.12; }
+[data-theme='light'] .orb-2 { background: radial-gradient(circle at center, #e07060, transparent 60%); opacity: 0.10; }
+[data-theme='light'] .orb-3 { background: radial-gradient(circle at center, #c84060, transparent 60%); opacity: 0.08; }
 
 /* Slow drift for orbs (adds life without distraction). */
 @keyframes drift {

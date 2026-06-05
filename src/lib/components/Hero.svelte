@@ -44,8 +44,7 @@
 					<ArrowRight size={16} class="btn-arrow" />
 				</a>
 				<a href="#contact" class="btn btn-ghost">Get in Touch</a>
-				<!-- TODO: drop your CV at static/resume.pdf so this link resolves. -->
-				<a href="/resume.pdf" download class="btn btn-tertiary">
+				<a href="/resume.pdf" download="Leul_Tesfaye_Resume.pdf" class="btn btn-tertiary">
 					<Download size={16} />
 					Résumé
 				</a>
@@ -63,12 +62,12 @@
 
 				<div
 					use:spotlight
-					class="glass glow-hover group relative isolate overflow-hidden rounded-2xl shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)]"
+					class="code-card glass glow-hover group relative isolate overflow-hidden rounded-2xl shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)]"
 				>
 					<div class="spotlight-layer"></div>
 					<!-- Title bar with macOS-style traffic lights -->
 					<div
-						class="flex items-center gap-2 border-b px-4 py-3"
+						class="code-card-titlebar flex items-center gap-2 border-b px-4 py-3"
 						style="border-color: color-mix(in srgb, #fff 8%, transparent);"
 					>
 						<span class="h-3 w-3 rounded-full bg-[#ff5f57]"></span>
