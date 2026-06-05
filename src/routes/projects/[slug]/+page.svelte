@@ -72,7 +72,6 @@
 	</header>
 
 	<!-- Hero visual placeholder -->
-	<!-- TODO: replace with a real screenshot / cover image for {project.name}. -->
 	<div class="relative mt-12 aspect-video w-full overflow-hidden rounded-2xl bg-surface">
 		<div
 			class="absolute inset-0 opacity-90"
@@ -86,24 +85,23 @@
 
 	<hr class="my-12 border-line" />
 
-	<!-- ── Case-study body. Fill in the TODO blocks below. ──────────── -->
+	<!-- ── Case-study body ──────────────────────────────────────────── -->
 	<div class="space-y-12">
 		<section>
 			<h2 class="font-display text-2xl font-semibold tracking-tight text-ink">Overview</h2>
 			<div class="mt-4 space-y-4 leading-relaxed text-muted">
-				<!-- TODO: Write a 2–3 paragraph overview of the project — what it is,
-				     who it's for, and the problem it solves. -->
-				<p>{project.description}</p>
+				{#each project.overview as para (para)}
+					<p>{para}</p>
+				{/each}
 			</div>
 		</section>
 
 		<section>
 			<h2 class="font-display text-2xl font-semibold tracking-tight text-ink">My Role</h2>
-			<!-- TODO: Replace with a bullet list of your specific contributions. -->
 			<ul class="mt-4 list-disc space-y-2 pl-5 leading-relaxed text-muted marker:text-accent">
-				<li>TODO: contribution #1</li>
-				<li>TODO: contribution #2</li>
-				<li>TODO: contribution #3</li>
+				{#each project.contributions as item (item)}
+					<li>{item}</li>
+				{/each}
 			</ul>
 		</section>
 
@@ -121,8 +119,9 @@
 				Challenges &amp; Learnings
 			</h2>
 			<div class="mt-4 space-y-4 leading-relaxed text-muted">
-				<!-- TODO: What was hard? What did you learn? What would you do differently? -->
-				<p>TODO: write about the challenges you faced and what you took away.</p>
+				{#each project.challenges as para (para)}
+					<p>{para}</p>
+				{/each}
 			</div>
 		</section>
 	</div>
