@@ -32,6 +32,10 @@ export interface Project {
 	live: string | null;
 	/** Public GitHub repo URL, or null if private / not applicable. */
 	github: string | null;
+	/** Path to cover image, served from static directory. */
+	image: string | null;
+	/** Optional path to mobile companion app screenshot, served from static. */
+	mobileImage?: string | null;
 }
 
 export const projects: Project[] = [
@@ -65,7 +69,9 @@ export const projects: Project[] = [
 		],
 		status: 'Live',
 		live: 'https://hotel-management-kohl-pi.vercel.app/',
-		github: 'https://github.com/lulacoder/Hotel_management'
+		github: 'https://github.com/lulacoder/Hotel_management',
+		image: '/project-hotel.webp',
+		mobileImage: '/project-hotel-mobile.webp'
 	},
 	{
 		slug: 'kenna-gifts',
@@ -96,7 +102,8 @@ export const projects: Project[] = [
 		],
 		status: 'Live',
 		live: 'https://w08o4w0k44okk488k0s8o8g8.sanduq.jirtuu.dev/',
-		github: null
+		github: null,
+		image: '/project-kenna.webp'
 	},
 	{
 		slug: 'trending-movies',
@@ -129,7 +136,8 @@ export const projects: Project[] = [
 		],
 		status: 'In Development',
 		live: 'https://trending-movies-iota.vercel.app/',
-		github: 'https://github.com/lulacoder/Trending-Movies'
+		github: 'https://github.com/lulacoder/Trending-Movies',
+		image: '/project-movies.webp'
 	},
 	{
 		slug: 'resume-analyzer',
@@ -162,7 +170,8 @@ export const projects: Project[] = [
 		],
 		status: 'Live',
 		live: 'https://resume-anaylzer-gamma.vercel.app/',
-		github: 'https://github.com/lulacoder/Resume-Anaylzer'
+		github: 'https://github.com/lulacoder/Resume-Anaylzer',
+		image: '/project-resume.webp'
 	}
 ];
 

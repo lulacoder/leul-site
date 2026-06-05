@@ -71,16 +71,24 @@
 		</div>
 	</header>
 
-	<!-- Hero visual placeholder -->
-	<div class="relative mt-12 aspect-video w-full overflow-hidden rounded-2xl bg-surface">
-		<div
-			class="absolute inset-0 opacity-90"
-			style="background: linear-gradient(135deg, #ff2d6e, #ff6a5e);"
-		></div>
-		<div
-			class="absolute inset-0"
-			style="background: radial-gradient(circle at 30% 20%, transparent, rgba(0,0,0,0.6));"
-		></div>
+	<!-- Hero visual screenshot or placeholder -->
+	<div class="relative mt-12 aspect-video w-full overflow-hidden rounded-2xl bg-surface border border-line">
+		{#if project.image}
+			<img
+				src={project.image}
+				alt="{project.name} walkthrough"
+				class="w-full h-full object-cover"
+			/>
+		{:else}
+			<div
+				class="absolute inset-0 opacity-90"
+				style="background: linear-gradient(135deg, #ff2d6e, #ff6a5e);"
+			></div>
+			<div
+				class="absolute inset-0"
+				style="background: radial-gradient(circle at 30% 20%, transparent, rgba(0,0,0,0.6));"
+			></div>
+		{/if}
 	</div>
 
 	<hr class="my-12 border-line" />
@@ -95,6 +103,25 @@
 				{/each}
 			</div>
 		</section>
+
+		{#if project.mobileImage}
+			<section class="grid grid-cols-1 gap-8 md:grid-cols-[1fr_200px] md:items-center">
+				<div>
+					<h2 class="font-display text-2xl font-semibold tracking-tight text-ink">Mobile Companion App</h2>
+					<div class="mt-4 space-y-4 leading-relaxed text-muted">
+						<p>
+							To support on-the-go hotel staff (such as cleaning crew and maintenance personnel), I built a cross-platform mobile companion app using <strong>React Native</strong> and <strong>Expo</strong>.
+						</p>
+						<p>
+							The mobile app links directly to the same reactive <strong>Convex</strong> backend, enabling staff to scan room QR codes, check off room cleaning checklists, and receive push notifications for urgent guest requests in real time.
+						</p>
+					</div>
+				</div>
+				<div class="mx-auto w-[200px] overflow-hidden rounded-2xl border border-line bg-surface shadow-lg">
+					<img src={project.mobileImage} alt="Mobile App Screenshot" class="w-full object-cover" />
+				</div>
+			</section>
+		{/if}
 
 		<section>
 			<h2 class="font-display text-2xl font-semibold tracking-tight text-ink">My Role</h2>

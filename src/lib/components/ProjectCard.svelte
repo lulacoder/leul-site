@@ -78,29 +78,36 @@
 		</div>
 	</div>
 
-	<!-- ── Visual column (gradient placeholder) ─────────────────── -->
-	<!-- TODO: replace this gradient block with a real screenshot of {project.name}. -->
-	<div class="relative aspect-16/10 overflow-hidden rounded-xl bg-surface">
-		<!-- neon gradient wash (zooms slightly on card hover) -->
-		<div
-			class="absolute inset-0 bg-linear-to-br {gradient} opacity-90 transition-transform duration-500 ease-out group-hover:scale-110"
-		></div>
-		<!-- darken for depth -->
-		<div
-			class="absolute inset-0"
-			style="background: radial-gradient(circle at 30% 20%, transparent, rgba(0,0,0,0.55));"
-		></div>
-		<!-- faint grid texture -->
-		<div
-			class="absolute inset-0 opacity-20"
-			style="background-image: linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px); background-size: 28px 28px;"
-		></div>
-		<!-- oversized project number watermark -->
-		<span
-			class="absolute bottom-3 right-5 font-display text-6xl font-bold text-white/25 select-none"
-		>
-			{project.number}
-		</span>
-		<span class="absolute left-5 top-4 font-mono text-xs text-white/90">{project.name}</span>
+	<!-- ── Visual column (screenshot or gradient placeholder) ───── -->
+	<div class="relative aspect-16/10 overflow-hidden rounded-xl bg-surface border border-line">
+		{#if project.image}
+			<img
+				src={project.image}
+				alt="{project.name} preview"
+				class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+			/>
+		{:else}
+			<!-- neon gradient wash (zooms slightly on card hover) -->
+			<div
+				class="absolute inset-0 bg-linear-to-br {gradient} opacity-90 transition-transform duration-500 ease-out group-hover:scale-110"
+			></div>
+			<!-- darken for depth -->
+			<div
+				class="absolute inset-0"
+				style="background: radial-gradient(circle at 30% 20%, transparent, rgba(0,0,0,0.55));"
+			></div>
+			<!-- faint grid texture -->
+			<div
+				class="absolute inset-0 opacity-20"
+				style="background-image: linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px); background-size: 28px 28px;"
+			></div>
+			<!-- oversized project number watermark -->
+			<span
+				class="absolute bottom-3 right-5 font-display text-6xl font-bold text-white/25 select-none"
+			>
+				{project.number}
+			</span>
+			<span class="absolute left-5 top-4 font-mono text-xs text-white/90">{project.name}</span>
+		{/if}
 	</div>
 </article>

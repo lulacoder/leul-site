@@ -76,18 +76,19 @@
 						<span class="ml-2 font-mono text-xs text-faint">who.ts</span>
 					</div>
 
-					<!-- Code snippet (hand syntax-coloured for the neon palette) -->
-					<pre class="overflow-x-auto px-5 py-5 font-mono text-[13px] leading-[1.75] text-ink"><code><span class="text-faint">// a quick introduction</span>
-<span class="text-accent">const</span> <span class="text-[#ff9ec0]">leul</span> = &#123;
-  role: <span class="text-[#ffb27a]">'Software Engineer'</span>,
-  school: <span class="text-[#ffb27a]">'AAU · Addis Ababa'</span>,
-  shipping: <span class="text-accent">true</span>,
-  stack: [<span class="text-[#ffb27a]">'SvelteKit'</span>, <span class="text-[#ffb27a]">'Convex'</span>, <span class="text-[#ffb27a]">'Effect'</span>],
-  runtime: <span class="text-[#ffb27a]">'Bun'</span>,
-  learning: <span class="text-[#ffb27a]">'Machine Learning'</span>,
+					<!-- Code snippet — keys pinned to muted grey so they're always visible on dark card -->
+				<pre class="overflow-x-auto px-5 py-5 font-mono text-[13px] leading-[1.75]"><code><span style="color:#6b6966">// a quick introduction</span>
+<span style="color:#9d9b97">const</span> <span style="color:#e8e6e1">leul</span> = &#123;
+  <span style="color:#9d9b97">role:</span>     <span style="color:#ffb27a">'Software Engineer'</span>,
+  <span style="color:#9d9b97">school:</span>   <span style="color:#ffb27a">'AAU · Addis Ababa'</span>,
+  <span style="color:#9d9b97">shipping:</span> <span style="color:#9d9b97">true</span>,
+  <span style="color:#9d9b97">stack:</span>    [<span style="color:#ffb27a">'SvelteKit'</span>,  <span style="color:#ffb27a">'Node.js'</span>,
+             <span style="color:#ffb27a">'Docker'</span>,      <span style="color:#ffb27a">'TanStack Start'</span>],
+  <span style="color:#9d9b97">runtime:</span>  <span style="color:#ffb27a">'Bun'</span>,
+  <span style="color:#9d9b97">learning:</span> <span style="color:#ffb27a">'Machine Learning'</span>,
 &#125;;
 
-<span class="text-[#ff9ec0]">leul</span>.<span class="text-[#7ad7ff]">build</span>().<span class="text-[#7ad7ff]">ship</span>(); <span class="text-faint">// repeat ∞</span></code></pre>
+<span style="color:#e8e6e1">leul</span>.<span style="color:#9d9b97">build</span>().<span style="color:#9d9b97">ship</span>(); <span style="color:#6b6966">// repeat ∞</span></code></pre>
 				</div>
 			</div>
 		</div>

@@ -10,12 +10,10 @@
 		{ category: 'Backend', items: ['Convex', 'Node.js', 'NestJS', 'Express'] },
 		{ category: 'Type-Safety', items: ['TypeScript', 'Effect (Effect-TS)'] },
 		{ category: 'Database', items: ['Convex', 'PostgreSQL', 'Supabase', 'MongoDB', 'Firebase'] },
-		{ category: 'Tooling', items: ['Bun', 'Git', 'GitHub', 'Vercel', 'VS Code'] },
+		{ category: 'Tooling', items: ['Bun', 'Git', 'GitHub', 'Vercel', 'VS Code', 'React Native', 'Expo'] },
 		{ category: 'Learning', items: ['Machine Learning (Python, scikit-learn)'] }
 	];
 
-	/** Stack I'm especially into right now — rendered with the accent pill. */
-	const highlight = new Set(['Convex', 'Effect (Effect-TS)', 'Bun']);
 </script>
 
 <section id="skills" class="relative bg-panel">
@@ -34,7 +32,7 @@
 						<h3 class="font-mono text-sm font-medium text-faint sm:pt-1.5">{group.category}</h3>
 						<div class="flex flex-wrap gap-2.5">
 							{#each group.items as item (item)}
-								<span class="pill" class:pill-accent={highlight.has(item)}>{item}</span>
+								<span class="pill">{item}</span>
 							{/each}
 						</div>
 					</div>
