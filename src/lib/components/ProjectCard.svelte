@@ -81,8 +81,10 @@
 	<!-- ── Visual column (gradient placeholder) ─────────────────── -->
 	<!-- TODO: replace this gradient block with a real screenshot of {project.name}. -->
 	<div class="relative aspect-16/10 overflow-hidden rounded-xl bg-surface">
-		<!-- neon gradient wash -->
-		<div class="absolute inset-0 bg-linear-to-br {gradient} opacity-90"></div>
+		<!-- neon gradient wash (zooms slightly on card hover) -->
+		<div
+			class="absolute inset-0 bg-linear-to-br {gradient} opacity-90 transition-transform duration-500 ease-out group-hover:scale-110"
+		></div>
 		<!-- darken for depth -->
 		<div
 			class="absolute inset-0"

@@ -5,11 +5,40 @@
 	import '@fontsource-variable/geist-mono';
 	import '@fontsource-variable/bricolage-grotesque';
 
+	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 
 	let { children }: { children: Snippet } = $props();
+
+	// 'dark' | 'light'
+	let theme = $state<'dark' | 'light'>('dark');
+
+	onMount(() => {
+		// Restore saved preference; fall back to system preference, then dark.
+		const saved = localStorage.getItem('theme') as 'dark' | 'light' | null;
+		if (saved) {
+			theme = saved;
+		} else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+			theme = 'light';
+		}
+	});
+
+	// Apply data-theme to <html> whenever theme changes.
+	$effect(() => {
+		const html = document.documentElement;
+		if (theme === 'light') {
+			html.setAttribute('data-theme', 'light');
+		} else {
+			html.removeAttribute('data-theme');
+		}
+	});
+
+	function toggleTheme() {
+		theme = theme === 'dark' ? 'light' : 'dark';
+		localStorage.setItem('theme', theme);
+	}
 </script>
 
 <!--
@@ -39,7 +68,7 @@
 	></div>
 </div>
 
-<Navbar />
+<Navbar {theme} {toggleTheme} />
 
 <!-- Offset content to the right of the fixed left sidebar on desktop. -->
 <div class="lg:pl-60">

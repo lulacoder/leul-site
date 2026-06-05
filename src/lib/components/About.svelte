@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ScrollFade from './ScrollFade.svelte';
+	import { spotlight } from '$lib/actions/spotlight';
 
 	/** Headline stats shown in the right-hand glass card. */
 	const stats = [
@@ -42,10 +43,11 @@
 
 			<!-- Right: stats card -->
 			<ScrollFade delay={120}>
-				<div class="glass rounded-2xl p-8">
+				<div use:spotlight class="glass glow-hover group relative isolate rounded-2xl p-8">
+					<div class="spotlight-layer"></div>
 					<dl class="grid grid-cols-2 gap-x-8 gap-y-10">
 						{#each stats as stat (stat.label)}
-							<div>
+							<div class="transition-transform duration-300 hover:-translate-y-1">
 								<dt
 									class="font-display text-4xl font-semibold tracking-tight text-gradient sm:text-5xl"
 								>
