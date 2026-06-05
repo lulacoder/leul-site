@@ -42,14 +42,14 @@ export const projects: Project[] = [
 	{
 		slug: 'hotel-management',
 		number: '01',
-		name: 'Hotel Management System',
+		name: 'TripWays Hotels',
 		tagline: 'Full-stack hotel ops platform — real-time bookings, role-based auth, and Chapa payments. Built solo.',
 		role: 'Full-Stack (Solo)',
 		tags: ['Full-Stack', 'Solo Build', 'React', 'Convex', 'TypeScript', 'Chapa Payments'],
 		description:
 			'A production hotel management system with multi-role authentication, real-time booking transitions, and integrated Chapa payment processing — designed and shipped entirely solo.',
 		overview: [
-			'Hotel Management is a full-stack web application that digitalises end-to-end hotel operations. The system handles everything from room inventory and guest reservations to staff announcements and revenue analytics — all in a single, cohesive interface.',
+			'TripWays Hotels is a full-stack web application that digitalises end-to-end hotel operations. The system handles everything from room inventory and guest reservations to staff announcements and revenue analytics — all in a single, cohesive interface.',
 			'The backend is powered by Convex, a reactive database platform that keeps every connected client in sync without manual polling. When a receptionist confirms a booking, the room availability grid updates instantly for every other logged-in user — no refresh, no polling.',
 			'The project is live at hotel-management-kohl-pi.vercel.app and continues to receive iterative improvements, with the Chapa payment pipeline being the most recent major addition.'
 		],
