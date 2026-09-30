@@ -8,7 +8,7 @@
 
 <footer class="border-t border-line">
 	<div
-		class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-10 sm:flex-row"
+		class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-7 sm:flex-row"
 	>
 		<p class="font-mono text-sm text-faint">© 2026 Leul Tesfaye</p>
 

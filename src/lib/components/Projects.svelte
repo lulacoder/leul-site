@@ -1,141 +1,62 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { ArrowUpRight } from '@lucide/svelte';
 	import ScrollFade from './ScrollFade.svelte';
 	import ProjectCard from './ProjectCard.svelte';
 	import { projects } from '$lib/projects';
 
-	// The scroller track. On mobile it's a continuously drifting horizontal
-	// carousel; on desktop (md+) it becomes a vertical stack with no auto-motion.
-	let track: HTMLDivElement | undefined = $state();
-
-	onMount(() => {
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-		const mql = window.matchMedia('(max-width: 767px)');
-
-		const SPEED = 45; // px per second — a calm, continuous drift
-		let raf = 0;
-		let last = 0;
-		let paused = false;
-		let resumeTimer: ReturnType<typeof setTimeout> | null = null;
-
-		// Distance of one full set of cards (incl. gaps) — the point at which
-		// the duplicated set lines up exactly, so we can wrap with no visible jump.
-		function loopWidth(): number {
-			if (!track) return 0;
-			const items = track.children;
-			const dup = items[projects.length] as HTMLElement | undefined;
-			const first = items[0] as HTMLElement | undefined;
-			if (!dup || !first) return track.scrollWidth / 2;
-			return dup.offsetLeft - first.offsetLeft;
-		}
-
-		function frame(now: number) {
-			if (!track) return;
-			if (!last) last = now;
-			const dt = (now - last) / 1000;
-			last = now;
-
-			if (!paused && mql.matches) {
-				const lw = loopWidth();
-				track.scrollLeft += SPEED * dt;
-				if (lw > 0 && track.scrollLeft >= lw) track.scrollLeft -= lw;
-			}
-			raf = requestAnimationFrame(frame);
-		}
-
-		function start() {
-			if (raf || !mql.matches) return;
-			last = 0;
-			raf = requestAnimationFrame(frame);
-		}
-		function stop() {
-			if (raf) cancelAnimationFrame(raf);
-			raf = 0;
-		}
-
-		// ── User priority ──────────────────────────────────────────────
-		// A genuine interaction pauses the drift immediately; it only resumes
-		// after the user has been idle for a moment. We listen to intent events
-		// (not 'scroll') so our own scrollLeft writes never pause us.
-		function resume() {
-			if (!track) return;
-			const lw = loopWidth();
-			if (lw > 0) track.scrollLeft = track.scrollLeft % lw; // normalise back into range
-			last = 0;
-			paused = false;
-		}
-		function onUserInteract() {
-			paused = true;
-			if (resumeTimer) clearTimeout(resumeTimer);
-			resumeTimer = setTimeout(resume, 2500);
-		}
-
-		const userEvents = ['pointerdown', 'touchstart', 'touchmove', 'wheel', 'keydown'];
-		userEvents.forEach((e) => track?.addEventListener(e, onUserInteract, { passive: true }));
-
-		// Only animate on mobile; start/stop as the viewport crosses 768px.
-		function syncToViewport() {
-			if (mql.matches) start();
-			else stop();
-		}
-		mql.addEventListener('change', syncToViewport);
-		syncToViewport();
-
-		return () => {
-			stop();
-			if (resumeTimer) clearTimeout(resumeTimer);
-			userEvents.forEach((e) => track?.removeEventListener(e, onUserInteract));
-			mql.removeEventListener('change', syncToViewport);
-		};
-	});
+	const selected = projects.filter((project) => project.featured);
+	const more = projects.filter((project) => !project.featured);
 </script>
 
-<section id="projects" class="relative">
-	<div class="mx-auto max-w-6xl px-6 py-28">
+<section id="projects">
+	<div class="section-shell">
 		<ScrollFade>
-			<p class="overline">// selected projects</p>
-			<h2 class="mt-3 font-display text-5xl font-semibold tracking-tight text-ink sm:text-6xl">
-				Work
-			</h2>
+			<p class="eyebrow">Projects</p>
+			<div class="mt-3 flex flex-wrap items-end justify-between gap-4">
+				<h2 class="section-heading">Selected work</h2>
+				<p class="max-w-sm text-sm leading-relaxed text-muted">A few live projects I've worked on, independently and with a team.</p>
+			</div>
 		</ScrollFade>
-
-		<!--
-			Mobile: a continuously drifting horizontal carousel that yields to the
-			user on touch. The cards are rendered twice so the drift can loop
-			seamlessly; the duplicate set is hidden on desktop (md+), where this
-			collapses back into a vertical stack of full-width cards.
-		-->
-		<div
-			bind:this={track}
-			class="carousel-track mt-14 flex gap-4 overflow-x-auto -mx-6 px-6 pb-4 md:mx-0 md:flex-col md:gap-6 md:overflow-visible md:px-0 md:pb-0"
-		>
-			{#each projects as project, i (project.slug)}
-				<ScrollFade delay={i * 80} class="w-[86vw] shrink-0 sm:w-[68vw] md:w-full md:shrink">
-					<ProjectCard {project} index={i} />
+		<div class="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2">
+			{#each selected as project, i (project.slug)}
+				<ScrollFade delay={i * 70} class={i === 0 ? 'md:col-span-2' : ''}>
+					<ProjectCard {project} featured={i === 0} />
 				</ScrollFade>
 			{/each}
-
-			<!-- Seamless-loop duplicates: visible only on mobile, hidden from a11y tree. -->
-			{#each projects as project, i ('dup-' + project.slug)}
-				<div class="w-[86vw] shrink-0 sm:w-[68vw] md:hidden" aria-hidden="true">
-					<ProjectCard {project} index={i} />
-				</div>
-			{/each}
 		</div>
-
-		<!-- Mobile-only hint that there's more to swipe. -->
-		<p class="mt-4 text-center font-mono text-xs text-faint md:hidden">swipe to explore →</p>
+		<ScrollFade>
+			<div class="mt-10">
+				<h3 class="font-display text-lg font-semibold text-ink">More projects</h3>
+				<div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+					{#each more as project (project.slug)}
+						<a href="/projects/{project.slug}" class="more-project group">
+							<img src={project.image} alt="" width="56" height="42" loading="lazy" class="h-10 w-14 shrink-0 rounded object-cover object-top" />
+							<div class="min-w-0 flex-1">
+								<p class="text-sm font-medium text-ink">{project.name}</p>
+								<p class="mt-1 text-xs text-muted">{project.role}</p>
+							</div>
+							<ArrowUpRight size={14} class="shrink-0 text-faint transition-colors group-hover:text-accent" />
+						</a>
+					{/each}
+				</div>
+			</div>
+		</ScrollFade>
 	</div>
 </section>
 
 <style>
-	/* Hide the scrollbar on the mobile carousel for a cleaner look. */
-	.carousel-track {
-		scrollbar-width: none;
-		-webkit-overflow-scrolling: touch;
+	.more-project {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 1rem;
+		background: color-mix(in srgb, var(--color-ink) 2%, transparent);
+		border: 1px solid var(--color-line);
+		border-radius: 0.65rem;
+		transition: background-color 0.2s, border-color 0.2s;
 	}
-	.carousel-track::-webkit-scrollbar {
-		display: none;
+	.more-project:hover {
+		background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+		border-color: color-mix(in srgb, var(--color-ink) 22%, transparent);
 	}
 </style>

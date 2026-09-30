@@ -1,67 +1,81 @@
-/**
- * Single source of truth for project data.
- *
- * Both the home-page Projects section and the dynamic case-study route
- * (`/projects/[slug]`) import from here — never duplicate this data.
- */
-
+/** Shared by the home page and the prerendered project pages. */
 export interface Project {
-	/** URL slug — used by `/projects/[slug]`. */
 	slug: string;
-	/** Display number, e.g. "01". */
-	number: string;
-	/** Project name. */
 	name: string;
-	/** Short, punchy one-liner shown on cards and case-study headers. */
-	tagline: string;
-	/** Leul's role on the project. */
 	role: string;
-	/** Tech-stack / category tags rendered as pills. */
 	tags: string[];
-	/** 1–2 sentence description for the project card. */
 	description: string;
-	/** Multi-paragraph overview for the case-study page. */
-	overview: string[];
-	/** Bullet-list of specific contributions. */
+	overview: string;
 	contributions: string[];
-	/** Challenges & learnings paragraphs. */
-	challenges: string[];
-	/** Current status, shown as a pill on the case-study page. */
-	status: string;
-	/** Live deployment URL, or null if not deployed. */
+	status: 'Live' | 'In development';
 	live: string | null;
-	/** Public GitHub repo URL, or null if private / not applicable. */
 	github: string | null;
-	/** Path to cover image, served from static directory. */
-	image: string | null;
-	/** Optional path to mobile companion app screenshot, served from static. */
-	mobileImage?: string | null;
+	image: string;
+	/** Narrow screenshot used by the compact featured cards. */
+	cardImage?: string;
+	featured?: boolean;
+	mobileImage?: string;
 }
 
 export const projects: Project[] = [
 	{
-		slug: 'hotel-management',
-		number: '01',
-		name: 'TripWays Hotels',
-		tagline: 'Full-stack hotel ops platform — real-time bookings, role-based auth, and Chapa payments. Built solo.',
-		role: 'Full-Stack (Solo)',
-		tags: ['Full-Stack', 'Solo Build', 'React', 'Convex', 'TypeScript', 'Chapa Payments'],
-		description:
-			'A production hotel ops platform — multi-role auth, real-time bookings, Chapa payments. Shipped solo.',
-		overview: [
-			'A full-stack hotel operations platform: bookings, room inventory, staff announcements, and revenue analytics in one interface.',
-			'The Convex backend keeps every connected screen in sync in real time — confirm a booking and the availability grid updates everywhere, no refresh. Chapa handles payments for the Ethiopian market.'
-		],
+		slug: 'visit-oromia',
+		name: 'Visit Oromia',
+		role: 'Website redesign & CMS integration',
+		tags: ['Tourism', 'Website redesign', 'CMS'],
+		description: 'Rebuilt the tourism website from scratch and integrated its CMS.',
+		overview: 'A tourism website for exploring Oromia, including destinations, travel information, stories, and digital tours.',
 		contributions: [
-			'Modelled the full Convex schema — rooms, bookings, guests, announcements, audit logs, analytics.',
-			'Built role-based auth for admins, receptionists, and guests, with permissions enforced server-side.',
-			'Implemented the booking state machine with optimistic-lock concurrency to prevent double-booking.',
-			'Integrated Chapa for online payments, including webhook reconciliation.',
-			'Shipped a real-time admin dashboard for revenue, occupancy, and room utilisation.'
+			'Redesigned and rebuilt the website from scratch.',
+			'Integrated the CMS to power the website content.'
 		],
-		challenges: [
-			"Authorisation was the hard part. Three roles, every mutation gated server-side through a shared helper — so a forgotten frontend check could never expose an admin action. I rewrote the schema twice before it felt clean.",
-			"Chapa's webhook docs were thin, so I built defensive reconciliation that handles the payload arriving before or after the booking exists. And since Convex mutations are transactional, the state machine uses optimistic locking so a room can't be double-booked under concurrent requests."
+		status: 'Live',
+		live: 'https://visitoromia.org/',
+		github: null,
+		image: '/project-visit-oromia.jpg',
+		featured: true
+	},
+	{
+		slug: 'jora-events',
+		name: 'Jora Events',
+		role: 'Core frontend team',
+		tags: ['Events', 'Frontend', 'Team project'],
+		description: 'Event discovery and ticketing for Addis Ababa.',
+		overview: 'An events platform for discovering events in Addis Ababa, getting tickets, and connecting with organizers.',
+		contributions: ['Contributed to the platform as a member of the core frontend team.'],
+		status: 'Live',
+		live: 'https://jora.events/',
+		github: null,
+		image: '/project-jora-events.jpg',
+		cardImage: '/project-jora-events-mobile.jpg',
+		featured: true
+	},
+	{
+		slug: 'fixmyaddis',
+		name: 'FixMyAddis',
+		role: 'Core backend & web frontend team',
+		tags: ['Civic tech', 'Backend', 'Web app'],
+		description: 'Report city issues and track their progress across Addis Ababa.',
+		overview: 'A platform where people report problems across Addis Ababa and follow their progress until they are resolved.',
+		contributions: ['Contributed to the core backend as part of the team.', 'Worked on the web app frontend.'],
+		status: 'Live',
+		live: 'https://h56quunh7xlbthjllrv09o3w.sanduq.jirtuu.dev/',
+		github: null,
+		image: '/project-fixmyaddis.jpg',
+		cardImage: '/project-fixmyaddis-mobile.jpg',
+		featured: true
+	},
+	{
+		slug: 'hotel-management',
+		name: 'TripWays Hotels',
+		role: 'Full-stack developer, solo',
+		tags: ['React', 'Convex', 'TypeScript', 'Chapa'],
+		description: 'Hotel bookings, staff workflows, and payments, built across web and mobile.',
+		overview: 'A hotel operations platform with room inventory, real-time bookings, staff tools, and Chapa payments. Its React Native companion app uses the same Convex backend.',
+		contributions: [
+			'Built the database, role-based access, and real-time booking workflows.',
+			'Integrated Chapa payments and the hotel dashboard.',
+			'Built the mobile companion with React Native and Expo.'
 		],
 		status: 'Live',
 		live: 'https://hotel-management-kohl-pi.vercel.app/',
@@ -71,27 +85,15 @@ export const projects: Project[] = [
 	},
 	{
 		slug: 'kenna-gifts',
-		number: '02',
 		name: 'Kenna Gifts',
-		tagline: "Corporate gifting platform for Ethiopia — I owned the entire admin panel frontend.",
-		role: 'Frontend Contributor',
-		tags: ['Frontend', 'React', 'Vite', 'NestJS', 'Admin Panel', 'TypeScript'],
-		description:
-			"Built the admin panel for Ethiopia's corporate gifting platform — user management, onboarding, live dashboard, and role-gated access.",
-		overview: [
-			"Kenna Gifts is Ethiopia's B2B corporate gifting platform. It has a consumer storefront and a separate admin control centre — I owned the admin panel end-to-end.",
-			'Built as a Vite + React SPA against a NestJS REST API, deployed independently from the storefront.'
-		],
+		role: 'Frontend contributor',
+		tags: ['React', 'Vite', 'NestJS', 'TypeScript'],
+		description: 'Admin frontend for a corporate gifting platform.',
+		overview: "A corporate gifting platform for Ethiopia. I built the admin frontend as a React app connected to a NestJS API.",
 		contributions: [
-			'Architected the admin SPA: routing, state, components, and the API layer.',
-			'Built the corporate onboarding flow — multi-step wizards for invites, credit limits, and account activation.',
-			'Shipped user management: search, filter, ban, reinstate, with audit notes.',
-			'Designed the live dashboard for order volume, revenue by corporate account, and category analytics.',
-			'Role-gated the UI: support sees read-only, admins can perform destructive actions.'
-		],
-		challenges: [
-			"CORS was the first wall. The admin SPA and the API live on different subdomains, and NestJS wasn't allowing credentialed cross-origin requests. I traced it through the network panel, then tightened the CorsModule whitelist and aligned the cookie SameSite policy.",
-			"There was no off-the-shelf component library, so the data tables had to be hand-built — sticky headers, sortable columns, inline editing — with Safari's older sticky implementation adding its own wrinkle."
+			'Built the admin app, routing, and API integration.',
+			'Implemented corporate onboarding and user management.',
+			'Added the dashboard and role-based UI access.'
 		],
 		status: 'Live',
 		live: 'https://w08o4w0k44okk488k0s8o8g8.sanduq.jirtuu.dev/',
@@ -100,56 +102,32 @@ export const projects: Project[] = [
 	},
 	{
 		slug: 'trending-movies',
-		number: '03',
 		name: 'Trending Movies',
-		tagline: 'Movie discovery app — TMDB-powered, with watchlist, genre filters, and full detail views.',
-		role: 'Frontend (Solo)',
-		tags: ['Next.js', 'TypeScript', 'TMDB API', 'Tailwind CSS', 'React Context'],
-		description:
-			'A Netflix-style movie discovery app on the TMDB API. Trending carousels, debounced search, full detail pages, and a persistent watchlist — server-rendered with Next.js.',
-		overview: [
-			"A Netflix-style movie discovery app powered by the TMDB API. Trending carousels, debounced search, full detail pages, and a local watchlist — all server-rendered with Next.js App Router.",
-			'No backend needed: the watchlist persists via localStorage, so users can save movies without an account.'
-		],
+		role: 'Frontend developer, solo',
+		tags: ['Next.js', 'TypeScript', 'TMDB', 'Tailwind CSS'],
+		description: 'Movie discovery with search, genre filters, and a saved watchlist.',
+		overview: 'A movie discovery app powered by TMDB, with server-rendered detail pages and a watchlist saved locally without an account.',
 		contributions: [
-			'Architected the app with Next.js App Router — server-rendered data, client interactivity scoped to watchlist and UI state.',
-			'Built the TMDB API layer (trending, search, detail, cast, similar) with full TypeScript types.',
-			'Designed the hero, trending carousel, and genre-filter components — scroll-snap, keyboard nav, skeleton placeholders.',
-			'Implemented the watchlist with React Context + localStorage persistence and a dedicated /watchlist page.',
-			'Built a skeleton loading system matched to every component layout, eliminating layout shift on load.'
+			'Built the Next.js app and typed TMDB integration.',
+			'Added trending carousels, genre filters, and debounced search.',
+			'Implemented a persistent watchlist and loading states.'
 		],
-		challenges: [
-			"Server-rendering the initial trending data was the right call: first paint stays fast even against a third-party API I don't control. Genre filtering runs client-side so it feels instant.",
-			"Search needed a debounce tight enough to respect the TMDB rate limit but loose enough to feel live. 350ms with cancel-on-unmount cleanup did it — no stale results racing newer ones."
-		],
-		status: 'In Development',
+		status: 'In development',
 		live: 'https://trending-movies-iota.vercel.app/',
 		github: 'https://github.com/lulacoder/Trending-Movies',
 		image: '/project-movies.webp'
 	},
 	{
 		slug: 'resume-analyzer',
-		number: '04',
 		name: 'Resume Analyzer',
-		tagline: 'AI-powered resume analysis — Gemini reads your PDF and coaches you to a better job.',
-		role: 'Solo Build',
-		tags: ['Next.js', 'TypeScript', 'Gemini AI', 'Supabase', 'Docker', 'PDF Parsing'],
-		description:
-			"Upload a resume PDF and get instant Gemini-powered feedback — ATS score, keyword gaps, section rewrites, and a coaching chat grounded in your results.",
-		overview: [
-			'Upload a resume PDF, get a Gemini-powered analysis: ATS score, keyword gaps, and experience critique. Beyond the scan, a section-by-section rewrite tool and a coaching chat grounded in your specific results.',
-			'Analyses persist to Supabase so users can revisit past results. Containerised with Docker, rate-limited, and shipping as a PWA.'
-		],
+		role: 'Full-stack developer, solo',
+		tags: ['Next.js', 'TypeScript', 'Gemini AI', 'Supabase', 'Docker'],
+		description: 'AI resume feedback, section rewrites, and a coaching chat.',
+		overview: 'Upload a resume PDF for Gemini-powered feedback, rewrites, and a coaching chat. Supabase stores accounts and past analyses.',
 		contributions: [
-			'Built the PDF ingestion pipeline — handles multi-column layouts, unicode edge cases, and column-split sentences.',
-			'Designed the Gemini prompt system: separate prompts for analysis, rewrite, and coaching, each tuned for consistent JSON output.',
-			'Multi-client Gemini setup that rotates API keys to stay within rate limits.',
-			'Built the analysis workspace — a split-pane UI with the analysis on one side and streaming chat on the other.',
-			'Set up Supabase auth, migration-backed schema, and a middleware-protected dashboard.'
-		],
-		challenges: [
-			"PDF parsing is messier than it sounds. Resumes use every conceivable layout — two-column designs, tables, embedded fonts — and naive extractors butcher them. The fix was custom normalisation that collapses whitespace artefacts and re-stitches lines split mid-sentence by column boundaries.",
-			"Getting Gemini to return parseable JSON was a fight. Early prompts produced markdown-fenced JSON, trailing commas, and hallucinated fields. Strict JSON-mode, a schema in the prompt, and a retry-with-correction loop that asks Gemini to fix its own broken syntax did it."
+			'Built PDF ingestion and the Gemini analysis workflow.',
+			'Created the analysis workspace and streaming coaching chat.',
+			'Integrated Supabase authentication and saved analyses.'
 		],
 		status: 'Live',
 		live: 'https://resume-anaylzer-gamma.vercel.app/',
@@ -158,7 +136,6 @@ export const projects: Project[] = [
 	}
 ];
 
-/** Look up a single project by slug. */
 export function getProject(slug: string): Project | undefined {
-	return projects.find((p) => p.slug === slug);
+	return projects.find((project) => project.slug === slug);
 }

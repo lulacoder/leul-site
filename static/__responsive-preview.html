@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Responsive preview</title>
+<style>
+  html, body { margin: 0; background: #232329; }
+  iframe { display: block; border: 0; background: #09090b; }
+</style>
+<iframe id="preview" title="Responsive website preview"></iframe>
+<script>
+  const params = new URLSearchParams(location.search);
+  const preview = document.getElementById('preview');
+  preview.width = params.get('width') || '390';
+  preview.height = params.get('height') || '844';
+  preview.src = params.get('site') || '/';
+</script>
+</html>

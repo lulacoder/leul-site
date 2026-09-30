@@ -21,10 +21,9 @@
 	<meta property="og:type" content="website" />
 </svelte:head>
 
-<!-- Single-page scroll: Hero → About → Projects → Skills → Education → Contact -->
 <Hero />
-<About />
 <Projects />
 <Skills />
+<About />
 <Education />
 <Contact />
