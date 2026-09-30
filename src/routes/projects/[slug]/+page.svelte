@@ -36,7 +36,7 @@
 		</div>
 	</header>
 	<div class="mt-8 overflow-hidden rounded-xl border border-line bg-surface">
-		<img src={project.image} alt="{project.name} website screenshot" width="1440" height="900" class="aspect-16/10 w-full object-cover object-top" />
+		<img src={project.image} alt="{project.name} website screenshot" width="1440" height="900" class="h-auto w-full" />
 	</div>
 	<div class="mt-8 grid gap-8 border-t border-line pt-8 md:grid-cols-[1fr_240px] md:gap-12">
 		<div>
@@ -66,9 +66,9 @@
 	</div>
 	{#if project.mobileImage}
 		<details class="mt-8 rounded-lg border border-line p-4">
-			<summary class="cursor-pointer text-sm font-medium text-ink">View the mobile companion</summary>
-			<p class="mt-3 text-sm text-muted">Built with React Native and Expo, connected to the same Convex backend.</p>
-			<img src={project.mobileImage} alt="TripWays Hotels mobile app screenshot" width="200" loading="lazy" class="mt-4 w-44 rounded-lg border border-line" />
+			<summary class="cursor-pointer text-sm font-medium text-ink">View the mobile website</summary>
+			<p class="mt-3 text-sm text-muted">The current Tripways booking website on a mobile screen.</p>
+			<img src={project.mobileImage} alt="{project.name} mobile website screenshot" width="390" height="844" loading="lazy" class="mt-4 w-full max-w-xs rounded-lg border border-line" />
 		</details>
 	{/if}
 	<nav aria-label="Other projects" class="mt-10 flex items-center justify-between gap-6 border-t border-line pt-6">

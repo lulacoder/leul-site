@@ -46,8 +46,8 @@ export const projects: Project[] = [
 		status: 'Live',
 		live: 'https://jora.events/',
 		github: null,
-		image: '/project-jora-events.jpg',
-		cardImage: '/project-jora-events-mobile.jpg',
+		image: '/project-jora-discovery.jpg',
+		cardImage: '/project-jora-discovery-mobile.jpg',
 		featured: true
 	},
 	{
@@ -67,7 +67,7 @@ export const projects: Project[] = [
 	},
 	{
 		slug: 'hotel-management',
-		name: 'TripWays Hotels',
+		name: 'Tripways Hotels',
 		role: 'Full-stack developer, solo',
 		tags: ['React', 'Convex', 'TypeScript', 'Chapa'],
 		description: 'Hotel bookings, staff workflows, and payments, built across web and mobile.',
@@ -78,10 +78,10 @@ export const projects: Project[] = [
 			'Built the mobile companion with React Native and Expo.'
 		],
 		status: 'Live',
-		live: 'https://hotel-management-kohl-pi.vercel.app/',
+		live: 'https://www.tripwayshotel.site/',
 		github: 'https://github.com/lulacoder/Hotel_management',
-		image: '/project-hotel.webp',
-		mobileImage: '/project-hotel-mobile.webp'
+		image: '/project-tripways.jpg',
+		mobileImage: '/project-tripways-mobile.jpg'
 	},
 	{
 		slug: 'kenna-gifts',
