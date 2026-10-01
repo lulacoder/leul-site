@@ -34,8 +34,8 @@
 	</div>
 	<a href="/projects/{project.slug}" class="project-preview" aria-label="View {project.name} project details">
 		<picture class="block h-full">
-			<source media="(max-width: 767px)" srcset={project.image} />
-		<img src={project.cardImage ?? project.image} alt="{project.name} website screenshot" width={project.cardImage ? 390 : 1440} height={project.cardImage ? 700 : 900} loading="lazy" class="h-full w-full object-cover object-top transition-transform duration-500 motion-safe:group-hover:scale-[1.02]" />
+			<source media="(max-width: 767px)" srcset={project.cardImage ?? project.image} />
+		<img src={project.image} alt="{project.name} website screenshot" width="1440" height="900" loading="lazy" class="h-full w-full object-cover object-top transition-transform duration-500 motion-safe:group-hover:scale-[1.02]" />
 		</picture>
 	</a>
 </article>
