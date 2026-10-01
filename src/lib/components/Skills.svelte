@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { Box, Code2, Database, Layers } from '@lucide/svelte';
+	import { Box, Code2, Database } from '@lucide/svelte';
 	import ScrollFade from './ScrollFade.svelte';
 
-	type Technology = { name: string; logo?: string; symbol?: 'box' | 'database' | 'layers' };
+	type Technology = { name: string; logo?: string; symbol?: 'box' | 'database' };
 	type Group = { category: string; items: Technology[] };
 	const columns: Group[][] = [
 		[
@@ -13,7 +13,7 @@
 			] },
 			{ category: 'Backend', items: [
 				{ name: 'Node.js', logo: 'nodedotjs' }, { name: 'NestJS', logo: 'nestjs' },
-				{ name: 'Convex', symbol: 'layers' }, { name: 'Express', logo: 'express' }
+				{ name: 'Convex', logo: 'convex' }, { name: 'Express', logo: 'express' }
 			] },
 			{ category: 'Types', items: [
 				{ name: 'TypeScript', logo: 'typescript' }, { name: 'Effect', logo: 'effect' }
@@ -65,8 +65,6 @@
 												<Box size={19} strokeWidth={1.5} class="shrink-0 text-muted" aria-hidden="true" />
 											{:else if item.symbol === 'database'}
 												<Database size={19} strokeWidth={1.5} class="shrink-0 text-muted" aria-hidden="true" />
-											{:else if item.symbol === 'layers'}
-												<Layers size={19} strokeWidth={1.5} class="shrink-0 text-amber-400" aria-hidden="true" />
 											{:else}
 												<Code2 size={19} strokeWidth={1.5} class="shrink-0 text-muted" aria-hidden="true" />
 											{/if}

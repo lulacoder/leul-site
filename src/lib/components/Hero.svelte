@@ -6,7 +6,7 @@
 	<div class="section-shell hero-grid">
 		<div class="min-w-0">
 			<p class="fade-up eyebrow" style="animation-delay: 0.05s">Hello, I'm Leul</p>
-			<h1 class="fade-up hero-heading mt-5" style="animation-delay: 0.1s">
+			<h1 class="hero-heading mt-5">
 				Building software that works in the <span class="text-accent">real world.</span>
 			</h1>
 			<p class="fade-up mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg" style="animation-delay: 0.15s">

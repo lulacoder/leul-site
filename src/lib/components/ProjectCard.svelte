@@ -34,8 +34,13 @@
 	</div>
 	<a href="/projects/{project.slug}" class="project-preview" aria-label="View {project.name} project details">
 		<picture class="block h-full">
-			<source media="(max-width: 767px)" srcset={project.cardImage ?? project.image} />
-		<img src={project.image} alt="{project.name} website screenshot" width="1440" height="900" loading="lazy" class="h-full w-full object-cover object-top transition-transform duration-500 motion-safe:group-hover:scale-[1.02]" />
+			{#if project.cardImage}
+				<source media="(max-width: 767px)" type="image/webp" srcset={project.cardImage.sources.webp} sizes="calc(100vw - 72px)" />
+			{/if}
+			<img src={project.image.img.src} srcset={project.image.sources.webp}
+				sizes={featured ? '(min-width: 1392px) 588px, (min-width: 1024px) calc(55vw - 186px), (min-width: 768px) calc(55vw - 54px), calc(100vw - 72px)' : '(min-width: 1392px) 224px, (min-width: 1024px) calc(22.5vw - 89px), (min-width: 768px) calc(22.5vw - 35px), calc(100vw - 72px)'}
+				alt="{project.name} website screenshot" width={project.image.img.w} height={project.image.img.h}
+				loading="lazy" decoding="async" class="h-full w-full object-cover object-top transition-transform duration-500 motion-safe:group-hover:scale-[1.02]" />
 		</picture>
 	</a>
 </article>

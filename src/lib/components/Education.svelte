@@ -1,18 +1,19 @@
 <script lang="ts">
 	import ScrollFade from './ScrollFade.svelte';
 	import { GraduationCap, Award, Check, ExternalLink, X } from '@lucide/svelte';
+	import certificate from '$lib/assets/ml-certificate.jpg?w=96;192;384;768;1024&format=webp&quality=88&enhanced';
 
-	/** Certificate images from the ML Specialization (fetched from old site). */
+	/** Responsive previews share the full-size certificate used by the lightbox. */
 	const mlCertificates = [
 		{
-			src: '/ml-certificate.jpg',
+			src: certificate,
 			alt: 'Stanford Machine Learning Specialization Certificate',
 			label: 'Specialization Certificate'
 		}
 	];
 
 	let lightboxOpen = $state(false);
-	let lightboxSrc = $state('');
+	let lightboxSrc = $state(certificate);
 	let lightboxAlt = $state('');
 	let lightboxDialog: HTMLDialogElement | undefined = $state();
 
@@ -20,7 +21,7 @@
 		if (lightboxOpen && lightboxDialog && !lightboxDialog.open) lightboxDialog.showModal();
 	});
 
-	function openLightbox(src: string, alt: string) {
+	function openLightbox(src: typeof certificate, alt: string) {
 		lightboxSrc = src;
 		lightboxAlt = alt;
 		lightboxOpen = true;
@@ -87,11 +88,17 @@
 					<!-- Certificate gallery trigger -->
 					<button
 						type="button"
-						onclick={() => openLightbox('/ml-certificate.jpg', 'Stanford Machine Learning Specialization Certificate')}
+						onclick={() => openLightbox(certificate, 'Stanford Machine Learning Specialization Certificate')}
 						class="cert-preview-btn mt-6 flex w-full items-center gap-2 rounded-xl border border-line p-3 text-left transition-all duration-200 hover:border-accent/40"
 					>
 						<img
-							src="/ml-certificate.jpg"
+							src={certificate.img.src}
+							srcset={certificate.sources.webp}
+							sizes="96px"
+							width={certificate.img.w}
+							height={certificate.img.h}
+							loading="lazy"
+							decoding="async"
 							alt="ML Certificate thumbnail"
 							class="h-16 w-24 rounded-lg object-cover"
 							onerror={(e) => { (e.currentTarget as HTMLElement).parentElement!.classList.add('cert-error'); }}
@@ -111,14 +118,20 @@
 			<div class="mt-10">
 				<p class="eyebrow mb-6">Certificates</p>
 				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-					{#each mlCertificates as cert (cert.src)}
+					{#each mlCertificates as cert (cert.src.img.src)}
 						<button
 							type="button"
 							onclick={() => openLightbox(cert.src, cert.alt)}
 							class="cert-card group relative overflow-hidden rounded-2xl border border-line"
 						>
 							<img
-								src={cert.src}
+								src={cert.src.img.src}
+								srcset={cert.src.sources.webp}
+								sizes="(min-width: 1392px) 336px, (min-width: 1024px) calc((100vw - 352px) / 3), (min-width: 640px) calc((100vw - 96px) / 2), calc(100vw - 48px)"
+								width={cert.src.img.w}
+								height={cert.src.img.h}
+								loading="lazy"
+								decoding="async"
 								alt={cert.alt}
 								class="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-105"
 							/>
@@ -150,7 +163,7 @@
 		<div
 			class="relative max-h-[90vh] max-w-4xl overflow-hidden rounded-2xl shadow-2xl"
 		>
-			<img src={lightboxSrc} alt={lightboxAlt} class="block max-h-[85vh] w-auto object-contain" />
+			<img src={lightboxSrc.img.src} srcset={lightboxSrc.sources.webp} sizes="(min-width: 944px) 896px, 95vw" width={lightboxSrc.img.w} height={lightboxSrc.img.h} alt={lightboxAlt} class="block max-h-[85vh] max-w-full w-auto object-contain" />
 			<button
 				type="button"
 				onclick={closeLightbox}

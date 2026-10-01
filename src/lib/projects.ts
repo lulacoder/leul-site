@@ -1,3 +1,18 @@
+import visitOromia from './assets/project-visit-oromia.jpg?w=480;768;1080;1432&format=webp&quality=85&enhanced';
+import jora from './assets/project-jora-discovery.jpg?w=480;768;1080;1250&format=webp&quality=85&enhanced';
+import joraMobile from './assets/project-jora-discovery-mobile.jpg?w=195;390&format=webp&quality=85&enhanced';
+import fixMyAddis from './assets/project-fixmyaddis.jpg?w=480;768;925&format=webp&quality=85&enhanced';
+import fixMyAddisMobile from './assets/project-fixmyaddis-mobile.jpg?w=195;390&format=webp&quality=85&enhanced';
+import tripways from './assets/project-tripways.jpg?w=480;768;1080;1537&format=webp&quality=85&enhanced';
+import tripwaysMobile from './assets/project-tripways-mobile.jpg?w=244;488&format=webp&quality=85&enhanced';
+import kenna from './assets/project-kenna.webp?w=480;768;1080;1887&format=webp&quality=85&enhanced';
+import movies from './assets/project-movies.webp?w=480;768;1080;1440&format=webp&quality=85&enhanced';
+import resume from './assets/project-resume.webp?w=480;768;1080;1440&format=webp&quality=85&enhanced';
+import tripwaysThumbnail from './assets/project-tripways.jpg?w=56;112;168&format=webp&quality=80&enhanced';
+import kennaThumbnail from './assets/project-kenna.webp?w=56;112;168&format=webp&quality=80&enhanced';
+import moviesThumbnail from './assets/project-movies.webp?w=56;112;168&format=webp&quality=80&enhanced';
+import resumeThumbnail from './assets/project-resume.webp?w=56;112;168&format=webp&quality=80&enhanced';
+
 /** Shared by the home page and the prerendered project pages. */
 export interface Project {
 	slug: string;
@@ -10,11 +25,12 @@ export interface Project {
 	status: 'Live' | 'In development';
 	live: string | null;
 	github: string | null;
-	image: string;
+	image: typeof visitOromia;
 	/** Narrow screenshot used by the compact featured cards. */
-	cardImage?: string;
+	cardImage?: typeof visitOromia;
+	thumbnail?: typeof visitOromia;
 	featured?: boolean;
-	mobileImage?: string;
+	mobileImage?: typeof visitOromia;
 }
 
 export const projects: Project[] = [
@@ -32,7 +48,7 @@ export const projects: Project[] = [
 		status: 'Live',
 		live: 'https://visitoromia.org/',
 		github: null,
-		image: '/project-visit-oromia.jpg',
+		image: visitOromia,
 		featured: true
 	},
 	{
@@ -46,8 +62,8 @@ export const projects: Project[] = [
 		status: 'Live',
 		live: 'https://jora.events/',
 		github: null,
-		image: '/project-jora-discovery.jpg',
-		cardImage: '/project-jora-discovery-mobile.jpg',
+		image: jora,
+		cardImage: joraMobile,
 		featured: true
 	},
 	{
@@ -61,8 +77,8 @@ export const projects: Project[] = [
 		status: 'Live',
 		live: 'https://h56quunh7xlbthjllrv09o3w.sanduq.jirtuu.dev/',
 		github: null,
-		image: '/project-fixmyaddis.jpg',
-		cardImage: '/project-fixmyaddis-mobile.jpg',
+		image: fixMyAddis,
+		cardImage: fixMyAddisMobile,
 		featured: true
 	},
 	{
@@ -80,8 +96,9 @@ export const projects: Project[] = [
 		status: 'Live',
 		live: 'https://www.tripwayshotel.site/',
 		github: 'https://github.com/lulacoder/Hotel_management',
-		image: '/project-tripways.jpg',
-		mobileImage: '/project-tripways-mobile.jpg'
+		image: tripways,
+		thumbnail: tripwaysThumbnail,
+		mobileImage: tripwaysMobile
 	},
 	{
 		slug: 'kenna-gifts',
@@ -98,7 +115,8 @@ export const projects: Project[] = [
 		status: 'Live',
 		live: 'https://w08o4w0k44okk488k0s8o8g8.sanduq.jirtuu.dev/',
 		github: null,
-		image: '/project-kenna.webp'
+		image: kenna,
+		thumbnail: kennaThumbnail
 	},
 	{
 		slug: 'trending-movies',
@@ -115,7 +133,8 @@ export const projects: Project[] = [
 		status: 'In development',
 		live: 'https://trending-movies-iota.vercel.app/',
 		github: 'https://github.com/lulacoder/Trending-Movies',
-		image: '/project-movies.webp'
+		image: movies,
+		thumbnail: moviesThumbnail
 	},
 	{
 		slug: 'resume-analyzer',
@@ -132,7 +151,8 @@ export const projects: Project[] = [
 		status: 'Live',
 		live: 'https://resume-anaylzer-gamma.vercel.app/',
 		github: 'https://github.com/lulacoder/Resume-Anaylzer',
-		image: '/project-resume.webp'
+		image: resume,
+		thumbnail: resumeThumbnail
 	}
 ];
 

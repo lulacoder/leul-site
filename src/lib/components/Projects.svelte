@@ -29,8 +29,9 @@
 				<h3 class="font-display text-lg font-semibold text-ink">More projects</h3>
 				<div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
 					{#each more as project (project.slug)}
+						{@const thumbnail = project.thumbnail ?? project.image}
 						<a href="/projects/{project.slug}" class="more-project group">
-							<img src={project.image} alt="" width="56" height="42" loading="lazy" class="h-10 w-14 shrink-0 rounded object-cover object-top" />
+							<img src={thumbnail.img.src} srcset={thumbnail.sources.webp} sizes="56px" alt="" width={thumbnail.img.w} height={thumbnail.img.h} loading="lazy" decoding="async" class="h-10 w-14 shrink-0 rounded object-cover object-top" />
 							<div class="min-w-0 flex-1">
 								<p class="text-sm font-medium text-ink">{project.name}</p>
 								<p class="mt-1 text-xs text-muted">{project.role}</p>

@@ -36,7 +36,9 @@
 		</div>
 	</header>
 	<div class="mt-8 overflow-hidden rounded-xl border border-line bg-surface">
-		<img src={project.image} alt="{project.name} website screenshot" width="1440" height="900" class="h-auto w-full" />
+		<img src={project.image.img.src} srcset={project.image.sources.webp}
+			sizes="(min-width: 1264px) 944px, (min-width: 1024px) calc(100vw - 320px), (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
+			alt="{project.name} website screenshot" width={project.image.img.w} height={project.image.img.h} class="h-auto w-full" />
 	</div>
 	<div class="mt-8 grid gap-8 border-t border-line pt-8 md:grid-cols-[1fr_240px] md:gap-12">
 		<div>
@@ -68,7 +70,7 @@
 		<details class="mt-8 rounded-lg border border-line p-4">
 			<summary class="cursor-pointer text-sm font-medium text-ink">View the mobile website</summary>
 			<p class="mt-3 text-sm text-muted">The current Tripways booking website on a mobile screen.</p>
-			<img src={project.mobileImage} alt="{project.name} mobile website screenshot" width="390" height="844" loading="lazy" class="mt-4 w-full max-w-xs rounded-lg border border-line" />
+			<img src={project.mobileImage.img.src} srcset={project.mobileImage.sources.webp} sizes="(min-width: 402px) 320px, calc(100vw - 82px)" alt="{project.name} mobile website screenshot" width={project.mobileImage.img.w} height={project.mobileImage.img.h} loading="lazy" decoding="async" class="mt-4 w-full max-w-xs rounded-lg border border-line" />
 		</details>
 	{/if}
 	<nav aria-label="Other projects" class="mt-10 flex items-center justify-between gap-6 border-t border-line pt-6">

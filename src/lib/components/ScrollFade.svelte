@@ -3,9 +3,8 @@
 	import type { Snippet } from 'svelte';
 
 	/**
-	 * ScrollFade — fades + slides its children in the first time they
-	 * scroll into view. Uses IntersectionObserver (threshold 0.15) and
-	 * respects `prefers-reduced-motion` (reveals instantly, no transition).
+	 * Content is visible in the prerendered HTML. JavaScript adds a small
+	 * slide on first intersection, unless reduced motion is requested.
 	 *
 	 * Wrap sections/cards and pass a staggered `delay` (e.g. `delay={i * 80}`).
 	 */
@@ -21,19 +20,15 @@
 	let { delay = 0, class: className = '', children }: Props = $props();
 
 	let el: HTMLDivElement | undefined = $state();
-	let visible = $state(false);
+	let revealed = $state(false);
 
 	onMount(() => {
-		// Reduced-motion users see content immediately — no animation.
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-			visible = true;
-			return;
-		}
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
 		const observer = new IntersectionObserver(
 			([entry]) => {
 				if (entry.isIntersecting) {
-					visible = true;
+					revealed = true;
 					observer.disconnect(); // reveal once, then stop observing
 				}
 			},
@@ -47,10 +42,20 @@
 
 <div
 	bind:this={el}
-	class="transition-all duration-500 ease-out motion-reduce:transition-none {className}"
-	class:opacity-0={!visible}
-	class:translate-y-5={!visible}
-	style="transition-delay: {delay}ms"
+	class={className}
+	class:revealed
+	style="animation-delay: {delay}ms"
 >
 	{@render children?.()}
 </div>
+
+<style>
+	.revealed { animation: slide-in 0.5s ease-out both; }
+	@keyframes slide-in {
+		from { transform: translateY(12px); }
+		to { transform: translateY(0); }
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.revealed { animation: none; }
+	}
+</style>
