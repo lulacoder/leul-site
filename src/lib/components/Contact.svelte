@@ -2,7 +2,6 @@
 	import ScrollFade from './ScrollFade.svelte';
 	import { Mail, Download, Send, Loader2, CheckCircle2, AlertCircle } from '@lucide/svelte';
 	import GithubIcon from './icons/GithubIcon.svelte';
-	import { spotlight } from '$lib/actions/spotlight';
 
 	const EMAIL = 'leultesfaye0755@gmail.com';
 	const GITHUB = 'https://github.com/lulacode';
@@ -47,30 +46,22 @@
 </script>
 
 <section id="contact" class="relative overflow-hidden">
-	<!-- focused glow behind the CTA -->
-	<div
-		aria-hidden="true"
-		class="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[28rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-40 blur-3xl"
-		style="background: radial-gradient(circle, rgba(255,45,110,0.5), transparent 60%);"
-	></div>
 
-	<div class="mx-auto max-w-3xl px-6 py-28 text-center">
+	<div class="mx-auto max-w-3xl px-6 py-20 text-center">
 		<ScrollFade>
-			<p class="overline">// contact</p>
+			<p class="eyebrow">Contact</p>
 			<h2
-				class="mt-4 font-display text-5xl font-semibold tracking-tight text-ink sm:text-6xl lg:text-7xl"
+				class="section-heading mt-4"
 			>
-				Let's collaborate <span class="text-gradient">today!</span>
+				Let's build something <span class="text-accent">useful.</span>
 			</h2>
 			<p class="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-muted">
-				Whether it's a job, a project, or just a conversation about tech — I'm always open.
+				Whether it's a job, a project, or a conversation about tech, I'm always open.
 			</p>
 
 			<div
-				use:spotlight
-				class="glass relative isolate mt-12 rounded-3xl border border-line p-8 text-left shadow-2xl md:p-10"
+				class="glass relative isolate mt-12 rounded-xl border border-line p-6 text-left sm:p-8"
 			>
-				<div class="spotlight-layer"></div>
 
 				{#if submitStatus === 'success'}
 					<div class="flex flex-col items-center justify-center py-8 text-center">
@@ -93,7 +84,7 @@
 					<form onsubmit={handleSubmit} class="space-y-5">
 						{#if submitStatus === 'error'}
 							<div
-								class="flex items-start gap-3 rounded-2xl border border-red-500/20 bg-red-500/5 p-4 text-red-200"
+								class="flex items-start gap-3 rounded-lg border border-red-500/20 bg-red-500/5 p-4 text-red-200"
 							>
 								<AlertCircle size={20} class="mt-0.5 shrink-0 text-red-400" />
 								<p class="text-sm">{submitMessage}</p>
@@ -115,7 +106,7 @@
 									placeholder="Name"
 									required
 									disabled={isSubmitting}
-									class="w-full rounded-2xl border border-line bg-canvas/30 px-5 py-3.5 text-base text-ink placeholder:text-faint/60 transition-all duration-200 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40 disabled:opacity-50"
+									class="w-full rounded-lg border border-line bg-canvas/30 px-5 py-3.5 text-base text-ink placeholder:text-faint/60 transition-all duration-200 focus:border-accent focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-accent/40 disabled:opacity-50"
 								/>
 							</div>
 
@@ -130,9 +121,9 @@
 									type="text"
 									id="company"
 									name="company"
-									placeholder="Company or say no"
+									placeholder="Company, optional"
 									disabled={isSubmitting}
-									class="w-full rounded-2xl border border-line bg-canvas/30 px-5 py-3.5 text-base text-ink placeholder:text-faint/60 transition-all duration-200 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40 disabled:opacity-50"
+									class="w-full rounded-lg border border-line bg-canvas/30 px-5 py-3.5 text-base text-ink placeholder:text-faint/60 transition-all duration-200 focus:border-accent focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-accent/40 disabled:opacity-50"
 								/>
 							</div>
 						</div>
@@ -151,7 +142,7 @@
 								placeholder="example@gmail.com"
 								required
 								disabled={isSubmitting}
-								class="w-full rounded-2xl border border-line bg-canvas/30 px-5 py-3.5 text-base text-ink placeholder:text-faint/60 transition-all duration-200 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40 disabled:opacity-50"
+								class="w-full rounded-lg border border-line bg-canvas/30 px-5 py-3.5 text-base text-ink placeholder:text-faint/60 transition-all duration-200 focus:border-accent focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-accent/40 disabled:opacity-50"
 							/>
 						</div>
 
@@ -169,7 +160,7 @@
 								placeholder="Your message"
 								required
 								disabled={isSubmitting}
-								class="w-full rounded-2xl border border-line bg-canvas/30 px-5 py-3.5 text-base text-ink placeholder:text-faint/60 transition-all duration-200 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40 disabled:opacity-50 resize-none"
+								class="w-full rounded-lg border border-line bg-canvas/30 px-5 py-3.5 text-base text-ink placeholder:text-faint/60 transition-all duration-200 focus:border-accent focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-accent/40 disabled:opacity-50 resize-none"
 							></textarea>
 						</div>
 

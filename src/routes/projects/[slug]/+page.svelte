@@ -4,177 +4,80 @@
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
-	// Reactive aliases so the markup stays readable.
 	const project = $derived(data.project);
 	const prev = $derived(data.prev);
 	const next = $derived(data.next);
 </script>
 
 <svelte:head>
-	<title>{project.name} — Leul Tesfaye</title>
-	<meta name="description" content={project.tagline} />
+	<title>{project.name} | Leul Tesfaye</title>
+	<meta name="description" content={project.description} />
 </svelte:head>
 
-<article class="mx-auto max-w-3xl px-6 pb-28 pt-28">
-	<!-- Back link -->
-	<a
-		href="/#projects"
-		class="inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-accent"
-	>
-		<ArrowLeft size={15} />
-		Back to projects
+<article class="mx-auto max-w-5xl px-6 pb-20 pt-28 sm:px-10 lg:pt-16">
+	<a href="/#projects" class="inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-accent">
+		<ArrowLeft size={15} /> Back to work
 	</a>
-
-	<!-- Header -->
-	<header class="mt-10">
-		<span
-			class="font-display text-6xl font-semibold leading-none text-transparent"
-			style="-webkit-text-stroke: 1px color-mix(in srgb, #fff 22%, transparent);"
-		>
-			{project.number}
-		</span>
-		<h1 class="mt-5 font-display text-5xl font-semibold tracking-tight text-ink sm:text-6xl">
-			{project.name}
-		</h1>
-		<p class="mt-4 text-lg leading-relaxed text-muted">{project.tagline}</p>
-
-		<!-- Meta pills: role · tech · status -->
-		<div class="mt-6 flex flex-wrap gap-2">
-			<span class="pill pill-accent">{project.role}</span>
-			{#each project.tags as tag (tag)}
-				<span class="pill">{tag}</span>
-			{/each}
-			<span class="pill inline-flex items-center gap-1.5">
-				<span
-					class="h-1.5 w-1.5 rounded-full"
-					class:bg-[#28c840]={project.status === 'Live'}
-					class:bg-[#febc2e]={project.status !== 'Live'}
-				></span>
-				{project.status}
-			</span>
-		</div>
-
-		<!-- Actions -->
-		<div class="mt-7 flex flex-wrap gap-3">
+	<header class="mt-8">
+		<p class="eyebrow">{project.status} project</p>
+		<h1 class="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">{project.name}</h1>
+		<p class="mt-3 max-w-2xl text-lg leading-relaxed text-muted">{project.description}</p>
+		<div class="mt-5 flex flex-wrap gap-3">
 			{#if project.live}
 				<a href={project.live} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-					Live Demo
-					<ArrowUpRight size={16} />
+					Visit live site <ArrowUpRight size={16} />
 				</a>
 			{/if}
 			{#if project.github}
 				<a href={project.github} target="_blank" rel="noopener noreferrer" class="btn btn-ghost">
-					<GithubIcon size={16} />
-					GitHub
+					<GithubIcon size={16} /> Source code
 				</a>
 			{/if}
 		</div>
 	</header>
-
-	<!-- Hero visual screenshot or placeholder -->
-	<div class="relative mt-12 aspect-video w-full overflow-hidden rounded-2xl bg-surface border border-line">
-		{#if project.image}
-			<img
-				src={project.image}
-				alt="{project.name} walkthrough"
-				class="w-full h-full object-cover"
-			/>
-		{:else}
-			<div
-				class="absolute inset-0 opacity-90"
-				style="background: linear-gradient(135deg, #ff2d6e, #ff6a5e);"
-			></div>
-			<div
-				class="absolute inset-0"
-				style="background: radial-gradient(circle at 30% 20%, transparent, rgba(0,0,0,0.6));"
-			></div>
-		{/if}
+	<div class="mt-8 overflow-hidden rounded-xl border border-line bg-surface">
+		<img src={project.image} alt="{project.name} website screenshot" width="1440" height="900" class="h-auto w-full" />
 	</div>
-
-	<hr class="my-12 border-line" />
-
-	<!-- ── Case-study body ──────────────────────────────────────────── -->
-	<div class="space-y-12">
-		<section>
-			<h2 class="font-display text-2xl font-semibold tracking-tight text-ink">Overview</h2>
-			<div class="mt-4 space-y-4 leading-relaxed text-muted">
-				{#each project.overview as para (para)}
-					<p>{para}</p>
-				{/each}
-			</div>
-		</section>
-
-		{#if project.mobileImage}
-			<section class="grid grid-cols-1 gap-8 md:grid-cols-[1fr_200px] md:items-center">
-				<div>
-					<h2 class="font-display text-2xl font-semibold tracking-tight text-ink">Mobile Companion App</h2>
-					<div class="mt-4 space-y-4 leading-relaxed text-muted">
-						<p>
-							To support on-the-go hotel staff (such as cleaning crew and maintenance personnel), I built a cross-platform mobile companion app using <strong>React Native</strong> and <strong>Expo</strong>.
-						</p>
-						<p>
-							The mobile app links directly to the same reactive <strong>Convex</strong> backend, enabling staff to scan room QR codes, check off room cleaning checklists, and receive push notifications for urgent guest requests in real time.
-						</p>
-					</div>
-				</div>
-				<div class="mx-auto w-[200px] overflow-hidden rounded-2xl border border-line bg-surface shadow-lg">
-					<img src={project.mobileImage} alt="Mobile App Screenshot" class="w-full object-cover" />
-				</div>
-			</section>
-		{/if}
-
-		<section>
-			<h2 class="font-display text-2xl font-semibold tracking-tight text-ink">My Role</h2>
-			<ul class="mt-4 list-disc space-y-2 pl-5 leading-relaxed text-muted marker:text-accent">
-				{#each project.contributions as item (item)}
-					<li>{item}</li>
+	<div class="mt-8 grid gap-8 border-t border-line pt-8 md:grid-cols-[1fr_240px] md:gap-12">
+		<div>
+			<h2 class="font-display text-xl font-semibold text-ink">About the project</h2>
+			<p class="mt-3 leading-relaxed text-muted">{project.overview}</p>
+			<h2 class="mt-6 font-display text-xl font-semibold text-ink">My contribution</h2>
+			<ul class="mt-3 list-disc space-y-2 pl-4 text-sm leading-relaxed text-muted marker:text-accent">
+				{#each project.contributions as contribution (contribution)}
+					<li>{contribution}</li>
 				{/each}
 			</ul>
-		</section>
-
-		<section>
-			<h2 class="font-display text-2xl font-semibold tracking-tight text-ink">Tech Stack</h2>
-			<div class="mt-4 flex flex-wrap gap-2">
-				{#each project.tags as tag (tag)}
-					<span class="pill">{tag}</span>
-				{/each}
+		</div>
+		<aside class="space-y-6">
+			<div>
+				<h2 class="eyebrow">Role</h2>
+				<p class="mt-2 text-sm leading-relaxed text-ink">{project.role}</p>
 			</div>
-		</section>
-
-		<section>
-			<h2 class="font-display text-2xl font-semibold tracking-tight text-ink">
-				Challenges &amp; Learnings
-			</h2>
-			<div class="mt-4 space-y-4 leading-relaxed text-muted">
-				{#each project.challenges as para (para)}
-					<p>{para}</p>
-				{/each}
+			<div>
+				<h2 class="eyebrow">Project stack & focus</h2>
+				<div class="mt-3 flex flex-wrap gap-2">
+					{#each project.tags as tag (tag)}
+						<span class="pill text-xs">{tag}</span>
+					{/each}
+				</div>
 			</div>
-		</section>
+		</aside>
 	</div>
-
-	<hr class="my-12 border-line" />
-
-	<!-- Prev / Next navigation -->
-	<nav class="flex items-center justify-between gap-4">
-		<a
-			href="/projects/{prev.slug}"
-			class="group inline-flex max-w-[45%] items-center gap-2 text-muted transition-colors hover:text-accent"
-		>
+	{#if project.mobileImage}
+		<details class="mt-8 rounded-lg border border-line p-4">
+			<summary class="cursor-pointer text-sm font-medium text-ink">View the mobile website</summary>
+			<p class="mt-3 text-sm text-muted">The current Tripways booking website on a mobile screen.</p>
+			<img src={project.mobileImage} alt="{project.name} mobile website screenshot" width="390" height="844" loading="lazy" class="mt-4 w-full max-w-xs rounded-lg border border-line" />
+		</details>
+	{/if}
+	<nav aria-label="Other projects" class="mt-10 flex items-center justify-between gap-6 border-t border-line pt-6">
+		<a href="/projects/{prev.slug}" class="inline-flex min-w-0 max-w-[48%] items-center gap-2 text-muted transition-colors hover:text-accent">
 			<ArrowLeft size={16} class="shrink-0" />
-			<span class="truncate">
-				<span class="block font-mono text-xs text-faint">Previous</span>
-				<span class="block text-sm font-medium">{prev.name}</span>
-			</span>
+			<span class="min-w-0"><span class="block text-xs text-faint">Previous</span><span class="block truncate text-sm font-medium">{prev.name}</span></span>
 		</a>
-		<a
-			href="/projects/{next.slug}"
-			class="group inline-flex max-w-[45%] items-center gap-2 text-right text-muted transition-colors hover:text-accent"
-		>
-			<span class="truncate">
-				<span class="block font-mono text-xs text-faint">Next</span>
-				<span class="block text-sm font-medium">{next.name}</span>
-			</span>
+		<a href="/projects/{next.slug}" class="inline-flex min-w-0 max-w-[48%] items-center gap-2 text-right text-muted transition-colors hover:text-accent">
+			<span class="min-w-0"><span class="block text-xs text-faint">Next</span><span class="block truncate text-sm font-medium">{next.name}</span></span>
 			<ArrowRight size={16} class="shrink-0" />
 		</a>
 	</nav>

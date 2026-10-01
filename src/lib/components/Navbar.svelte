@@ -13,9 +13,9 @@
 	} = $props();
 
 	const links = [
-		{ id: 'about', label: 'About' },
 		{ id: 'projects', label: 'Projects' },
-		{ id: 'skills', label: 'Skills' },
+		{ id: 'skills', label: 'Tech stack' },
+		{ id: 'about', label: 'About' },
 		{ id: 'education', label: 'Education' },
 		{ id: 'contact', label: 'Contact' }
 	];
@@ -30,10 +30,12 @@
 	const onHome = $derived($page.url.pathname === '/');
 	const href = (id: string) => (onHome ? `#${id}` : `/#${id}`);
 
-	onMount(() => {
-		const sections = links
+	// Reconnect section tracking when returning from a project page.
+	$effect(() => {
+		const sections = onHome ? links
 			.map((l) => document.getElementById(l.id))
-			.filter((s): s is HTMLElement => s !== null);
+			.filter((s): s is HTMLElement => s !== null) : [];
+		active = onHome ? '' : 'projects';
 
 		const observer = new IntersectionObserver(
 			(entries) => {
@@ -44,13 +46,15 @@
 			{ rootMargin: '-45% 0px -50% 0px', threshold: 0 }
 		);
 		sections.forEach((s) => observer.observe(s));
+		return () => observer.disconnect();
+	});
 
+	onMount(() => {
 		const onScroll = () => (scrolled = window.scrollY > 8);
 		onScroll();
 		window.addEventListener('scroll', onScroll, { passive: true });
 
 		return () => {
-			observer.disconnect();
 			window.removeEventListener('scroll', onScroll);
 		};
 	});
@@ -62,8 +66,7 @@
 		<!-- Brand -->
 		<a href={onHome ? '#top' : '/'} class="group flex items-center gap-2.5">
 			<span
-				class="h-2.5 w-2.5 rounded-full bg-accent transition-shadow duration-300 group-hover:shadow-[0_0_16px_var(--color-accent)]"
-				style="box-shadow: 0 0 10px var(--color-accent);"
+				class="h-2.5 w-2.5 rounded-full bg-accent"
 			></span>
 			<span class="leading-tight">
 				<span class="block font-display text-base font-semibold tracking-tight text-ink">Leul Tesfaye</span>
@@ -78,7 +81,7 @@
 					<li>
 						<a
 							href={href(link.id)}
-							class="group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 hover:translate-x-1"
+							class="group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-200"
 							class:text-accent={active === link.id}
 							class:text-muted={active !== link.id}
 							style={active === link.id ? 'background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);' : ''}
@@ -87,7 +90,6 @@
 								class="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-accent transition-all duration-200"
 								class:opacity-100={active === link.id}
 								class:opacity-0={active !== link.id}
-								style="box-shadow: 0 0 8px var(--color-accent);"
 							></span>
 							<span class="font-mono text-xs" class:text-accent={active === link.id} class:text-faint={active !== link.id}>0{i + 1}</span>
 							<span class="transition-colors group-hover:text-ink">{link.label}</span>
@@ -153,7 +155,7 @@
 >
 	<nav class="flex h-16 items-center justify-between px-5">
 		<a href={onHome ? '#top' : '/'} class="flex items-center gap-2 font-display text-sm font-semibold text-ink">
-			<span class="h-2 w-2 rounded-full bg-accent" style="box-shadow: 0 0 8px var(--color-accent);"></span>
+			<span class="h-2 w-2 rounded-full bg-accent"></span>
 			Leul Tesfaye
 		</a>
 
@@ -219,7 +221,7 @@
 <style>
 	/* ── Sidebar ── */
 	.sidebar {
-		background-color: color-mix(in srgb, var(--color-canvas) 82%, transparent);
+		background-color: var(--color-canvas);
 		backdrop-filter: blur(20px);
 		-webkit-backdrop-filter: blur(20px);
 		transition: background-color 0.3s ease;
@@ -246,6 +248,8 @@
 	   THEME TOGGLE — pill/track style
 	   ────────────────────────────────────────── */
 	.theme-toggle {
+		min-width: 44px;
+		min-height: 44px;
 		display: inline-flex;
 		align-items: center;
 		background: none;
