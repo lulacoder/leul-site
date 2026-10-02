@@ -1,8 +1,9 @@
 import visitOromia from './assets/project-visit-oromia.jpg?w=480;768;1080;1432&format=webp&quality=85&enhanced';
+import visitOromiaCard from './assets/project-visit-oromia-card.jpg?w=390;780;1170&format=webp&quality=85&enhanced';
 import jora from './assets/project-jora-discovery.jpg?w=480;768;1080;1250&format=webp&quality=85&enhanced';
-import joraMobile from './assets/project-jora-discovery-mobile.jpg?w=195;390&format=webp&quality=85&enhanced';
+import joraCard from './assets/project-jora-discovery-card.jpg?w=390;780;1170&format=webp&quality=85&enhanced';
 import fixMyAddis from './assets/project-fixmyaddis.jpg?w=480;768;925&format=webp&quality=85&enhanced';
-import fixMyAddisMobile from './assets/project-fixmyaddis-mobile.jpg?w=195;390&format=webp&quality=85&enhanced';
+import fixMyAddisCard from './assets/project-fixmyaddis-card.jpg?w=390;780;1170&format=webp&quality=85&enhanced';
 import tripways from './assets/project-tripways.jpg?w=480;768;1080;1537&format=webp&quality=85&enhanced';
 import tripwaysMobile from './assets/project-tripways-mobile.jpg?w=244;488&format=webp&quality=85&enhanced';
 import kenna from './assets/project-kenna.webp?w=480;768;1080;1887&format=webp&quality=85&enhanced';
@@ -26,7 +27,7 @@ export interface Project {
 	live: string | null;
 	github: string | null;
 	image: typeof visitOromia;
-	/** Narrow screenshot used by the compact featured cards. */
+	/** Square phone-viewport capture used by carousel and compact grid cards. */
 	cardImage?: typeof visitOromia;
 	thumbnail?: typeof visitOromia;
 	featured?: boolean;
@@ -49,6 +50,7 @@ export const projects: Project[] = [
 		live: 'https://visitoromia.org/',
 		github: null,
 		image: visitOromia,
+		cardImage: visitOromiaCard,
 		featured: true
 	},
 	{
@@ -63,7 +65,7 @@ export const projects: Project[] = [
 		live: 'https://jora.events/',
 		github: null,
 		image: jora,
-		cardImage: joraMobile,
+		cardImage: joraCard,
 		featured: true
 	},
 	{
@@ -78,7 +80,7 @@ export const projects: Project[] = [
 		live: 'https://h56quunh7xlbthjllrv09o3w.sanduq.jirtuu.dev/',
 		github: null,
 		image: fixMyAddis,
-		cardImage: fixMyAddisMobile,
+		cardImage: fixMyAddisCard,
 		featured: true
 	},
 	{

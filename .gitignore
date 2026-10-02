@@ -5,6 +5,7 @@ node_modules
 .vercel
 .svelte-kit
 build
+.audit/
 
 # OS / editor
 .DS_Store

@@ -35,10 +35,10 @@
 	<a href="/projects/{project.slug}" class="project-preview" aria-label="View {project.name} project details">
 		<picture class="block h-full">
 			{#if project.cardImage}
-				<source media="(max-width: 767px)" type="image/webp" srcset={project.cardImage.sources.webp} sizes="calc(100vw - 72px)" />
+				<source media={featured ? '(max-width: 767px)' : undefined} type="image/webp" srcset={project.cardImage.sources.webp} sizes="(min-width: 1392px) 622px, (min-width: 768px) calc(50vw - 69px), min(calc(100vw - 69px), 459px)" />
 			{/if}
 			<img src={project.image.img.src} srcset={project.image.sources.webp}
-				sizes={featured ? '(min-width: 1392px) 588px, (min-width: 1024px) calc(55vw - 186px), (min-width: 768px) calc(55vw - 54px), calc(100vw - 72px)' : '(min-width: 1392px) 224px, (min-width: 1024px) calc(22.5vw - 89px), (min-width: 768px) calc(22.5vw - 35px), calc(100vw - 72px)'}
+				sizes={featured ? '(min-width: 1392px) 588px, (min-width: 1024px) calc(55vw - 186px), (min-width: 768px) calc(55vw - 54px), min(calc(100vw - 69px), 459px)' : '(min-width: 1392px) 224px, (min-width: 1024px) calc(22.5vw - 89px), (min-width: 768px) calc(22.5vw - 35px), min(calc(100vw - 69px), 459px)'}
 				alt="{project.name} website screenshot" width={project.image.img.w} height={project.image.img.h}
 				loading="lazy" decoding="async" class="h-full w-full object-cover object-top transition-transform duration-500 motion-safe:group-hover:scale-[1.02]" />
 		</picture>
@@ -46,7 +46,7 @@
 </article>
 
 <style>
-	.project-card {
+			.project-card {
 		display: flex;
 		flex-direction: column-reverse;
 		height: 100%;
@@ -60,7 +60,7 @@
 	.project-copy { min-width: 0; padding: 1.5rem; }
 	.project-preview {
 		display: block;
-		aspect-ratio: 16 / 10;
+		aspect-ratio: 1 / 1;
 		margin: 0.65rem 0.65rem 0;
 		overflow: hidden;
 		border-radius: 0.4rem;
@@ -75,17 +75,8 @@
 		font-size: 0.7rem;
 	}
 	@media (min-width: 768px) {
-		.project-card {
-			display: grid;
-			grid-template-columns: 1.1fr 0.9fr;
-		}
-		.project-copy { padding: 1.25rem; }
-		.project-preview {
-			aspect-ratio: auto;
-			min-height: 330px;
-			margin: 0.65rem 0.65rem 0.65rem 0;
-		}
 		.featured {
+			display: grid;
 			grid-template-columns: 0.8fr 1.2fr;
 			align-items: center;
 		}

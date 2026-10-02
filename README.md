@@ -53,3 +53,11 @@ static/
 All project content lives in [`src/lib/projects.ts`](src/lib/projects.ts).
 Add or edit entries there — the home page and case-study routes update
 automatically (and new slugs are prerendered on the next build).
+
+## Refreshing project previews
+
+Run `node scripts/capture-mobile-previews.mjs` to capture the three selected
+projects, or pass `visit-oromia`, `jora-discovery`, or `fixmyaddis` to refresh one.
+The script uses Puppeteer Core with installed Chrome. Set `CHROME_PATH` if Chrome
+is elsewhere. It overwrites the square `*-card.jpg` assets, so review each capture
+before keeping it. Desktop and case-study screenshots use separate assets.

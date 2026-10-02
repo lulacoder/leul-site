@@ -2,6 +2,7 @@
 	import { ArrowUpRight } from '@lucide/svelte';
 	import ScrollFade from './ScrollFade.svelte';
 	import ProjectCard from './ProjectCard.svelte';
+	import ProjectCarousel from './ProjectCarousel.svelte';
 	import { projects } from '$lib/projects';
 
 	const selected = projects.filter((project) => project.featured);
@@ -17,7 +18,11 @@
 				<p class="max-w-sm text-sm leading-relaxed text-muted">A few live projects I've worked on, independently and with a team.</p>
 			</div>
 		</ScrollFade>
-		<div class="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2">
+		<!-- Phones: auto-advancing carousel. Tablet and up: the grid. -->
+		<div class="mt-10 md:hidden">
+			<ProjectCarousel projects={selected} />
+		</div>
+		<div class="mt-10 hidden grid-cols-2 gap-5 md:grid">
 			{#each selected as project, i (project.slug)}
 				<ScrollFade delay={i * 70} class={i === 0 ? 'md:col-span-2' : ''}>
 					<ProjectCard {project} featured={i === 0} />
