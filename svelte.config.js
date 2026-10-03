@@ -7,8 +7,7 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		// Deploy target: Vercel. The whole site is static (prerendered),
-		// so the adapter ships pure HTML/CSS/JS — no serverless cost.
+		// Portfolio pages are prerendered; /api/chat runs as a Vercel function.
 		adapter: adapter()
 	}
 };

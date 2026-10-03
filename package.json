@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "prepare": "svelte-kit sync || echo ''",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "test:chat": "node scripts/check-chat.mjs"
   },
   "devDependencies": {
     "@sveltejs/adapter-vercel": "^6.3.3",
@@ -28,6 +29,9 @@
     "@fontsource-variable/bricolage-grotesque": "^5.2.10",
     "@fontsource-variable/geist": "^5.2.9",
     "@fontsource-variable/geist-mono": "^5.2.8",
-    "@lucide/svelte": "^1.17.0"
+    "@lucide/svelte": "^1.17.0",
+    "@tanstack/ai": "^0.64.0",
+    "@tanstack/ai-gemini": "^0.34.2",
+    "@tanstack/ai-svelte": "^0.24.4"
   }
 }
