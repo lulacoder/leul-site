@@ -9,6 +9,7 @@
 	import type { Snippet } from 'svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	import ChatWidget from '$lib/components/ChatWidget.svelte';
 
 	let { children }: { children: Snippet } = $props();
 
@@ -50,3 +51,5 @@
 
 	<Footer />
 </div>
+
+<ChatWidget />

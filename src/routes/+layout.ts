@@ -1,6 +1,5 @@
-// Prerender the entire site to static HTML — perfect for a portfolio and
-// free to host on Vercel. Dynamic project routes supply their own `entries`.
+// Prerender portfolio pages. The chat endpoint opts out of prerendering.
 export const prerender = true;
 
-// No client-side router data to load; this is a purely static site.
+// Portfolio routes use local data and consistent URLs.
 export const trailingSlash = 'never';
