@@ -11,7 +11,12 @@
 	let composer: HTMLTextAreaElement;
 	let transcript: HTMLDivElement;
 	let nearBottom = $state(true);
-	const suggestions = ['What has Leul built?', 'How did he build Tripways?', 'What does he enjoy?'];
+	const workPrompts = ['What has Leul built?', 'How did he build Tripways?', 'What does he do at Jirtuu?', 'How does he write code?'];
+	const funPrompts = ['How did he get into coding?', 'When did his AI agent break his app?', "How's Man United treating him?", 'Djokovic or Alcaraz?'];
+	const thinkingLines = ['Thinking...', 'Checking my notes on Leul...', 'Warming up a joke...', 'Arguing with myself...'];
+	// The panel loads only in the browser, so random picks cannot cause a hydration mismatch.
+	const suggestions = [pickOne(workPrompts), ...shuffled(funPrompts).slice(0, 2)];
+	let thinkingIndex = $state(0);
 
 	const chat = createChat({
 		connection: fetchServerSentEvents('/api/chat'),
@@ -28,6 +33,14 @@
 	const atLimit = $derived(chat.messages.length >= MAX_CHAT_MESSAGES);
 	const lastUserMessage = $derived(chat.messages.findLast((message) => message.role === 'user'));
 	const lastQuestion = $derived(lastUserMessage?.parts.find((part) => part.type === 'text')?.content ?? '');
+
+	function pickOne<T>(items: T[]): T {
+		return items[Math.floor(Math.random() * items.length)];
+	}
+
+	function shuffled<T>(items: T[]): T[] {
+		return items.map((item) => ({ item, order: Math.random() })).sort((a, b) => a.order - b.order).map(({ item }) => item);
+	}
 
 	/** Translates transport errors into a short message visitors can act on. */
 	function showError(cause: Error) {
@@ -77,6 +90,14 @@
 		}
 	}
 
+	/** Cycles the waiting message so a slow answer feels less like a stall. */
+	$effect(() => {
+		if (!chat.isLoading) return;
+		thinkingIndex = 0;
+		const timer = setInterval(() => { thinkingIndex = (thinkingIndex + 1) % thinkingLines.length; }, 2200);
+		return () => clearInterval(timer);
+	});
+
 	/** Focuses the question field when the chat panel opens. */
 	$effect(() => {
 		if (open) void tick().then(() => composer?.focus());
@@ -106,7 +127,7 @@
 		<div class="chat-avatar" aria-hidden="true">L.</div>
 		<div class="chat-heading">
 			<h2 id="chat-title">Ask about Leul</h2>
-			<p>His work. His interests. Your questions.</p>
+			<p>The work, the code, and the Man United pain.</p>
 		</div>
 		<button type="button" class="icon-button" aria-label="New chat" title="New chat" onclick={newChat}><RotateCcw size={16} /></button>
 		<button type="button" class="icon-button" aria-label="Close chat" title="Close chat" onclick={onClose}><X size={19} /></button>
@@ -117,8 +138,8 @@
 		{#if !chat.messages.length}
 			<div class="welcome">
 				<MessageCircle size={26} strokeWidth={1.5} class="text-accent" />
-				<h3>Get to know Leul.</h3>
-				<p>I'm his AI assistant. Ask me about what he's built, how he works, or what he enjoys outside of code.</p>
+				<h3>Go on, ask about Leul.</h3>
+				<p>I'm his AI sidekick. I know his projects, how he writes code, and why he keeps supporting Man United. He's not around to stop me.</p>
 				<div class="suggestions">
 					{#each suggestions as question}<button type="button" onclick={() => send(question)}>{question}<ArrowUp size={14} class="rotate-45" /></button>{/each}
 				</div>
@@ -128,13 +149,13 @@
 			{@const text = message.parts.filter((part) => part.type === 'text').map((part) => part.content).join('')}
 			{#if text}
 				<div class="message" class:user={message.role === 'user'}>
-					<p class="message-label">{message.role === 'user' ? 'You' : "Leul's AI assistant"}</p>
+					<p class="message-label">{message.role === 'user' ? 'You' : "Leul's AI sidekick"}</p>
 					<div class="message-text"><ChatText {text} /></div>
 				</div>
 			{/if}
 		{/each}
 		{#if chat.isLoading}
-			<p class="thinking" role="status"><span class="thinking-dot"></span>Thinking...</p>
+			<p class="thinking" role="status"><span class="thinking-dot"></span>{thinkingLines[thinkingIndex]}</p>
 		{/if}
 		{#if error}
 			<div class="chat-error" role="alert"><p>{error}</p>{#if lastQuestion}<button type="button" onclick={retry}>Try again</button>{/if}</div>
@@ -147,14 +168,14 @@
 	<form class="composer" onsubmit={(event) => { event.preventDefault(); void send(input); }}>
 		<label class="sr-only" for="chat-question">Your question about Leul</label>
 		<textarea id="chat-question" bind:this={composer} bind:value={input} rows="2" maxlength={MAX_INPUT_LENGTH}
-			placeholder="What would you like to know?" disabled={atLimit} onkeydown={onComposerKey}></textarea>
+			placeholder="Ask anything about Leul..." disabled={atLimit} onkeydown={onComposerKey}></textarea>
 		{#if chat.isLoading}
 			<button type="button" class="send-button" aria-label="Stop response" title="Stop response" onclick={() => chat.stop()}><Square size={14} fill="currentColor" /></button>
 		{:else}
 			<button type="submit" class="send-button" aria-label="Send question" title="Send question" disabled={!input.trim() || atLimit}><ArrowUp size={20} /></button>
 		{/if}
 	</form>
-	<footer class="chat-footer"><span>AI answers about Leul</span><a href="/#contact" onclick={onClose}>Contact Leul</a></footer>
+	<footer class="chat-footer"><span>AI sidekick. Jokes are mine, facts are his.</span><a href="/#contact" onclick={onClose}>Contact Leul</a></footer>
 </div>
 
 <style>

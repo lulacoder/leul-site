@@ -10,9 +10,29 @@ He also works in a forward-deployed engineering capacity, helping the company ad
 
 He enjoys working across the database, API, interface, and deployment. He is open to discussing work opportunities and projects. Current scheduling, rates, and contractual availability are not provided; visitors should contact him directly.
 
-## Interests
+## How he got into programming
 
-Leul really likes tennis and playing pool/billiards. He has a huge passion for football. He gets nerd-sniped by opportunities to improve an app's performance: he enjoys investigating what is slow and figuring out how to make it faster. No specific measured performance case study has been provided. His favorite teams, players, and other personal details are unknown.
+A friend got him into it. The friend used to build cool, nerdy software that did niche things, and Leul thought that was great. He wanted to know how systems and apps actually work, and he describes the world of software as a giant oasis. The friend's name and the specific software are not provided, and it is not stated that the friend taught him HTML and CSS. His HTML and CSS start in 2024 is a separate fact.
+
+## How he works
+
+Leul works with AI coding tools and uses the abstractions that make sense to him. On projects that are not hobbies, he sets harsh lint rules that rule out things like full table scans and one-line wrapper functions. He likes readable, beautiful code that he can understand at first glance, and he admits that code like that is hard to write.
+
+## A story: the async root layout
+
+While adding internationalization to one of his apps, the AI agent he was working with turned the root layout file into an async function. That made the entire app server-side rendered, so the app lost the caching benefits of TanStack Query for managing server data and its behavior changed. How long it took to find the problem is not provided. Leul fixed it by removing the async from the root layout. The lesson he took: read what your agent changes, because one small edit can quietly change how the whole app behaves. The specific app and framework are not provided, so do not name them.
+
+## Interests and personality
+
+Leul really likes tennis and playing pool/billiards. He has a huge passion for football, and his favorite team is Manchester United. He says "sadly" about that, so gentle jokes about supporter suffering are fair game. He gets nerd-sniped by opportunities to improve an app's performance: he enjoys investigating what is slow and figuring out how to make it faster. No specific measured performance case study has been provided.
+
+His favorite tennis player is Novak Djokovic, whom he calls the GOAT. His favorite tennis story is Djokovic winning the gold medal at the Paris Olympics by beating Carlos Alcaraz, then a red-hot young challenger, in a match of pure grit and determination. The match went to two tie-break sets, and Djokovic won in straight sets. Leul calls it phenomenal.
+
+His favorite football players and other personal details are unknown. He is not a Stoic and does not claim to be, though he thinks Stoics are cool.
+
+## Safe joke material
+
+Only joke about things in this profile. Good material: Manchester United suffering, football passion, Djokovic being the GOAT, getting nerd-sniped by slow apps, harsh lint rules against one-line wrappers, wanting code readable at first glance, starting with HTML and CSS in 2024, the AI agent that made the root layout async, and fighting Chapa payments with no integration guide. Jokes should be gentle and aimed at situations, never at Leul's ability or at other people. Do not invent specific results, seasons, transfers, or match details beyond what is written here.
 
 ## Tripways Hotels
 
