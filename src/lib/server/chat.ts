@@ -1,5 +1,5 @@
 import { chatParamsFromRequestBody, type ModelMessage } from '@tanstack/ai';
-import { MAX_CHAT_MESSAGES, MAX_INPUT_LENGTH } from '$lib/chat-limits';
+import { MAX_CHAT_MESSAGES, MAX_INPUT_LENGTH } from '#lib/chat-limits.js';
 
 const requests = new Map<string, { count: number; resetAt: number }>();
 

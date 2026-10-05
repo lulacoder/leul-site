@@ -1,6 +1,6 @@
 # Leul Tesfaye — Portfolio
 
-A personal portfolio built with SvelteKit, Svelte 5, Tailwind CSS v4, and Lucide. Portfolio pages are prerendered. The AI chat uses a server endpoint and deploys with the existing Vercel adapter.
+A personal portfolio built with SvelteKit 3, Svelte 5, Tailwind CSS v4, and Lucide. Portfolio pages are prerendered. The AI chat uses a server endpoint and deploys with the existing Vercel adapter.
 
 ## Portfolio chat
 
@@ -17,6 +17,8 @@ Requests accept plain text only, up to 1,000 characters per question and 40 mess
 With the local server running and a Gemini key configured, run `npm run test:chat` for browser and endpoint checks. It sends six real Gemini questions, checks tab-session persistence and reset, and saves desktop/mobile screenshots in `.audit/`. It uses installed Chrome through Puppeteer Core; set `CHROME_PATH` or `CHAT_TEST_URL` if needed.
 
 ## Develop
+
+Requires Node.js 22.17 or later. SvelteKit configuration lives in `vite.config.ts`, and `#lib/*` imports are declared in `package.json`. Server environment variables are declared in `src/env.ts`.
 
 ```bash
 npm install

@@ -2,7 +2,7 @@
 	import { onDestroy, tick } from 'svelte';
 	import { createChat, fetchServerSentEvents, sessionStoragePersistence } from '@tanstack/ai-svelte';
 	import { ArrowUp, MessageCircle, RotateCcw, Square, X } from '@lucide/svelte';
-	import { MAX_CHAT_MESSAGES, MAX_INPUT_LENGTH } from '$lib/chat-limits';
+	import { MAX_CHAT_MESSAGES, MAX_INPUT_LENGTH } from '#lib/chat-limits.js';
 	import ChatText from './ChatText.svelte';
 
 	let { open, onClose }: { open: boolean; onClose: () => void } = $props();

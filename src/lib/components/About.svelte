@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ScrollFade from './ScrollFade.svelte';
 
-	import { projects } from '$lib/projects';
+	import { projects } from '#lib/projects.js';
 
 	const liveProjects = projects.filter((project) => project.status === 'Live').length;
 	/** A few facts about my work and background. */

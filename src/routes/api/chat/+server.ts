@@ -1,9 +1,9 @@
-import { env } from '$env/dynamic/private';
+import { GEMINI_API_KEY } from '$app/env/private';
+
 import { chat, EventType, toServerSentEventsResponse, type StreamChunk } from '@tanstack/ai';
 import { createGeminiChat } from '@tanstack/ai-gemini';
-import { json } from '@sveltejs/kit';
-import { allowChatRequest, parseChatRequest } from '$lib/server/chat';
-import profile from '$lib/server/leul-profile.md?raw';
+import { allowChatRequest, parseChatRequest } from '#lib/server/chat.js';
+import profile from '#lib/server/leul-profile.md?raw';
 import type { RequestHandler } from './$types';
 
 export const prerender = false;
@@ -57,28 +57,29 @@ async function* friendlyStream(stream: AsyncIterable<StreamChunk>): AsyncIterabl
 export const POST: RequestHandler = async ({ request, url, getClientAddress }) => {
 	const origin = request.headers.get('origin');
 	if (origin && origin !== url.origin) {
-		return json({ message: 'Please use the chat on this website.' }, { status: 403 });
+		return Response.json({ message: 'Please use the chat on this website.' }, { status: 403 });
 	}
 	if (!allowChatRequest(getClientAddress())) {
-		return json({ message: 'A little too fast. Please try again in a minute.' }, {
+		return Response.json({ message: 'A little too fast. Please try again in a minute.' }, {
 			status: 429, headers: { 'Retry-After': '60' }
 		});
 	}
 	let params: Awaited<ReturnType<typeof parseChatRequest>>;
 	try {
 		const body = await request.text();
-		if (body.length > 64_000) return json({ message: 'Please start a new chat.' }, { status: 413 });
+		if (body.length > 64_000) return Response.json({ message: 'Please start a new chat.' }, { status: 413 });
 		params = await parseChatRequest(JSON.parse(body));
 	} catch {
-		return json({ message: 'Please start a new chat and try again.' }, { status: 400 });
+		return Response.json({ message: 'Please start a new chat and try again.' }, { status: 400 });
 	}
-	if (!env.GEMINI_API_KEY) {
-		return json({ message: "Chat isn't available just yet. You can still contact Leul." }, { status: 503 });
+
+	if (!GEMINI_API_KEY) {
+		return Response.json({ message: "Chat isn't available just yet. You can still contact Leul." }, { status: 503 });
 	}
 	const controller = new AbortController();
 	request.signal.addEventListener('abort', () => controller.abort(), { once: true, signal: controller.signal });
 	const stream = chat({
-		adapter: createGeminiChat('gemini-3.5-flash-lite', env.GEMINI_API_KEY),
+		adapter: createGeminiChat('gemini-3.5-flash-lite', GEMINI_API_KEY),
 		...params,
 		systemPrompts: [instructions],
 		modelOptions: { maxOutputTokens: 2048, temperature: 1.1 },

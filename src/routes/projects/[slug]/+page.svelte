@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ArrowLeft, ArrowRight, ArrowUpRight } from '@lucide/svelte';
-	import GithubIcon from '$lib/components/icons/GithubIcon.svelte';
+	import GithubIcon from '#lib/components/icons/GithubIcon.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();

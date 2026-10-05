@@ -3,7 +3,7 @@
 	import ScrollFade from './ScrollFade.svelte';
 	import ProjectCard from './ProjectCard.svelte';
 	import ProjectCarousel from './ProjectCarousel.svelte';
-	import { projects } from '$lib/projects';
+	import { projects } from '#lib/projects.js';
 
 	const selected = projects.filter((project) => project.featured);
 	const more = projects.filter((project) => !project.featured);

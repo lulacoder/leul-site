@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ArrowUpRight, ArrowRight } from '@lucide/svelte';
-	import type { Project } from '$lib/projects';
+	import type { Project } from '#lib/projects.js';
 
 	let { project, featured = false }: { project: Project; featured?: boolean } = $props();
 </script>

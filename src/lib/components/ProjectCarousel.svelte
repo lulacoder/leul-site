@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { ChevronLeft, ChevronRight, Pause, Play } from '@lucide/svelte';
 	import ProjectCard from './ProjectCard.svelte';
-	import type { Project } from '$lib/projects';
+	import type { Project } from '#lib/projects.js';
 
 	let { projects, interval = 5000 }: { projects: Project[]; interval?: number } = $props();
 

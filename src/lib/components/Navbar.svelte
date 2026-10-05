@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { Menu, X, Mail, Download, Sun, Moon } from '@lucide/svelte';
 	import GithubIcon from './icons/GithubIcon.svelte';
 
@@ -27,7 +27,7 @@
 	let menuOpen = $state(false);
 	let scrolled = $state(false);
 
-	const onHome = $derived($page.url.pathname === '/');
+	const onHome = $derived(page.url.pathname === '/');
 	const href = (id: string) => (onHome ? `#${id}` : `/#${id}`);
 
 	// Reconnect section tracking when returning from a project page.

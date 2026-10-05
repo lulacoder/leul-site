@@ -1,15 +1,15 @@
 <script lang="ts">
 	import '../app.css';
 	// Self-hosted variable fonts (no external requests).
-	import '@fontsource-variable/geist';
-	import '@fontsource-variable/geist-mono';
-	import '@fontsource-variable/bricolage-grotesque';
+	import '@fontsource-variable/geist/index.css';
+	import '@fontsource-variable/geist-mono/index.css';
+	import '@fontsource-variable/bricolage-grotesque/index.css';
 
 	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
-	import Navbar from '$lib/components/Navbar.svelte';
-	import Footer from '$lib/components/Footer.svelte';
-	import ChatWidget from '$lib/components/ChatWidget.svelte';
+	import Navbar from '#lib/components/Navbar.svelte';
+	import Footer from '#lib/components/Footer.svelte';
+	import ChatWidget from '#lib/components/ChatWidget.svelte';
 
 	let { children }: { children: Snippet } = $props();
 

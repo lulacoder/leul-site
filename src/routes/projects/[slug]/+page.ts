@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { projects } from '$lib/projects';
+import { projects } from '#lib/projects.js';
 import type { EntryGenerator, PageLoad } from './$types';
 
 export const load: PageLoad = ({ params }) => {

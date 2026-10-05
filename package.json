@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.17"
+  },
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
@@ -12,17 +15,17 @@
     "test:chat": "node scripts/check-chat.mjs"
   },
   "devDependencies": {
-    "@sveltejs/adapter-vercel": "^6.3.3",
+    "@sveltejs/adapter-vercel": "^7.0.0",
     "@sveltejs/enhanced-img": "^1.0.0",
-    "@sveltejs/kit": "^2.15.0",
+    "@sveltejs/kit": "^3.0.0",
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
     "@tailwindcss/vite": "^4.3.0",
     "@types/node": "^25.9.1",
     "puppeteer-core": "^25.12.0",
-    "svelte": "^5.0.0",
-    "svelte-check": "^4.0.0",
+    "svelte": "^5.57.1",
+    "svelte-check": "^4.7.5",
     "tailwindcss": "^4.3.0",
-    "typescript": "^5.5.0",
+    "typescript": "^6.0.0",
     "vite": "^8.3.2"
   },
   "dependencies": {
@@ -33,5 +36,8 @@
     "@tanstack/ai": "^0.64.0",
     "@tanstack/ai-gemini": "^0.34.2",
     "@tanstack/ai-svelte": "^0.24.4"
+  },
+  "imports": {
+    "#lib/*": "./src/lib/*"
   }
 }

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ScrollFade from './ScrollFade.svelte';
 	import { GraduationCap, Award, Check, ExternalLink, X } from '@lucide/svelte';
-	import certificate from '$lib/assets/ml-certificate.jpg?w=96;192;384;768;1024&format=webp&quality=88&enhanced';
+	import certificate from '#lib/assets/ml-certificate.jpg?w=96;192;384;768;1024&format=webp&quality=88&enhanced';
 
 	/** Responsive previews share the full-size certificate used by the lightbox. */
 	const mlCertificates = [
