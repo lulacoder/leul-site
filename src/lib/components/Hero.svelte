@@ -7,7 +7,7 @@
 		<div class="min-w-0">
 			<p class="fade-up eyebrow" style="animation-delay: 0.05s">Hello, I'm Leul</p>
 			<h1 class="hero-heading mt-5">
-				Building software that works in the <span class="text-accent">real world.</span>
+				I build <span class="text-accent">full-stack products</span> and <span class="text-accent">architect solutions.</span>
 			</h1>
 			<p class="fade-up mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg" style="animation-delay: 0.15s">
 				I'm Leul, a software engineering student at AAU, Ethiopia.
@@ -31,7 +31,7 @@
 					<span class="h-2 w-2 rounded-full bg-[#4c4c55]"></span>
 					<span class="ml-2 font-mono text-[11px]">who.ts</span>
 				</div>
-				<pre class="overflow-x-auto p-5 font-mono text-xs leading-[1.9]"><code><span class="code-comment">// a quick introduction</span>
+				<pre class="whitespace-pre-wrap wrap-anywhere p-5 font-mono text-xs leading-[1.9]"><code><span class="code-comment">// a quick introduction</span>
 <span class="code-key">const</span> leul = &#123;
   <span class="code-key">role:</span> <span class="code-string">'Software Engineer'</span>,
   <span class="code-key">school:</span> <span class="code-string">'AAU, Addis Ababa'</span>,
@@ -46,6 +46,7 @@
   <span class="code-key">runtime:</span> <span class="code-string">'Bun'</span>,
 &#125;;
 
+<span class="code-comment">// Good abstractions and clear constraints make better software.</span>
 leul.build().ship();</code></pre>
 			</div>
 		</div>
@@ -61,7 +62,7 @@ leul.build().ship();</code></pre>
 		padding-bottom: 4rem;
 	}
 	.hero-heading {
-		font-size: clamp(2.75rem, 4.6vw, 4.5rem);
+		font-size: clamp(2.475rem, 4.14vw, 4.05rem);
 		font-weight: 600;
 		letter-spacing: -0.05em;
 		line-height: 1.03;
