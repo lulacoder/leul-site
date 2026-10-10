@@ -36,7 +36,7 @@ Only joke about things in this profile. Good material: Manchester United sufferi
 
 ## Tripways Hotels
 
-A freelance hotel platform covering room inventory, bookings, staff workflows, and Chapa payments. Leul built the web and mobile applications and deployed the platform himself. The web frontend uses React and TanStack Router. The mobile frontend uses React Native and Expo. Both use Convex as the backend.
+A freelance hotel platform covering room inventory, bookings, staff workflows, and Chapa payments. Leul built the web and mobile applications and deployed the platform himself. The web frontend uses React and TanStack Router, with Clerk for authentication. The mobile frontend uses React Native and Expo. Both use Convex as the backend.
 
 The hardest problem was connecting Chapa payments to Convex without a ready-made integration guide. Working with his AI coding agent, Leul figured out how to start payments, receive payment confirmations, and save the results correctly. For technical follow-up questions, the implementation uses Convex actions to call Chapa, internal actions to handle payment events, internal mutations to update stored records, and webhooks for payment notifications.
 
@@ -58,20 +58,20 @@ Portfolio: /projects/kenna-gifts
 
 A civic platform where people report city problems in Addis Ababa and track their progress until resolution. Reports are routed by location. Staff can assign service providers, track progress, and work within permissions for their role and geographic area.
 
-Leul worked as a full-stack developer on features involving both the core backend and the web application frontend, as part of a team. The web app uses Next.js and React. The backend uses NestJS, Prisma, and PostgreSQL. Do not claim he built the whole platform alone or assign him a specific lead title on this project.
+Leul worked as a full-stack developer on features involving both the core backend and the web application frontend, as part of a team. The web app uses Next.js and React. The backend uses NestJS, Prisma, and PostgreSQL, with Better Auth for authentication and BullMQ backed by Redis for background job queues. Do not claim he built the whole platform alone or assign him a specific lead title on this project.
 
 Portfolio: /projects/fixmyaddis
 
 ## Visit Oromia
 
-A tourism website for exploring Oromia, including destinations, travel information, stories, and digital tours. Leul redesigned and rebuilt the website from scratch and integrated the CMS that powers its content.
+A tourism website for exploring Oromia, including destinations, travel information, stories, and digital tours. Leul redesigned and rebuilt the website from scratch and integrated the CMS that powers its content. The website uses Next.js with Strapi as its CMS.
 
 Website: https://visitoromia.org/
 Portfolio: /projects/visit-oromia
 
 ## Jora Events
 
-An event discovery and ticketing platform for Addis Ababa. Leul contributed as a member of the core frontend team. Do not claim he built it alone.
+An event discovery and ticketing platform for Addis Ababa. The frontend uses React Router with Vite, and the backend uses Laravel. Leul contributed as a member of the core frontend team. Do not claim he built it alone.
 
 Website: https://jora.events/
 Portfolio: /projects/jora-events
@@ -80,11 +80,11 @@ Portfolio: /projects/jora-events
 
 Trending Movies is a solo movie discovery app using Next.js, TypeScript, TMDB, and Tailwind CSS. It includes search, genre filters, movie details, and a locally saved watchlist. The portfolio labels it in development. Portfolio: /projects/trending-movies
 
-Resume Analyzer is a solo project providing AI resume feedback, rewrites, and a streaming coaching chat. It uses Next.js, TypeScript, Gemini, and Supabase, with PDF ingestion, authentication, and saved analyses. Portfolio: /projects/resume-analyzer
+Resume Analyzer is a solo project providing AI resume feedback, rewrites, and a streaming coaching chat. It uses Next.js, AI SDK, TypeScript, Gemini, and Supabase, with PDF ingestion, authentication, and saved analyses. Portfolio: /projects/resume-analyzer
 
 Leul completed Stanford's Machine Learning Specialization on Coursera on August 27, 2025. This is a specialization certificate, not a Stanford degree. His university program is a Bachelor of Software Engineering at Addis Ababa University.
 
-His portfolio also lists SvelteKit, Node.js, TanStack Start, Effect, Cloudflare Workers, Durable Objects, D1, and Bun among his tools. Do not invent years of experience or proficiency ratings for them.
+His portfolio also lists SvelteKit, Node.js, Laravel, Strapi, TanStack Start, Effect, Cloudflare Workers, Durable Objects, D1, and Bun among his tools. Do not invent years of experience or proficiency ratings for them.
 
 ## Contact
 

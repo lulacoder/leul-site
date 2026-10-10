@@ -13,7 +13,8 @@
 			] },
 			{ category: 'Backend', items: [
 				{ name: 'Node.js', logo: 'nodedotjs' }, { name: 'NestJS', logo: 'nestjs' },
-				{ name: 'Convex', logo: 'convex' }, { name: 'Express', logo: 'express' }
+				{ name: 'Convex', logo: 'convex' }, { name: 'Express', logo: 'express' },
+				{ name: 'Laravel', logo: 'laravel' }, { name: 'Strapi', logo: 'strapi' }
 			] },
 			{ category: 'Types', items: [
 				{ name: 'TypeScript', logo: 'typescript' }, { name: 'Effect', logo: 'effect' }

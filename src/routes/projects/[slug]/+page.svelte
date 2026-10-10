@@ -44,6 +44,8 @@
 		<div>
 			<h2 class="font-display text-xl font-semibold text-ink">About the project</h2>
 			<p class="mt-3 leading-relaxed text-muted">{project.overview}</p>
+			<h2 class="mt-6 font-display text-xl font-semibold text-ink">Project stack</h2>
+			<p class="mt-3 leading-relaxed text-muted">{project.stackDescription}</p>
 			<h2 class="mt-6 font-display text-xl font-semibold text-ink">My contribution</h2>
 			<ul class="mt-3 list-disc space-y-2 pl-4 text-sm leading-relaxed text-muted marker:text-accent">
 				{#each project.contributions as contribution (contribution)}
@@ -57,10 +59,10 @@
 				<p class="mt-2 text-sm leading-relaxed text-ink">{project.role}</p>
 			</div>
 			<div>
-				<h2 class="eyebrow">Project stack & focus</h2>
+				<h2 class="eyebrow">Tech stack</h2>
 				<div class="mt-3 flex flex-wrap gap-2">
-					{#each project.tags as tag (tag)}
-						<span class="pill text-xs">{tag}</span>
+					{#each project.stack as technology (technology)}
+						<span class="pill text-xs">{technology}</span>
 					{/each}
 				</div>
 			</div>
