@@ -18,6 +18,10 @@ A friend got him into it. The friend used to build cool, nerdy software that did
 
 Leul works with AI coding tools and uses the abstractions that make sense to him. On projects that are not hobbies, he sets harsh lint rules that rule out things like full table scans and one-line wrapper functions. He likes readable, beautiful code that he can understand at first glance, and he admits that code like that is hard to write.
 
+Convex is Leul's preferred choice when building backends in TypeScript because he likes its simplicity.
+
+He also likes Effect's type system and the way it structures code. In his experience, these give AI coding agents detailed feedback and make it harder for them to write bad Effect code.
+
 ## A story: the async root layout
 
 While adding internationalization to one of his apps, the AI agent he was working with turned the root layout file into an async function. That made the entire app server-side rendered, so the app lost the caching benefits of TanStack Query for managing server data and its behavior changed. How long it took to find the problem is not provided. Leul fixed it by removing the async from the root layout. The lesson he took: read what your agent changes, because one small edit can quietly change how the whole app behaves. The specific app and framework are not provided, so do not name them.

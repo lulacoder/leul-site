@@ -8,15 +8,49 @@
 	let ready = $state(false);
 	let loadError = $state(false);
 	let launcher: HTMLButtonElement;
+	let panelPromise: Promise<typeof import('./ChatPanel.svelte')> | undefined;
+	let hoverTimer: ReturnType<typeof setTimeout> | undefined;
 
-	onMount(() => { ready = true; });
+	onMount(() => {
+		ready = true;
+		return cancelPreload;
+	});
 
-	/** Loads the chat code only when a visitor first opens the panel. */
+	/** Shares an in-flight download between preloading and opening. */
+	function loadPanel() {
+		return panelPromise ??= import('./ChatPanel.svelte').catch((cause) => {
+			panelPromise = undefined;
+			throw cause;
+		});
+	}
+
+	function cancelPreload() {
+		if (hoverTimer !== undefined) {
+			clearTimeout(hoverTimer);
+			hoverTimer = undefined;
+		}
+	}
+
+	/** Warms the code without opening the panel or showing speculative errors. */
+	function preloadChat() {
+		cancelPreload();
+		if (!Panel) void loadPanel().catch(() => undefined);
+	}
+
+	/** Ignores touch hover and brief pointer passes over the launcher. */
+	function schedulePreload(event: PointerEvent) {
+		if (event.pointerType === 'touch' || Panel) return;
+		cancelPreload();
+		hoverTimer = setTimeout(preloadChat, 150);
+	}
+
+	/** Opens the panel using any download already started by hover or focus. */
 	async function openChat() {
+		cancelPreload();
 		loading = true;
 		loadError = false;
 		try {
-			Panel ??= (await import('./ChatPanel.svelte')).default;
+			Panel ??= (await loadPanel()).default;
 			open = true;
 		} catch {
 			loadError = true;
@@ -47,6 +81,9 @@
 	aria-expanded={open}
 	aria-controls={Panel ? 'leul-chat' : undefined}
 	disabled={loading || !ready}
+	onpointerenter={schedulePreload}
+	onpointerleave={cancelPreload}
+	onfocus={preloadChat}
 	onclick={open ? closeChat : openChat}
 >
 	{#if loading}<LoaderCircle size={19} class="animate-spin" />{:else}<MessageCircle size={19} />{/if}
