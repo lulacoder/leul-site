@@ -33,6 +33,8 @@ npm run preview
 npm run check        # svelte-check (types + templates)
 ```
 
+`npm run check` uses TypeScript 7.1 beta through the `@typescript/native` npm alias and `--tsgo`. TypeScript 6 stays installed as `typescript` because SvelteKit and Svelte's file conversion tools require its JavaScript API.
+
 ## Deploy (Vercel)
 
 Uses `@sveltejs/adapter-vercel`. Push to a Git repo, import the project in Vercel, and it builds automatically — no extra config needed.
