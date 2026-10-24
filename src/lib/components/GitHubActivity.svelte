@@ -6,6 +6,7 @@
 
 	type ActivityState = { kind: 'loading' } | { kind: 'ready'; calendar: ContributionCalendar } | { kind: 'error' };
 	let activity = $state<ActivityState>({ kind: 'loading' });
+	let focusedDate = $state<string | null>(null);
 	let tooltip = $state<{ text: string; x: number; y: number; below: boolean } | null>(null);
 	const levels: ContributionLevel[] = ['NONE', 'FIRST_QUARTILE', 'SECOND_QUARTILE', 'THIRD_QUARTILE', 'FOURTH_QUARTILE'];
 	const monthFormat = new Intl.DateTimeFormat('en', { month: 'short', timeZone: 'UTC' });
@@ -42,6 +43,25 @@
 		return `${count ? numberFormat.format(count) : 'No'} contribution${count === 1 ? '' : 's'} on ${dateFormat.format(new Date(`${day.date}T00:00:00Z`))}`;
 	}
 
+	/** Moves focus through days while keeping the calendar to one Tab stop */
+	function navigateDay(event: KeyboardEvent, day: ContributionDay): void {
+		if (!(event.currentTarget instanceof HTMLButtonElement) || event.altKey || event.ctrlKey || event.metaKey) return;
+		const buttons = Array.from(event.currentTarget.closest('.calendar')?.querySelectorAll<HTMLButtonElement>('.day') ?? []);
+		const index = buttons.indexOf(event.currentTarget);
+		let nextIndex: number;
+		switch (event.key) {
+			case 'ArrowUp': nextIndex = day.weekday === 0 ? index : index - 1; break;
+			case 'ArrowDown': nextIndex = day.weekday === 6 ? index : index + 1; break;
+			case 'ArrowLeft': nextIndex = index - 7; break;
+			case 'ArrowRight': nextIndex = index + 7; break;
+			case 'Home': nextIndex = 0; break;
+			case 'End': nextIndex = buttons.length - 1; break;
+			default: return;
+		}
+		event.preventDefault();
+		buttons[nextIndex]?.focus();
+	}
+
 	/** Positions one shared tooltip inside the viewport for hover, focus, and tap */
 	function showDay(event: MouseEvent | FocusEvent, day: ContributionDay): void {
 		if (!(event.currentTarget instanceof HTMLElement)) return;
@@ -76,8 +96,9 @@
 					<p class="contribution-total"><span class="font-medium text-ink">{numberFormat.format(activity.calendar.totalContributions)}</span> contributions in the last year</p>
 					<span class="streak" aria-label="{streak} consecutive days of GitHub contributions">{numberFormat.format(streak)}-day streak</span>
 				</div>
+				<p id="github-navigation" class="sr-only">Use Up and Down to move by day, Left and Right by week, and Home and End for the first and last day. Press Tab to leave the calendar.</p>
 				<div class="calendar-scroll" onscroll={() => (tooltip = null)}>
-					<div class="calendar" style:--weeks={activity.calendar.weeks.length}>
+					<div class="calendar" role="group" aria-label="Daily GitHub contributions" aria-describedby="github-navigation" style:--weeks={activity.calendar.weeks.length}>
 						{#each ['Mon', 'Wed', 'Fri'] as label, i}
 							<span class="weekday" style:grid-row={i * 2 + 3}>{label}</span>
 						{/each}
@@ -89,13 +110,15 @@
 									class="day"
 									data-level={day.contributionLevel}
 									aria-label={dayLabel(day)}
+									tabindex={day.date === (focusedDate ?? activity.calendar.weeks[0]?.contributionDays[0]?.date) ? 0 : -1}
 									style:grid-column={index + 2}
 									style:grid-row={day.weekday + 2}
 									onmouseenter={(event) => showDay(event, day)}
 									onmouseleave={() => (tooltip = null)}
-									onfocus={(event) => showDay(event, day)}
+									onfocus={(event) => { focusedDate = day.date; showDay(event, day); }}
 									onblur={() => (tooltip = null)}
-									onclick={(event) => showDay(event, day)}
+									onclick={(event) => { focusedDate = day.date; showDay(event, day); }}
+									onkeydown={(event) => navigateDay(event, day)}
 								></button>
 							{/each}
 						{/each}
