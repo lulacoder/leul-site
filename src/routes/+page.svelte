@@ -2,6 +2,7 @@
 	import Hero from '#lib/components/Hero.svelte';
 	import About from '#lib/components/About.svelte';
 	import Projects from '#lib/components/Projects.svelte';
+	import GitHubActivity from '#lib/components/GitHubActivity.svelte';
 	import Skills from '#lib/components/Skills.svelte';
 	import Education from '#lib/components/Education.svelte';
 	import Contact from '#lib/components/Contact.svelte';
@@ -23,6 +24,7 @@
 
 <Hero />
 <Projects />
+<GitHubActivity />
 <Skills />
 <About />
 <Education />

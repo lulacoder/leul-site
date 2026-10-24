@@ -1,4 +1,7 @@
 import { defineEnvVars } from '@sveltejs/kit/env';
 
-// Keep the key optional so the chat endpoint can return its unavailable response.
-export const variables = defineEnvVars({ GEMINI_API_KEY: { schema: (input) => input ?? '' } });
+// Keep keys optional so each endpoint can return its unavailable response
+export const variables = defineEnvVars({
+	GEMINI_API_KEY: { schema: (input) => input ?? '' },
+	GITHUB_TOKEN: { schema: (input) => input ?? '' }
+});
