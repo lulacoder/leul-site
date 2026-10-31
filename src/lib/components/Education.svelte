@@ -1,215 +1,98 @@
 <script lang="ts">
+	import { GraduationCap, ArrowUpRight, X } from '@lucide/svelte';
 	import ScrollFade from './ScrollFade.svelte';
-	import { GraduationCap, Award, Check, ExternalLink, X } from '@lucide/svelte';
 	import certificate from '#lib/assets/ml-certificate.jpg?w=96;192;384;768;1024&format=webp&quality=88&enhanced';
 
-	/** Responsive previews share the full-size certificate used by the lightbox. */
-	const mlCertificates = [
-		{
-			src: certificate,
-			alt: 'Stanford Machine Learning Specialization Certificate',
-			label: 'Specialization Certificate'
-		}
-	];
-
 	let lightboxOpen = $state(false);
-	let lightboxSrc = $state(certificate);
-	let lightboxAlt = $state('');
 	let lightboxDialog: HTMLDialogElement | undefined = $state();
 
 	$effect(() => {
 		if (lightboxOpen && lightboxDialog && !lightboxDialog.open) lightboxDialog.showModal();
 	});
-
-	function openLightbox(src: typeof certificate, alt: string) {
-		lightboxSrc = src;
-		lightboxAlt = alt;
-		lightboxOpen = true;
-	}
-	function closeLightbox() {
-		lightboxOpen = false;
-	}
 </script>
 
-<section id="education" class="relative">
+<section id="education" class="education-section">
 	<div class="section-shell">
 		<ScrollFade>
-			<p class="eyebrow">Background</p>
-			<h2 class="section-heading mt-3">
-				Education
-			</h2>
+			<p class="section-label"><GraduationCap size={25} aria-hidden="true" /> <span>Education</span></p>
+			<div class="education-heading">
+				<h2>A strong foundation<br />and a drive to <em>keep learning.</em></h2>
+				<p>I'm studying software engineering and exploring machine learning alongside the products I build.</p>
+			</div>
 		</ScrollFade>
 
-		<div class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
-			<!-- University -->
-			<ScrollFade>
-				<div class="glass surface-hover group relative isolate h-full rounded-2xl p-8">
-					<div
-						class="flex h-12 w-12 items-center justify-center rounded-xl text-accent transition-transform duration-300 group-hover:scale-110"
-						style="background: color-mix(in srgb, var(--color-accent) 14%, transparent);"
-					>
-						<GraduationCap size={22} />
-					</div>
-					<h3 class="mt-5 font-display text-xl font-semibold tracking-tight text-ink">
-						Bachelor of Software Engineering
-					</h3>
-					<p class="mt-1 text-muted">Addis Ababa University</p>
-					<p class="mt-4 font-mono text-sm text-faint">Current Student</p>
+		<ScrollFade delay={100}>
+			<article class="university-card">
+				<div class="university-copy">
+					<span class="tag">B.Sc.</span>
+					<h3>Addis Ababa University</h3>
+					<p class="degree">Bachelor of Software Engineering</p>
+					<p class="description">I'm currently studying software engineering at Addis Ababa University.</p>
+					<p class="school-name">Addis Ababa University <span>·</span> Current student</p>
 				</div>
-			</ScrollFade>
+				<img class="building" src="/university-illustration.svg" alt="" aria-hidden="true" />
+			</article>
+		</ScrollFade>
 
-			<!-- Stanford ML Specialization -->
-			<ScrollFade delay={120}>
-				<div class="glass surface-hover group relative isolate h-full rounded-2xl p-8">
-					<div class="flex items-start justify-between">
-						<div
-							class="flex h-12 w-12 items-center justify-center rounded-xl text-accent transition-transform duration-300 group-hover:scale-110"
-							style="background: color-mix(in srgb, var(--color-accent) 14%, transparent);"
-						>
-							<Award size={22} />
-						</div>
-						<span class="pill pill-accent gap-1.5">
-							<Check size={13} />
-							Verified
-						</span>
-					</div>
-					<h3 class="mt-5 font-display text-xl font-semibold tracking-tight text-ink">
-						Machine Learning Specialization
-					</h3>
-					<p class="mt-1 text-muted">Stanford University · Coursera</p>
-					<p class="mt-4 font-mono text-sm text-faint">Completed August 27, 2025</p>
-
-					<div class="mt-5 flex flex-wrap gap-2">
-						{#each ['Supervised ML', 'Advanced Learning Algorithms', 'Unsupervised Learning', 'Reinforcement Learning'] as topic (topic)}
-							<span class="pill text-xs">{topic}</span>
-						{/each}
-					</div>
-
-					<!-- Certificate gallery trigger -->
-					<button
-						type="button"
-						onclick={() => openLightbox(certificate, 'Stanford Machine Learning Specialization Certificate')}
-						class="cert-preview-btn mt-6 flex w-full items-center gap-2 rounded-xl border border-line p-3 text-left transition-all duration-200 hover:border-accent/40"
-					>
-						<img
-							src={certificate.img.src}
-							srcset={certificate.sources.webp}
-							sizes="96px"
-							width={certificate.img.w}
-							height={certificate.img.h}
-							loading="lazy"
-							decoding="async"
-							alt="ML Certificate thumbnail"
-							class="h-16 w-24 rounded-lg object-cover"
-							onerror={(e) => { (e.currentTarget as HTMLElement).parentElement!.classList.add('cert-error'); }}
-						/>
-						<div class="min-w-0 flex-1">
-							<p class="text-sm font-medium text-ink">View Certificate</p>
-							<p class="mt-0.5 text-xs text-faint">Stanford · ML Specialization</p>
-						</div>
-						<ExternalLink size={14} class="shrink-0 text-faint" />
-					</button>
+		<ScrollFade delay={160}>
+			<article class="course-card">
+				<div>
+					<span class="tag">Online course</span>
+					<h3>Machine Learning Specialization</h3>
+					<p class="degree">Stanford University · Coursera</p>
+					<p class="description">Completed August 27, 2025. Topics include supervised and unsupervised learning, advanced learning algorithms, and reinforcement learning.</p>
 				</div>
-			</ScrollFade>
-		</div>
-
-		<!-- Certificate gallery section -->
-		<ScrollFade delay={200}>
-			<div class="mt-10">
-				<p class="eyebrow mb-6">Certificates</p>
-				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-					{#each mlCertificates as cert (cert.src.img.src)}
-						<button
-							type="button"
-							onclick={() => openLightbox(cert.src, cert.alt)}
-							class="cert-card group relative overflow-hidden rounded-2xl border border-line"
-						>
-							<img
-								src={cert.src.img.src}
-								srcset={cert.src.sources.webp}
-								sizes="(min-width: 1392px) 336px, (min-width: 1024px) calc((100vw - 352px) / 3), (min-width: 640px) calc((100vw - 96px) / 2), calc(100vw - 48px)"
-								width={cert.src.img.w}
-								height={cert.src.img.h}
-								loading="lazy"
-								decoding="async"
-								alt={cert.alt}
-								class="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-105"
-							/>
-							<div class="cert-card-overlay absolute inset-0 flex items-end justify-between gap-2 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-								<span class="rounded-full bg-ink/80 px-3 py-1 text-xs font-medium text-canvas backdrop-blur-sm">
-									{cert.label}
-								</span>
-								<span class="flex h-8 w-8 items-center justify-center rounded-full bg-accent/90 text-white backdrop-blur-sm">
-									<ExternalLink size={13} />
-								</span>
-							</div>
-						</button>
-					{/each}
-				</div>
-			</div>
+				<button class="certificate-preview" type="button" onclick={() => lightboxOpen = true} aria-label="View Stanford Machine Learning Specialization certificate">
+					<img src={certificate.img.src} srcset={certificate.sources.webp} sizes="(min-width: 768px) 240px, 70vw" width={certificate.img.w} height={certificate.img.h} alt="Stanford Machine Learning Specialization certificate" loading="lazy" decoding="async" />
+				</button>
+				<button class="certificate-link" type="button" onclick={() => lightboxOpen = true}>View certificate <ArrowUpRight size={16} aria-hidden="true" /></button>
+			</article>
 		</ScrollFade>
 	</div>
 </section>
 
-<!-- Lightbox -->
 {#if lightboxOpen}
-	<dialog
-		bind:this={lightboxDialog}
-		class="certificate-dialog"
-		aria-label={lightboxAlt}
-		onclose={closeLightbox}
-		onclick={(event) => { if (event.target === event.currentTarget) closeLightbox(); }}
-	>
-		<div
-			class="relative max-h-[90vh] max-w-4xl overflow-hidden rounded-2xl shadow-2xl"
-		>
-			<img src={lightboxSrc.img.src} srcset={lightboxSrc.sources.webp} sizes="(min-width: 944px) 896px, 95vw" width={lightboxSrc.img.w} height={lightboxSrc.img.h} alt={lightboxAlt} class="block max-h-[85vh] max-w-full w-auto object-contain" />
-			<button
-				type="button"
-				onclick={closeLightbox}
-				class="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition-colors hover:bg-black/80"
-				aria-label="Close"
-			>
-				<X size={16} />
-			</button>
+	<dialog bind:this={lightboxDialog} class="certificate-dialog" aria-label="Stanford Machine Learning Specialization certificate" onclose={() => lightboxOpen = false} onclick={(event) => { if (event.target === event.currentTarget) lightboxDialog?.close(); }}>
+		<div class="dialog-content">
+			<img src={certificate.img.src} srcset={certificate.sources.webp} sizes="(min-width: 944px) 896px, 95vw" width={certificate.img.w} height={certificate.img.h} alt="Stanford Machine Learning Specialization certificate" />
+			<button type="button" onclick={() => lightboxDialog?.close()} aria-label="Close certificate"><X size={18} /></button>
 		</div>
 	</dialog>
 {/if}
 
 <style>
-	.cert-preview-btn {
-		background: color-mix(in srgb, var(--color-ink) 3%, transparent);
-	}
-	.cert-preview-btn:hover {
-		background: color-mix(in srgb, var(--color-accent) 5%, transparent);
-	}
-
-	.cert-card {
-		background: color-mix(in srgb, var(--color-ink) 3%, transparent);
-		cursor: pointer;
-	}
-
-	.cert-card-overlay {
-		background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%);
-	}
-
-	.certificate-dialog {
-		max-width: 95vw;
-		max-height: 95vh;
-		margin: auto;
-		padding: 1rem;
-		border: none;
-		background: transparent;
-		animation: lb-in 0.2s ease;
-	}
-	.certificate-dialog::backdrop {
-		background: rgba(0, 0, 0, 0.85);
-		backdrop-filter: blur(12px);
-		-webkit-backdrop-filter: blur(12px);
-	}
-
-	@keyframes lb-in {
-		from { opacity: 0; }
-		to { opacity: 1; }
-	}
+	.education-section { border-top: 1px solid var(--color-line); }
+	.section-label { display: flex; align-items: center; gap: 1rem; color: var(--color-accent); }
+	.section-label span { color: var(--color-ink); font: 500 .68rem var(--font-mono); letter-spacing: .16em; text-transform: uppercase; }
+	.section-label span::after { content: ''; display: block; width: 2.5rem; height: 1px; margin-top: .65rem; background: var(--color-accent); }
+	.education-heading { display: grid; gap: 1.5rem; margin: 2.5rem 0; align-items: end; }
+	h2, h3, .degree { font-family: Georgia, serif; font-weight: 400; }
+	h2 { font-size: clamp(2.4rem, 4.2vw, 3.8rem); letter-spacing: -.04em; line-height: 1.1; }
+	h2 em { color: var(--color-accent); font-style: normal; }
+	.education-heading > p { max-width: 19rem; color: var(--color-muted); line-height: 1.7; }
+	.university-card, .course-card { position: relative; overflow: hidden; border: 1px solid var(--color-line); border-radius: .5rem; background: color-mix(in srgb, var(--color-ink) 1%, var(--color-canvas)); }
+	.university-card { min-height: 21rem; padding: 2rem; }
+	.university-copy { position: relative; z-index: 1; max-width: 26rem; }
+	.tag { display: inline-block; padding: .3rem .8rem; border: 1px solid color-mix(in srgb, var(--color-accent) 30%, var(--color-line)); border-radius: 99px; color: var(--color-accent); font: 500 .65rem var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
+	h3 { margin-top: 1.1rem; color: var(--color-ink); font-size: clamp(1.5rem, 2.2vw, 2rem); line-height: 1.2; }
+	.degree { margin-top: .35rem; color: var(--color-ink); font-size: 1.15rem; }
+	.description { margin-top: .9rem; color: var(--color-muted); line-height: 1.65; }
+	.school-name { margin-top: 2rem; color: var(--color-ink); font-size: .85rem; }
+	.school-name::before { content: ''; display: block; width: 1.5rem; height: 1px; margin-bottom: 1rem; background: var(--color-accent); }
+	.school-name span { color: var(--color-accent); }
+	.building { position: absolute; right: 0; bottom: 0; width: min(51%, 32rem); height: auto; opacity: .24; pointer-events: none; }
+	.course-card { display: grid; gap: 1.5rem; margin-top: .9rem; padding: 1.7rem 2rem; align-items: center; }
+	.course-card h3 { font-size: 1.4rem; }
+	.course-card .description { max-width: 34rem; font-size: .9rem; }
+	.certificate-preview { width: min(100%, 15rem); padding: .25rem; border: 1px solid var(--color-line); border-radius: .4rem; cursor: pointer; }
+	.certificate-preview img { display: block; width: 100%; height: auto; border-radius: .2rem; }
+	.certificate-link { display: inline-flex; width: fit-content; min-height: 44px; align-items: center; justify-content: center; gap: .5rem; padding: .7rem 1rem; border: 1px solid var(--color-accent); border-radius: .4rem; color: var(--color-accent); font-size: .85rem; cursor: pointer; transition: background .2s; }
+	.certificate-link:hover { background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
+	.certificate-dialog { max-width: 95vw; max-height: 95vh; margin: auto; padding: 1rem; border: 0; background: transparent; }
+	.certificate-dialog::backdrop { background: rgba(0, 0, 0, .85); backdrop-filter: blur(12px); }
+	.dialog-content { position: relative; max-width: 56rem; }
+	.dialog-content img { display: block; max-width: 100%; max-height: 85vh; width: auto; object-fit: contain; border-radius: .5rem; }
+	.dialog-content button { position: absolute; top: .75rem; right: .75rem; display: grid; width: 2.5rem; height: 2.5rem; place-items: center; border-radius: 50%; background: rgba(0, 0, 0, .7); color: white; cursor: pointer; }
+	@media (min-width: 768px) { .education-heading { grid-template-columns: 1fr 17rem; } .course-card { grid-template-columns: minmax(0, 1fr) minmax(9rem, 15rem) auto; } }
+	@media (max-width: 767px) { .university-card { padding-bottom: 10rem; } .building { width: 85%; opacity: .22; } }
 </style>
