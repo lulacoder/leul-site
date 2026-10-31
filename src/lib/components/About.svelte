@@ -23,27 +23,16 @@
 					<h3><Gamepad2 size={25} aria-hidden="true" /> <span>Interests</span></h3>
 					<div class="interest-grid">
 						<div>
-							<svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-								<g transform="rotate(42 16 16)">
-									<ellipse cx="16" cy="10.5" rx="7" ry="8.5" />
-									<path d="M12 4.5v12M16 2.2v16.6M20 4.5v12M10 7h12M9 10.5h14M10 14h12M12.5 18l2 3.2h3L19.5 18M14.5 21.2h3v7.3a1.5 1.5 0 0 1-3 0zM14.5 24h3M14.5 26.5h3" />
-								</g>
-							</svg>
+							<img class="interest-image" src="/interests/tennis.svg" width="52" height="52" alt="" />
 							<span>Tennis</span>
 						</div>
 						<div>
-							<svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-								<circle cx="16" cy="16" r="13" />
-								<path d="m16 10.4-4.5 3.3 1.7 5.3h5.6l1.7-5.3-4.5-3.3ZM16 10.4V6M11.5 13.7 7.3 12.3M13.2 19l-2.6 3.6M18.8 19l2.6 3.6m-.9-8.9 4.2-1.4M12.3 3.5 16 6l3.7-2.5M3.2 12.8l4.1-.5 1.4-3.7M6.5 24.9l4.1-2.3 3.2 2.2m11.7.1-4.1-2.3-3.2 2.2m10.6-12-4.1-.5-1.4-3.7" />
-							</svg>
+							<img class="interest-image" src="/interests/football.svg" width="52" height="52" alt="" />
 							<span>Football</span>
 						</div>
 						<div><BookOpen size={32} strokeWidth={1.7} aria-hidden="true" /><span>Technology &amp; learning</span></div>
 						<div>
-							<svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-								<circle cx="16" cy="16" r="13" /><circle cx="16" cy="16" r="5.5" />
-								<path d="M14.5 14.2a1.5 1.5 0 1 1 3 0c0 .9-.7 1.5-1.5 1.5s-1.5-.6-1.5-1.5Zm-.3 3.4c0-1  .8-1.9 1.8-1.9s1.8.9 1.8 1.9-.8 1.8-1.8 1.8-1.8-.8-1.8-1.8Z" />
-							</svg>
+							<img class="interest-image" src="/interests/billiards.svg" width="52" height="52" alt="" />
 							<span>Pool (billiards)</span>
 						</div>
 					</div>
@@ -78,6 +67,7 @@
 	.info-panel h3 span::after { content: ''; display: block; width: 2.25rem; height: 1px; margin-top: .65rem; background: var(--color-accent); }
 	.interest-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin-top: 1.25rem; }
 	.interest-grid div { display: flex; min-height: 7rem; flex-direction: column; align-items: center; justify-content: center; gap: .65rem; padding: 1rem; border: 1px solid var(--color-line); border-radius: .4rem; color: var(--color-ink); text-align: center; font-size: .85rem; }
+	.interest-image { width: 52px; height: 52px; object-fit: contain; }
 	.interest-grid div::after { content: ''; width: 1.5rem; height: 1px; background: var(--color-accent); }
 	.working-list { margin-top: 1rem; list-style: none; }
 	.working-list li { display: flex; align-items: center; gap: 1.1rem; padding: .9rem 0; color: var(--color-muted); font-size: .9rem; }
