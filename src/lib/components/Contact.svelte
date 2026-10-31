@@ -4,7 +4,7 @@
 	import GithubIcon from './icons/GithubIcon.svelte';
 
 	const EMAIL = 'leultesfaye0755@gmail.com';
-	const GITHUB = 'https://github.com/lulacode';
+	const GITHUB = 'https://github.com/lulacoder';
 	const ACCESS_KEY = 'ebdab10b-c8f0-4863-8ed0-1a1732fd2f71';
 
 	let isSubmitting = $state(false);

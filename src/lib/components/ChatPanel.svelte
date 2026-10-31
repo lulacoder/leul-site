@@ -13,9 +13,9 @@
 	let nearBottom = $state(true);
 	const workPrompts = ['What has Leul built?', 'How did he build Tripways?', 'What does he do at Jirtuu?', 'How does he write code?'];
 	const funPrompts = ['How did he get into coding?', 'When did his AI agent break his app?', "How's Man United treating him?", 'Djokovic or Alcaraz?'];
-	const thinkingLines = ['Thinking...', 'Checking my notes on Leul...', 'Warming up a joke...', 'Arguing with myself...'];
+	const thinkingLines = ['Thinking...', 'Checking my notes on Leul...'];
 	// The panel loads only in the browser, so random picks cannot cause a hydration mismatch.
-	const suggestions = [pickOne(workPrompts), ...shuffled(funPrompts).slice(0, 2)];
+	const suggestions = [...shuffled(workPrompts).slice(0, 2), pickOne(funPrompts)];
 	let thinkingIndex = $state(0);
 
 	const chat = createChat({
@@ -127,7 +127,7 @@
 		<div class="chat-avatar" aria-hidden="true">L.</div>
 		<div class="chat-heading">
 			<h2 id="chat-title">Ask about Leul</h2>
-			<p>The work, the code, and the Man United pain.</p>
+			<p>Projects, experience, and interests</p>
 		</div>
 		<button type="button" class="icon-button" aria-label="New chat" title="New chat" onclick={newChat}><RotateCcw size={16} /></button>
 		<button type="button" class="icon-button" aria-label="Close chat" title="Close chat" onclick={onClose}><X size={19} /></button>
@@ -138,8 +138,8 @@
 		{#if !chat.messages.length}
 			<div class="welcome">
 				<MessageCircle size={26} strokeWidth={1.5} class="text-accent" />
-				<h3>Go on, ask about Leul.</h3>
-				<p>I'm his AI sidekick. I know his projects, how he writes code, and why he keeps supporting Man United. He's not around to stop me.</p>
+				<h3>Ask about Leul</h3>
+				<p>Ask about Leul's projects, experience, or the technologies he works with.</p>
 				<div class="suggestions">
 					{#each suggestions as question}<button type="button" onclick={() => send(question)}>{question}<ArrowUp size={14} class="rotate-45" /></button>{/each}
 				</div>
@@ -149,7 +149,7 @@
 			{@const text = message.parts.filter((part) => part.type === 'text').map((part) => part.content).join('')}
 			{#if text}
 				<div class="message" class:user={message.role === 'user'}>
-					<p class="message-label">{message.role === 'user' ? 'You' : "Leul's AI sidekick"}</p>
+					<p class="message-label">{message.role === 'user' ? 'You' : 'AI assistant'}</p>
 					<div class="message-text"><ChatText {text} /></div>
 				</div>
 			{/if}
@@ -175,7 +175,7 @@
 			<button type="submit" class="send-button" aria-label="Send question" title="Send question" disabled={!input.trim() || atLimit}><ArrowUp size={20} /></button>
 		{/if}
 	</form>
-	<footer class="chat-footer"><span>AI sidekick. Jokes are mine, facts are his.</span><a href="/#contact" onclick={onClose}>Contact Leul</a></footer>
+	<footer class="chat-footer"><span>AI assistant for Leul's portfolio</span><a href="/#contact" onclick={onClose}>Contact Leul</a></footer>
 </div>
 
 <style>

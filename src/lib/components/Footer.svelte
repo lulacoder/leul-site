@@ -3,7 +3,7 @@
 	import GithubIcon from './icons/GithubIcon.svelte';
 
 	const EMAIL = 'leultesfaye0755@gmail.com';
-	const GITHUB = 'https://github.com/lulacode';
+	const GITHUB = 'https://github.com/lulacoder';
 </script>
 
 <footer class="border-t border-line">

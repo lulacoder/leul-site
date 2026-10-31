@@ -21,7 +21,7 @@
 	];
 
 	const EMAIL = 'leultesfaye0755@gmail.com';
-	const GITHUB = 'https://github.com/lulacode';
+	const GITHUB = 'https://github.com/lulacoder';
 
 	let active = $state('');
 	let menuOpen = $state(false);
