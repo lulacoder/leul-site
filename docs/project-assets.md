@@ -1,6 +1,6 @@
 # Project preview assets
 
-The three new preview images are browser screenshots of the live homepages, captured on September 30, 2026. They preserve each project's actual branding and interface.
+The project preview images are browser screenshots of the live homepages. They preserve each project's actual branding and interface.
 
 | Asset | Source |
 | --- | --- |
@@ -8,7 +8,7 @@ The three new preview images are browser screenshots of the live homepages, capt
 | `src/lib/assets/project-jora-discovery.jpg` | https://jora.events/ |
 | `src/lib/assets/project-fixmyaddis.jpg` | https://h56quunh7xlbthjllrv09o3w.sanduq.jirtuu.dev/ |
 
-The corresponding `project-jora-discovery-mobile.jpg` and `project-fixmyaddis-mobile.jpg` are real narrow-viewport captures for the compact cards. The full desktop captures appear on the project detail pages.
+The project screenshots were refreshed on October 31, 2026 for Visit Oromia, Jora Events, FixMyAddis, Tripways Hotels, and Resume Analyzer. Square card crops use narrow-viewport captures where available; Jora's card uses a crop of its desktop capture. Tripways also has a narrow-viewport detail image. Kenna's admin screenshot and the existing Trending Movies image remain in use.
 
 Existing project images remain in use. No generated design-concept artwork is used by the app.
 

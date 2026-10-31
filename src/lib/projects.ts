@@ -5,10 +5,12 @@ import joraCard from './assets/project-jora-discovery-card.jpg?w=390;780;1170&fo
 import fixMyAddis from './assets/project-fixmyaddis.jpg?w=480;768;925&format=webp&quality=85&enhanced';
 import fixMyAddisCard from './assets/project-fixmyaddis-card.jpg?w=390;780;1170&format=webp&quality=85&enhanced';
 import tripways from './assets/project-tripways.jpg?w=480;768;1080;1537&format=webp&quality=85&enhanced';
+import tripwaysCard from './assets/project-tripways-card.jpg?w=390;570&format=webp&quality=85&enhanced';
 import tripwaysMobile from './assets/project-tripways-mobile.jpg?w=244;488&format=webp&quality=85&enhanced';
 import kenna from './assets/project-kenna.webp?w=480;768;1080;1887&format=webp&quality=85&enhanced';
 import movies from './assets/project-movies.webp?w=480;768;1080;1440&format=webp&quality=85&enhanced';
 import resume from './assets/project-resume.webp?w=480;768;1080;1440&format=webp&quality=85&enhanced';
+import resumeCard from './assets/project-resume-card.jpg?w=390;570&format=webp&quality=85&enhanced';
 import tripwaysThumbnail from './assets/project-tripways.jpg?w=56;112;168&format=webp&quality=80&enhanced';
 import kennaThumbnail from './assets/project-kenna.webp?w=56;112;168&format=webp&quality=80&enhanced';
 import moviesThumbnail from './assets/project-movies.webp?w=56;112;168&format=webp&quality=80&enhanced';
@@ -109,6 +111,7 @@ export const projects: Project[] = [
 		live: 'https://www.tripwayshotel.site/',
 		github: 'https://github.com/lulacoder/Hotel_management',
 		image: tripways,
+		cardImage: tripwaysCard,
 		thumbnail: tripwaysThumbnail,
 		mobileImage: tripwaysMobile
 	},
@@ -170,6 +173,7 @@ export const projects: Project[] = [
 		live: 'https://resume-anaylzer-gamma.vercel.app/',
 		github: 'https://github.com/lulacoder/Resume-Anaylzer',
 		image: resume,
+		cardImage: resumeCard,
 		thumbnail: resumeThumbnail
 	}
 ];
