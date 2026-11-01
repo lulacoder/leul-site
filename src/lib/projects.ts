@@ -9,12 +9,9 @@ import tripwaysCard from './assets/project-tripways-card.jpg?w=390;570&format=we
 import tripwaysMobile from './assets/project-tripways-mobile.jpg?w=244;488&format=webp&quality=85&enhanced';
 import kenna from './assets/project-kenna.webp?w=480;768;1080;1887&format=webp&quality=85&enhanced';
 import movies from './assets/project-movies.webp?w=480;768;1080;1440&format=webp&quality=85&enhanced';
-import resume from './assets/project-resume.webp?w=480;768;1080;1440&format=webp&quality=85&enhanced';
-import resumeCard from './assets/project-resume-card.jpg?w=390;570&format=webp&quality=85&enhanced';
 import tripwaysThumbnail from './assets/project-tripways.jpg?w=56;112;168&format=webp&quality=80&enhanced';
 import kennaThumbnail from './assets/project-kenna.webp?w=56;112;168&format=webp&quality=80&enhanced';
 import moviesThumbnail from './assets/project-movies.webp?w=56;112;168&format=webp&quality=80&enhanced';
-import resumeThumbnail from './assets/project-resume.webp?w=56;112;168&format=webp&quality=80&enhanced';
 
 /** Shared by the home page and the prerendered project pages. */
 export interface Project {
@@ -154,27 +151,6 @@ export const projects: Project[] = [
 		github: 'https://github.com/lulacoder/Trending-Movies',
 		image: movies,
 		thumbnail: moviesThumbnail
-	},
-	{
-		slug: 'resume-analyzer',
-		name: 'Resume Analyzer',
-		role: 'Full-stack developer, solo',
-		tags: ['Next.js', 'TypeScript', 'Gemini AI', 'Supabase', 'Docker'],
-		description: 'AI resume feedback, section rewrites, and a coaching chat.',
-		overview: 'Upload a resume PDF for Gemini-powered feedback, rewrites, and a coaching chat. Supabase stores accounts and past analyses.',
-		stack: ['Next.js', 'AI SDK', 'Gemini', 'Supabase'],
-		stackDescription: 'The app uses Next.js with AI SDK for its AI features and streaming responses. Gemini provides resume feedback, and Supabase stores accounts and saved analyses.',
-		contributions: [
-			'Built PDF ingestion and the Gemini analysis workflow.',
-			'Created the analysis workspace and streaming coaching chat.',
-			'Integrated Supabase authentication and saved analyses.'
-		],
-		status: 'Live',
-		live: 'https://resume-anaylzer-gamma.vercel.app/',
-		github: 'https://github.com/lulacoder/Resume-Anaylzer',
-		image: resume,
-		cardImage: resumeCard,
-		thumbnail: resumeThumbnail
 	}
 ];
 
