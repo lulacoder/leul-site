@@ -40,8 +40,15 @@
 	<div class="detail-image mt-8 overflow-hidden rounded-xl border border-line bg-surface">
 		<img src={project.image.img.src} srcset={project.image.sources.webp}
 			sizes="(min-width: 1264px) 944px, (min-width: 1024px) calc(100vw - 320px), (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
-			alt="{project.name} website screenshot" width={project.image.img.w} height={project.image.img.h} class="h-auto w-full" />
+			alt="{project.name} project artwork" width={project.image.img.w} height={project.image.img.h} class="h-auto w-full" />
 	</div>
+	{#if project.secondaryImage}
+		<div class="mt-4 overflow-hidden rounded-xl border border-line bg-surface">
+			<img src={project.secondaryImage.img.src} srcset={project.secondaryImage.sources.webp}
+				sizes="(min-width: 1264px) 944px, (min-width: 1024px) calc(100vw - 320px), (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
+				alt={project.slug === 'jora-events' ? 'Jora Events discovery, categories and event details' : `${project.name} website screenshot`} width={project.secondaryImage.img.w} height={project.secondaryImage.img.h} loading="lazy" decoding="async" class="h-auto w-full" />
+		</div>
+	{/if}
 	<div class="mt-8 grid gap-8 border-t border-line pt-8 md:grid-cols-[1fr_240px] md:gap-12">
 		<div>
 			<h2 class="font-display text-xl font-semibold text-ink">About the project</h2>

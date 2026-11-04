@@ -32,14 +32,14 @@
 			</a>
 		</div>
 	</div>
-	<a href="/projects/{project.slug}" class="project-preview" aria-label="View {project.name} project details">
+	<a href="/projects/{project.slug}" class="project-preview" class:artwork={project.slug === 'jora-events'} aria-label="View {project.name} project details">
 		<picture class="block h-full">
 			{#if project.cardImage}
 				<source media={featured ? '(max-width: 767px)' : undefined} type="image/webp" srcset={project.cardImage.sources.webp} sizes="(min-width: 1392px) 622px, (min-width: 768px) calc(50vw - 69px), min(calc(100vw - 69px), 459px)" />
 			{/if}
 			<img src={project.image.img.src} srcset={project.image.sources.webp}
 				sizes={featured ? '(min-width: 1392px) 588px, (min-width: 1024px) calc(55vw - 186px), (min-width: 768px) calc(55vw - 54px), min(calc(100vw - 69px), 459px)' : '(min-width: 1392px) 224px, (min-width: 1024px) calc(22.5vw - 89px), (min-width: 768px) calc(22.5vw - 35px), min(calc(100vw - 69px), 459px)'}
-				alt="{project.name} website screenshot" width={project.image.img.w} height={project.image.img.h}
+				alt="{project.name} project artwork" width={project.image.img.w} height={project.image.img.h}
 				loading="lazy" decoding="async" class="h-full w-full object-cover object-top" />
 		</picture>
 		<span class="view-project" aria-hidden="true">View project <ArrowUpRight size={14} /></span>
@@ -49,7 +49,7 @@
 <style>
 	.project-card {
 		display: flex;
-		flex-direction: column-reverse;
+		flex-direction: column;
 		height: 100%;
 		position: relative;
 		isolation: isolate;
@@ -76,11 +76,12 @@
 		.project-card:hover .project-preview img { transform: scale(1.035); }
 		.project-preview:hover .view-project { opacity: 1; transform: translate(-50%, 0); }
 	}
-	.project-copy { min-width: 0; padding: 1.5rem; }
+	.project-copy { order: 1; flex: 1; min-width: 0; padding: 1.5rem; }
 	.project-preview {
 		position: relative;
 		display: block;
-		aspect-ratio: 1 / 1;
+		aspect-ratio: 4 / 3;
+		flex: none;
 		margin: 0.65rem 0.65rem 0;
 		overflow: hidden;
 		border-radius: 0.4rem;
@@ -88,6 +89,7 @@
 		background: var(--color-surface);
 	}
 	.project-preview img { transition: transform 500ms var(--motion-ease-out); }
+	.project-preview.artwork img { object-fit: contain; }
 	.view-project {
 		position: absolute;
 		left: 50%;
@@ -125,7 +127,7 @@
 			grid-template-columns: 0.8fr 1.2fr;
 			align-items: center;
 		}
-		.featured .project-copy { padding: 2rem; }
+		.featured .project-copy { order: 0; padding: 2rem; }
 		.featured .project-preview { min-height: 0; aspect-ratio: 16 / 10; margin: 0.75rem; }
 	}
 </style>

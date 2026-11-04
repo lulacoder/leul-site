@@ -1,6 +1,6 @@
 # Project preview assets
 
-The project preview images are browser screenshots of the live homepages. They preserve each project's actual branding and interface.
+The project covers combine generated case-study artwork with each project's visual identity. The original website screenshots remain available on the detail pages. Jora uses the supplied cover and discovery artwork. Generated images are illustrative, not literal screenshots.
 
 | Asset | Source |
 | --- | --- |
@@ -10,7 +10,7 @@ The project preview images are browser screenshots of the live homepages. They p
 
 The project screenshots were refreshed on October 31, 2026 for Visit Oromia, Jora Events, FixMyAddis, Tripways Hotels, and Resume Analyzer. Square card crops use narrow-viewport captures where available; Jora's card uses a crop of its desktop capture. Tripways also has a narrow-viewport detail image. Kenna's admin screenshot and the existing Trending Movies image remain in use.
 
-Existing project images remain in use. No generated design-concept artwork is used by the app.
+Generated covers use the `*-case-study-v2.webp` sources in `src/lib/assets/`. Their responsive variants are produced by enhanced-img.
 
 ## Image optimization
 
