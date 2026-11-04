@@ -1,6 +1,6 @@
 # Project preview assets
 
-The project covers combine generated case-study artwork with each project's visual identity. The original website screenshots remain available on the detail pages. Jora uses the supplied cover and discovery artwork. Generated images are illustrative, not literal screenshots.
+The project covers combine generated case-study artwork with each project's visual identity. Older screenshots are no longer displayed on the detail pages. Jora uses the supplied cover and discovery artwork. Generated images are illustrative, not literal screenshots.
 
 | Asset | Source |
 | --- | --- |

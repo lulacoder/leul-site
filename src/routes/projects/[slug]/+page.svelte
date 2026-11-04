@@ -46,7 +46,7 @@
 		<div class="mt-4 overflow-hidden rounded-xl border border-line bg-surface">
 			<img src={project.secondaryImage.img.src} srcset={project.secondaryImage.sources.webp}
 				sizes="(min-width: 1264px) 944px, (min-width: 1024px) calc(100vw - 320px), (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
-				alt={project.slug === 'jora-events' ? 'Jora Events discovery, categories and event details' : `${project.name} website screenshot`} width={project.secondaryImage.img.w} height={project.secondaryImage.img.h} loading="lazy" decoding="async" class="h-auto w-full" />
+				alt="Jora Events discovery, categories and event details" width={project.secondaryImage.img.w} height={project.secondaryImage.img.h} loading="lazy" decoding="async" class="h-auto w-full" />
 		</div>
 	{/if}
 	<div class="mt-8 grid gap-8 border-t border-line pt-8 md:grid-cols-[1fr_240px] md:gap-12">
@@ -77,13 +77,6 @@
 			</div>
 		</aside>
 	</div>
-	{#if project.mobileImage}
-		<details class="disclosure mt-8 rounded-lg border border-line p-4">
-			<summary class="cursor-pointer text-sm font-medium text-ink">View the mobile website</summary>
-			<p class="mt-3 text-sm text-muted">The current Tripways booking website on a mobile screen.</p>
-			<img src={project.mobileImage.img.src} srcset={project.mobileImage.sources.webp} sizes="(min-width: 402px) 320px, calc(100vw - 82px)" alt="{project.name} mobile website screenshot" width={project.mobileImage.img.w} height={project.mobileImage.img.h} loading="lazy" decoding="async" class="mt-4 w-full max-w-xs rounded-lg border border-line" />
-		</details>
-	{/if}
 	<nav aria-label="Other projects" class="mt-10 flex items-center justify-between gap-6 border-t border-line pt-6">
 		<a href="/projects/{prev.slug}" class="group inline-flex min-w-0 max-w-[48%] items-center gap-2 text-muted transition-colors hover:text-accent">
 			<ArrowLeft size={16} class="shrink-0 transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-x-1.5" />

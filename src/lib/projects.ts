@@ -3,14 +3,8 @@ import fixMyAddisArt from './assets/fixmyaddis-case-study-v2.webp?w=480;768;1080
 import tripwaysArt from './assets/tripways-case-study-v2.webp?w=480;768;1080;1500&format=webp&quality=85&enhanced';
 import kennaArt from './assets/kenna-case-study-v2.webp?w=480;768;1080;1500&format=webp&quality=85&enhanced';
 import moviesArt from './assets/movies-case-study-v2.webp?w=480;768;1080;1500&format=webp&quality=85&enhanced';
-import visitOromia from './assets/project-visit-oromia.jpg?w=480;768;1080;1432&format=webp&quality=85&enhanced';
 import jora from './assets/jora-cover-v2.webp?w=480;768;1080;1600;2000&format=webp&quality=85&enhanced';
 import joraDiscover from './assets/jora-discover-v2.webp?w=480;768;1080;1600;2000&format=webp&quality=85&enhanced';
-import fixMyAddis from './assets/project-fixmyaddis.jpg?w=480;768;925&format=webp&quality=85&enhanced';
-import tripways from './assets/project-tripways.jpg?w=480;768;1080;1537&format=webp&quality=85&enhanced';
-import tripwaysMobile from './assets/project-tripways-mobile.jpg?w=244;488&format=webp&quality=85&enhanced';
-import kenna from './assets/project-kenna.webp?w=480;768;1080;1887&format=webp&quality=85&enhanced';
-import movies from './assets/project-movies.webp?w=480;768;1080;1440&format=webp&quality=85&enhanced';
 
 /** Shared by the home page and the prerendered project pages. */
 export interface Project {
@@ -26,13 +20,12 @@ export interface Project {
 	status: 'Live' | 'In development';
 	live: string | null;
 	github: string | null;
-	image: typeof visitOromia;
+	image: typeof oromiaArt;
 	/** Square phone-viewport capture used by carousel and compact grid cards. */
-	cardImage?: typeof visitOromia;
-	secondaryImage?: typeof visitOromia;
-	thumbnail?: typeof visitOromia;
+	cardImage?: typeof oromiaArt;
+	secondaryImage?: typeof oromiaArt;
+	thumbnail?: typeof oromiaArt;
 	featured?: boolean;
-	mobileImage?: typeof visitOromia;
 }
 
 export const projects: Project[] = [
@@ -53,7 +46,6 @@ export const projects: Project[] = [
 		live: 'https://visitoromia.org/',
 		github: null,
 		image: oromiaArt,
-		secondaryImage: visitOromia,
 		featured: true
 	},
 	{
@@ -87,7 +79,6 @@ export const projects: Project[] = [
 		live: 'https://h56quunh7xlbthjllrv09o3w.sanduq.jirtuu.dev/',
 		github: null,
 		image: fixMyAddisArt,
-		secondaryImage: fixMyAddis,
 		featured: true
 	},
 	{
@@ -108,8 +99,6 @@ export const projects: Project[] = [
 		live: 'https://www.tripwayshotel.site/',
 		github: 'https://github.com/lulacoder/Hotel_management',
 		image: tripwaysArt,
-		secondaryImage: tripways,
-		mobileImage: tripwaysMobile
 	},
 	{
 		slug: 'kenna-gifts',
@@ -129,7 +118,6 @@ export const projects: Project[] = [
 		live: 'https://w08o4w0k44okk488k0s8o8g8.sanduq.jirtuu.dev/',
 		github: null,
 		image: kennaArt,
-		secondaryImage: kenna
 	},
 	{
 		slug: 'trending-movies',
@@ -149,7 +137,6 @@ export const projects: Project[] = [
 		live: 'https://trending-movies-iota.vercel.app/',
 		github: 'https://github.com/lulacoder/Trending-Movies',
 		image: moviesArt,
-		secondaryImage: movies
 	}
 ];
 
