@@ -15,12 +15,14 @@
 </svelte:head>
 
 <article class="mx-auto max-w-5xl px-6 pb-20 pt-28 sm:px-10 lg:pt-16">
-	<a href="/#projects" class="inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-accent">
-		<ArrowLeft size={15} /> Back to work
+	<a href="/#projects" class="group inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-accent">
+		<ArrowLeft size={15} class="transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-x-1.5" /> Back to work
 	</a>
 	<header class="mt-8">
 		<p class="eyebrow">{project.status} project</p>
-		<h1 class="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">{project.name}</h1>
+		<h1 class="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+			{project.name}
+		</h1>
 		<p class="mt-3 max-w-2xl text-lg leading-relaxed text-muted">{project.description}</p>
 		<div class="mt-5 flex flex-wrap gap-3">
 			{#if project.live}
@@ -35,7 +37,7 @@
 			{/if}
 		</div>
 	</header>
-	<div class="mt-8 overflow-hidden rounded-xl border border-line bg-surface">
+	<div class="detail-image mt-8 overflow-hidden rounded-xl border border-line bg-surface">
 		<img src={project.image.img.src} srcset={project.image.sources.webp}
 			sizes="(min-width: 1264px) 944px, (min-width: 1024px) calc(100vw - 320px), (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
 			alt="{project.name} website screenshot" width={project.image.img.w} height={project.image.img.h} class="h-auto w-full" />
@@ -69,20 +71,20 @@
 		</aside>
 	</div>
 	{#if project.mobileImage}
-		<details class="mt-8 rounded-lg border border-line p-4">
+		<details class="disclosure mt-8 rounded-lg border border-line p-4">
 			<summary class="cursor-pointer text-sm font-medium text-ink">View the mobile website</summary>
 			<p class="mt-3 text-sm text-muted">The current Tripways booking website on a mobile screen.</p>
 			<img src={project.mobileImage.img.src} srcset={project.mobileImage.sources.webp} sizes="(min-width: 402px) 320px, calc(100vw - 82px)" alt="{project.name} mobile website screenshot" width={project.mobileImage.img.w} height={project.mobileImage.img.h} loading="lazy" decoding="async" class="mt-4 w-full max-w-xs rounded-lg border border-line" />
 		</details>
 	{/if}
 	<nav aria-label="Other projects" class="mt-10 flex items-center justify-between gap-6 border-t border-line pt-6">
-		<a href="/projects/{prev.slug}" class="inline-flex min-w-0 max-w-[48%] items-center gap-2 text-muted transition-colors hover:text-accent">
-			<ArrowLeft size={16} class="shrink-0" />
+		<a href="/projects/{prev.slug}" class="group inline-flex min-w-0 max-w-[48%] items-center gap-2 text-muted transition-colors hover:text-accent">
+			<ArrowLeft size={16} class="shrink-0 transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-x-1.5" />
 			<span class="min-w-0"><span class="block text-xs text-faint">Previous</span><span class="block truncate text-sm font-medium">{prev.name}</span></span>
 		</a>
-		<a href="/projects/{next.slug}" class="inline-flex min-w-0 max-w-[48%] items-center gap-2 text-right text-muted transition-colors hover:text-accent">
+		<a href="/projects/{next.slug}" class="group inline-flex min-w-0 max-w-[48%] items-center gap-2 text-right text-muted transition-colors hover:text-accent">
 			<span class="min-w-0"><span class="block text-xs text-faint">Next</span><span class="block truncate text-sm font-medium">{next.name}</span></span>
-			<ArrowRight size={16} class="shrink-0" />
+			<ArrowRight size={16} class="shrink-0 transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:translate-x-1.5" />
 		</a>
 	</nav>
 </article>

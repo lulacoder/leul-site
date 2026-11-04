@@ -40,25 +40,45 @@
 			<img src={project.image.img.src} srcset={project.image.sources.webp}
 				sizes={featured ? '(min-width: 1392px) 588px, (min-width: 1024px) calc(55vw - 186px), (min-width: 768px) calc(55vw - 54px), min(calc(100vw - 69px), 459px)' : '(min-width: 1392px) 224px, (min-width: 1024px) calc(22.5vw - 89px), (min-width: 768px) calc(22.5vw - 35px), min(calc(100vw - 69px), 459px)'}
 				alt="{project.name} website screenshot" width={project.image.img.w} height={project.image.img.h}
-				loading="lazy" decoding="async" class="h-full w-full object-cover object-top transition-transform duration-500 motion-safe:group-hover:scale-[1.02]" />
+				loading="lazy" decoding="async" class="h-full w-full object-cover object-top" />
 		</picture>
+		<span class="view-project" aria-hidden="true">View project <ArrowUpRight size={14} /></span>
 	</a>
 </article>
 
 <style>
-			.project-card {
+	.project-card {
 		display: flex;
 		flex-direction: column-reverse;
 		height: 100%;
-		overflow: hidden;
+		position: relative;
+		isolation: isolate;
 		border: 1px solid var(--color-line);
 		border-radius: 0.75rem;
 		background: color-mix(in srgb, var(--color-ink) 2.5%, var(--color-canvas));
-		transition: border-color 0.2s ease;
+		transition: transform 320ms var(--motion-ease-out), border-color 240ms ease;
 	}
-	.project-card:hover { border-color: color-mix(in srgb, var(--color-ink) 22%, transparent); }
+	/* A layered, neutral shadow gives the raised card a grounded edge. */
+	.project-card::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		border-radius: inherit;
+		box-shadow: 0 18px 36px -16px rgb(0 0 0 / 0.5), 0 5px 12px -5px rgb(0 0 0 / 0.22);
+		opacity: 0;
+		transition: opacity 320ms ease;
+		pointer-events: none;
+	}
+	@media (hover: hover) and (pointer: fine) {
+		.project-card:hover { transform: translateY(-5px); border-color: color-mix(in srgb, var(--color-ink) 20%, var(--color-line)); }
+		.project-card:hover::before { opacity: 1; }
+		.project-card:hover .project-preview img { transform: scale(1.035); }
+		.project-preview:hover .view-project { opacity: 1; transform: translate(-50%, 0); }
+	}
 	.project-copy { min-width: 0; padding: 1.5rem; }
 	.project-preview {
+		position: relative;
 		display: block;
 		aspect-ratio: 1 / 1;
 		margin: 0.65rem 0.65rem 0;
@@ -66,6 +86,31 @@
 		border-radius: 0.4rem;
 		border: 1px solid var(--color-line);
 		background: var(--color-surface);
+	}
+	.project-preview img { transition: transform 500ms var(--motion-ease-out); }
+	.view-project {
+		position: absolute;
+		left: 50%;
+		bottom: 1rem;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		padding: 0.55rem 0.85rem;
+		border-radius: 999px;
+		background: var(--color-ink);
+		color: var(--color-canvas);
+		font-size: 0.75rem;
+		font-weight: 600;
+		white-space: nowrap;
+		opacity: 0;
+		transform: translate(-50%, 10px);
+		transition: opacity 200ms ease, transform 300ms var(--motion-ease-out);
+		pointer-events: none;
+	}
+	.project-preview:focus-visible .view-project { opacity: 1; transform: translate(-50%, 0); }
+	@media (prefers-reduced-motion: reduce) {
+		.project-card:hover, .project-card:hover .project-preview img { transform: none; }
+		.view-project, .project-preview:hover .view-project { transform: translate(-50%, 0); }
 	}
 	.project-tag {
 		padding: 0.3rem 0.55rem;

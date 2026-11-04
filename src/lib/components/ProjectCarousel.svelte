@@ -179,11 +179,10 @@
 		height: 2.75rem;
 		border-radius: 9999px;
 		color: var(--color-muted);
-		transition: color 0.2s, background-color 0.2s;
+		transition: color 180ms ease, background-color 180ms ease;
 	}
-	.carousel-btn:hover {
-		color: var(--color-ink);
-		background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+	@media (hover: hover) and (pointer: fine) {
+		.carousel-btn:hover { color: var(--color-ink); background: color-mix(in srgb, var(--color-ink) 7%, transparent); }
 	}
 	@media (prefers-reduced-motion: reduce) {
 		.carousel-track { scroll-behavior: auto; }

@@ -1,29 +1,36 @@
 <script lang="ts">
 	import { ArrowRight, Download } from '@lucide/svelte';
+
+	const headline: { text: string; accent?: boolean }[] = [
+		...'I build'.split(' ').map((text) => ({ text })),
+		...'full-stack products'.split(' ').map((text) => ({ text, accent: true })),
+		{ text: 'and' },
+		...'architect solutions.'.split(' ').map((text) => ({ text, accent: true }))
+	];
 </script>
 
 <section id="top">
 	<div class="section-shell hero-grid">
 		<div class="min-w-0">
-			<p class="fade-up eyebrow" style="animation-delay: 0.05s">Hello, I'm Leul</p>
+			<p class="fade-up eyebrow" style="--d: 50ms">Hello, I'm Leul</p>
 			<h1 class="hero-heading mt-5">
-				I build <span class="text-accent">full-stack products</span> and <span class="text-accent">architect solutions.</span>
+				{#each headline as word, i}<span class="word-mask"><span class="word" class:text-accent={word.accent} style="--d: {150 + i * 70}ms">{word.text}</span></span>{' '}{/each}
 			</h1>
-			<p class="fade-up mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg" style="animation-delay: 0.15s">
+			<p class="fade-up mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg" style="--d: 650ms">
 				I'm Leul, a software engineering student at AAU, Ethiopia.
 				I build full-stack products, ship them, and keep learning.
 			</p>
-			<p class="fade-up mt-5 flex items-center gap-2 text-xs text-muted" style="animation-delay: 0.2s">
+			<p class="fade-up mt-5 flex items-center gap-2 text-xs text-muted" style="--d: 740ms">
 				<span class="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true"></span>
 				Open to opportunities
 			</p>
-			<div class="fade-up mt-7 flex flex-wrap items-center gap-3" style="animation-delay: 0.25s">
+			<div class="fade-up mt-7 flex flex-wrap items-center gap-3" style="--d: 830ms">
 				<a href="#projects" class="btn btn-primary">See my work <ArrowRight size={16} class="btn-arrow" /></a>
 				<a href="#contact" class="btn btn-ghost">Get in touch</a>
 				<a href="/resume.pdf" download="Leul_Tesfaye_Resume.pdf" class="btn btn-tertiary"><Download size={15} /> Resume</a>
 			</div>
 		</div>
-		<div class="fade-up min-w-0" style="animation-delay: 0.3s">
+		<div class="fade-up min-w-0" style="--d: 400ms">
 			<div class="code-card overflow-hidden rounded-xl border">
 				<div class="code-card-titlebar flex items-center gap-2 border-b px-4 py-3">
 					<span class="h-2 w-2 rounded-full bg-accent"></span>

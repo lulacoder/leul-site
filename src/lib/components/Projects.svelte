@@ -59,10 +59,11 @@
 		background: color-mix(in srgb, var(--color-ink) 2%, transparent);
 		border: 1px solid var(--color-line);
 		border-radius: 0.65rem;
-		transition: background-color 0.2s, border-color 0.2s;
+		transition: background-color 0.2s;
 	}
-	.more-project:hover {
-		background: color-mix(in srgb, var(--color-ink) 4%, transparent);
-		border-color: color-mix(in srgb, var(--color-ink) 22%, transparent);
+	@media (hover: hover) and (pointer: fine) {
+		.more-project:hover {
+			background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+		}
 	}
 </style>

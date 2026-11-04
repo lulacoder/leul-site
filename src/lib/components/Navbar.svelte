@@ -3,6 +3,7 @@
 	import { page } from '$app/state';
 	import { Menu, X, Mail, Download, Sun, Moon } from '@lucide/svelte';
 	import GithubIcon from './icons/GithubIcon.svelte';
+	import { navScroll } from '#lib/scroll.svelte.js';
 
 	let {
 		theme,
@@ -40,13 +41,37 @@
 		const observer = new IntersectionObserver(
 			(entries) => {
 				for (const entry of entries) {
-					if (entry.isIntersecting) active = entry.target.id;
+					// Paused while a nav click is scrolling, so the marker doesn't flicker through every section.
+					if (entry.isIntersecting && !navScroll.target) active = entry.target.id;
 				}
 			},
 			{ rootMargin: '-45% 0px -50% 0px', threshold: 0 }
 		);
 		sections.forEach((s) => observer.observe(s));
 		return () => observer.disconnect();
+	});
+
+	// One highlight that slides between links instead of each link fading on and off.
+	let linkEls: HTMLAnchorElement[] = $state([]);
+	let indicator = $state({ y: 0, h: 0, visible: false, instant: true });
+	let placed = false;
+
+	$effect(() => {
+		const el = linkEls[links.findIndex((l) => l.id === active)];
+		if (!el) {
+			indicator.visible = false;
+			placed = false;
+			return;
+		}
+		// First placement snaps into position; every later move slides.
+		indicator = { y: el.offsetTop, h: el.offsetHeight, visible: true, instant: !placed };
+		placed = true;
+	});
+
+	// While a nav click is scrolling, jump the marker straight to its destination.
+	$effect(() => {
+		const target = navScroll.target;
+		if (target && links.some((l) => l.id === target)) active = target;
 	});
 
 	onMount(() => {
@@ -75,24 +100,25 @@
 		</a>
 
 		<!-- Nav links -->
-		<nav class="mt-14">
+		<nav class="relative mt-14">
+			<span
+				class="nav-indicator"
+				class:instant={indicator.instant}
+				aria-hidden="true"
+				style="transform: translateY({indicator.y}px); height: {indicator.h}px; opacity: {indicator.visible ? 1 : 0};"
+			></span>
 			<ul class="space-y-1">
 				{#each links as link, i (link.id)}
 					<li>
 						<a
+							bind:this={linkEls[i]}
 							href={href(link.id)}
-							class="group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-200"
+							class="nav-link group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium"
 							class:text-accent={active === link.id}
 							class:text-muted={active !== link.id}
-							style={active === link.id ? 'background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);' : ''}
 						>
-							<span
-								class="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-accent transition-all duration-200"
-								class:opacity-100={active === link.id}
-								class:opacity-0={active !== link.id}
-							></span>
-							<span class="font-mono text-xs" class:text-accent={active === link.id} class:text-faint={active !== link.id}>0{i + 1}</span>
-							<span class="transition-colors group-hover:text-ink">{link.label}</span>
+							<span class="font-mono text-xs transition-colors duration-200" class:text-accent={active === link.id} class:text-faint={active !== link.id}>0{i + 1}</span>
+							<span class="nav-label transition-colors group-hover:text-ink">{link.label}</span>
 						</a>
 					</li>
 				{/each}
@@ -115,10 +141,10 @@
 		<!-- Socials + theme toggle in one row -->
 		<div class="flex items-center justify-between">
 			<div class="flex items-center gap-3">
-				<a href={GITHUB} target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="text-muted transition-all duration-200 hover:-translate-y-0.5 hover:text-accent">
+				<a href={GITHUB} target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="text-muted transition-[color,transform] duration-200 hover:-translate-y-0.5 hover:text-accent">
 					<GithubIcon size={17} />
 				</a>
-				<a href="mailto:{EMAIL}" aria-label="Email" class="text-muted transition-all duration-200 hover:-translate-y-0.5 hover:text-accent">
+				<a href="mailto:{EMAIL}" aria-label="Email" class="text-muted transition-[color,transform] duration-200 hover:-translate-y-0.5 hover:text-accent">
 					<Mail size={17} />
 				</a>
 			</div>
@@ -222,14 +248,52 @@
 	/* ── Sidebar ── */
 	.sidebar {
 		background-color: var(--color-canvas);
-		backdrop-filter: blur(20px);
-		-webkit-backdrop-filter: blur(20px);
 		transition: background-color 0.3s ease;
+		/* Named so it stays put during route transitions. */
+		view-transition-name: site-sidebar;
+	}
+
+	/* ── Sliding active highlight ── */
+	.nav-indicator {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		border-radius: 0.5rem;
+		background: color-mix(in srgb, var(--color-accent) 11%, transparent);
+		pointer-events: none;
+		transition:
+			transform 0.55s var(--motion-ease-spring),
+			height 0.3s var(--motion-ease-out),
+			opacity 0.2s ease;
+	}
+	.nav-indicator.instant { transition: opacity 0.2s ease; }
+	.nav-indicator::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 50%;
+		width: 2px;
+		height: 1.25rem;
+		margin-top: -0.625rem;
+		border-radius: 9999px;
+		background: var(--color-accent);
+	}
+	.nav-link { transition: color 0.2s; }
+	.nav-label { display: inline-block; transition: color 0.2s, transform 0.4s var(--motion-ease-spring); }
+	@media (hover: hover) and (pointer: fine) {
+		.nav-link:hover .nav-label { transform: translateX(4px); }
+	}
+	.nav-link:active .nav-label { transform: scale(0.96); transition-duration: 0.12s; }
+	@media (prefers-reduced-motion: reduce) {
+		.nav-indicator { transition: opacity 0.2s ease; }
+		.nav-link:hover .nav-label, .nav-link:active .nav-label { transform: none; }
 	}
 
 	/* ── Mobile header ── */
 	.mobile-header {
 		transition: background-color 0.3s ease;
+		view-transition-name: site-header;
 	}
 	.mobile-header--scrolled {
 		background-color: color-mix(in srgb, var(--color-canvas) 90%, transparent);
@@ -288,11 +352,15 @@
 		align-items: center;
 		justify-content: center;
 		color: var(--color-canvas);
-		transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.25s ease;
+		transition: transform 0.25s var(--motion-ease-out), background-color 0.25s ease;
 	}
 
 	.theme-toggle-thumb--light {
 		transform: translateY(-50%) translateX(1rem);
 		background-color: var(--color-accent);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.theme-toggle-thumb { transition: background-color 0.25s ease; }
 	}
 </style>

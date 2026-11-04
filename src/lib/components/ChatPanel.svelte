@@ -179,7 +179,7 @@
 </div>
 
 <style>
-	.chat-panel { position: fixed; z-index: 70; right: 1rem; bottom: calc(max(1rem, env(safe-area-inset-bottom)) + 4rem); display: flex; flex-direction: column; width: min(390px, calc(100vw - 2rem)); height: min(560px, calc(100dvh - 7rem)); border: 1px solid var(--color-line); border-radius: 20px; background: var(--color-panel); color: var(--color-ink); box-shadow: 0 18px 55px #0003; overflow: hidden; }
+	.chat-panel { view-transition-name: chat-panel; position: fixed; z-index: 70; right: 1rem; bottom: calc(max(1rem, env(safe-area-inset-bottom)) + 4rem); display: flex; flex-direction: column; width: min(390px, calc(100vw - 2rem)); height: min(560px, calc(100dvh - 7rem)); border: 1px solid var(--color-line); border-radius: 20px; background: var(--color-panel); color: var(--color-ink); box-shadow: 0 18px 55px #0003; overflow: hidden; }
 	.chat-panel[hidden] { display: none; }
 	.chat-header { display: flex; align-items: center; gap: 10px; padding: 18px 14px 18px 18px; border-bottom: 1px solid var(--color-line); flex-shrink: 0; }
 	.chat-avatar { display: grid; place-items: center; width: 36px; height: 36px; flex-shrink: 0; border-radius: 11px; background: var(--color-accent-strong); color: #fff; font-family: var(--font-display); font-size: 19px; font-weight: 600; }
@@ -187,14 +187,17 @@
 	.chat-heading h2 { font-size: 15px; font-weight: 600; letter-spacing: -0.02em; }
 	.chat-heading p { font-size: 10px; color: var(--color-muted); margin-top: 3px; }
 	.icon-button { display: grid; place-items: center; width: 32px; height: 36px; border-radius: 8px; color: var(--color-muted); cursor: pointer; flex-shrink: 0; }
-	.icon-button:hover { background: var(--color-surface); color: var(--color-ink); }
 	.transcript { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 22px 18px; }
 	.welcome { padding-top: 12px; }
 	.welcome h3 { margin-top: 15px; font-size: 26px; line-height: 1.15; letter-spacing: -0.04em; }
 	.welcome > p { margin-top: 12px; font-size: 13px; line-height: 1.7; color: var(--color-muted); }
 	.suggestions { display: flex; flex-direction: column; gap: 8px; margin-top: 24px; }
 	.suggestions button { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; border: 1px solid var(--color-line); border-radius: 10px; font-size: 12px; text-align: left; cursor: pointer; }
-	.suggestions button:hover { background: var(--color-surface); border-color: var(--color-muted); }
+	.icon-button, .suggestions button { transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease; }
+	@media (hover: hover) and (pointer: fine) {
+		.icon-button:hover { background: var(--color-surface); color: var(--color-ink); }
+		.suggestions button:hover { background: var(--color-surface); border-color: color-mix(in srgb, var(--color-ink) 20%, var(--color-line)); }
+	}
 	.message { margin-bottom: 20px; }
 	.message-label { margin-bottom: 7px; font-size: 10px; font-weight: 500; color: var(--color-faint); }
 	.message-text { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; line-height: 1.75; }

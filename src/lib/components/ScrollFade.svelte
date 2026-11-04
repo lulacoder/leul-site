@@ -3,10 +3,11 @@
 	import type { Snippet } from 'svelte';
 
 	/**
-	 * Content is visible in the prerendered HTML. JavaScript adds a small
-	 * slide on first intersection, unless reduced motion is requested.
+	 * Content is visible in the prerendered HTML. After mount, anything still below the
+	 * viewport is hidden and rises into view the first time it scrolls in. Content already
+	 * on screen is never hidden, so nothing flashes.
 	 *
-	 * Wrap sections/cards and pass a staggered `delay` (e.g. `delay={i * 80}`).
+	 * Wrap sections/cards and pass a staggered `delay` (e.g. `delay={i * 90}`).
 	 */
 	interface Props {
 		/** Stagger delay, in milliseconds, before the reveal runs. */
@@ -20,10 +21,12 @@
 	let { delay = 0, class: className = '', children }: Props = $props();
 
 	let el: HTMLDivElement | undefined = $state();
+	let armed = $state(false);
 	let revealed = $state(false);
 
 	onMount(() => {
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		if (!el || el.getBoundingClientRect().top < window.innerHeight) return;
+		armed = true;
 
 		const observer = new IntersectionObserver(
 			([entry]) => {
@@ -32,10 +35,10 @@
 					observer.disconnect(); // reveal once, then stop observing
 				}
 			},
-			{ threshold: 0.15 }
+			{ threshold: 0.12 }
 		);
 
-		if (el) observer.observe(el);
+		observer.observe(el);
 		return () => observer.disconnect();
 	});
 </script>
@@ -43,19 +46,32 @@
 <div
 	bind:this={el}
 	class={className}
+	class:armed
 	class:revealed
-	style="animation-delay: {delay}ms"
+	style="--reveal-delay: {delay}ms"
 >
 	{@render children?.()}
 </div>
 
 <style>
-	.revealed { animation: slide-in 0.5s ease-out both; }
-	@keyframes slide-in {
-		from { transform: translateY(12px); }
-		to { transform: translateY(0); }
+	.armed {
+		opacity: 0;
+		transform: translateY(56px) scale(0.96);
+		filter: blur(8px);
+		will-change: transform, opacity, filter;
+	}
+	/* The transition lives on the revealed state, so arming is instant and only the reveal animates. */
+	.armed.revealed {
+		opacity: 1;
+		transform: none;
+		filter: none;
+		will-change: auto;
+		transition:
+			opacity 0.8s var(--motion-ease-out) var(--reveal-delay),
+			transform 1s var(--motion-ease-out) var(--reveal-delay),
+			filter 0.8s var(--motion-ease-out) var(--reveal-delay);
 	}
 	@media (prefers-reduced-motion: reduce) {
-		.revealed { animation: none; }
+		.armed { transform: none; filter: none; }
 	}
 </style>

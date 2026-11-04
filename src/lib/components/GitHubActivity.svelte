@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { ArrowUpRight } from '@lucide/svelte';
 	import GithubIcon from './icons/GithubIcon.svelte';
+	import ScrollFade from './ScrollFade.svelte';
 	import { getCurrentStreak, parseCalendar, type ContributionCalendar, type ContributionDay, type ContributionLevel } from '#lib/github.js';
 
 	type ActivityState = { kind: 'loading' } | { kind: 'ready'; calendar: ContributionCalendar } | { kind: 'error' };
@@ -78,6 +79,7 @@
 <svelte:window onscroll={() => (tooltip = null)} onresize={() => (tooltip = null)} onkeydown={(event) => { if (event.key === 'Escape') tooltip = null; }} />
 
 <section id="github" aria-labelledby="github-heading">
+	<ScrollFade>
 	<div class="section-shell activity-shell">
 		<div class="activity-card">
 			<div class="activity-header">
@@ -140,6 +142,7 @@
 			{/if}
 		</div>
 	</div>
+	</ScrollFade>
 </section>
 
 {#if tooltip}
@@ -177,7 +180,9 @@
 		border-radius: 3px;
 	}
 	.day { width: 100%; height: 14px; padding: 0; cursor: pointer; }
-	.day:hover, .day:focus-visible { outline: 1px solid var(--color-ink); outline-offset: 1px; }
+	.day { transition: transform 0.25s var(--motion-ease-spring); }
+	.day:hover { transform: scale(1.5); position: relative; z-index: 1; }
+	.day:focus-visible { outline: 1px solid var(--color-ink); outline-offset: 1px; }
 	[data-level='FIRST_QUARTILE'] { background: color-mix(in srgb, var(--color-accent) 24%, var(--color-canvas)); }
 	[data-level='SECOND_QUARTILE'] { background: color-mix(in srgb, var(--color-accent) 48%, var(--color-canvas)); }
 	[data-level='THIRD_QUARTILE'] { background: color-mix(in srgb, var(--color-accent) 74%, var(--color-canvas)); }

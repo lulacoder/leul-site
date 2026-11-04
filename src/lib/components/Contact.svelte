@@ -66,7 +66,7 @@
 				{#if submitStatus === 'success'}
 					<div class="flex flex-col items-center justify-center py-8 text-center">
 						<div
-							class="text-accent mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent/10 border border-accent/30 animate-bounce"
+							class="text-accent mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent/10 border border-accent/30 pop-in"
 						>
 							<CheckCircle2 size={32} />
 						</div>
@@ -106,7 +106,7 @@
 									placeholder="Name"
 									required
 									disabled={isSubmitting}
-									class="w-full rounded-lg border border-line bg-canvas/30 px-5 py-3.5 text-base text-ink placeholder:text-faint/60 transition-all duration-200 focus:border-accent focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-accent/40 disabled:opacity-50"
+									class="w-full rounded-lg border border-line bg-canvas/30 px-5 py-3.5 text-base text-ink placeholder:text-faint/60 transition-[border-color,box-shadow,opacity] duration-200 focus:border-accent focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-accent/40 disabled:opacity-50"
 								/>
 							</div>
 
@@ -123,7 +123,7 @@
 									name="company"
 									placeholder="Company, optional"
 									disabled={isSubmitting}
-									class="w-full rounded-lg border border-line bg-canvas/30 px-5 py-3.5 text-base text-ink placeholder:text-faint/60 transition-all duration-200 focus:border-accent focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-accent/40 disabled:opacity-50"
+									class="w-full rounded-lg border border-line bg-canvas/30 px-5 py-3.5 text-base text-ink placeholder:text-faint/60 transition-[border-color,box-shadow,opacity] duration-200 focus:border-accent focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-accent/40 disabled:opacity-50"
 								/>
 							</div>
 						</div>
@@ -142,7 +142,7 @@
 								placeholder="example@gmail.com"
 								required
 								disabled={isSubmitting}
-								class="w-full rounded-lg border border-line bg-canvas/30 px-5 py-3.5 text-base text-ink placeholder:text-faint/60 transition-all duration-200 focus:border-accent focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-accent/40 disabled:opacity-50"
+								class="w-full rounded-lg border border-line bg-canvas/30 px-5 py-3.5 text-base text-ink placeholder:text-faint/60 transition-[border-color,box-shadow,opacity] duration-200 focus:border-accent focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-accent/40 disabled:opacity-50"
 							/>
 						</div>
 
@@ -160,7 +160,7 @@
 								placeholder="Your message"
 								required
 								disabled={isSubmitting}
-								class="w-full rounded-lg border border-line bg-canvas/30 px-5 py-3.5 text-base text-ink placeholder:text-faint/60 transition-all duration-200 focus:border-accent focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-accent/40 disabled:opacity-50 resize-none"
+								class="w-full rounded-lg border border-line bg-canvas/30 px-5 py-3.5 text-base text-ink placeholder:text-faint/60 transition-[border-color,box-shadow,opacity] duration-200 focus:border-accent focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-accent/40 disabled:opacity-50 resize-none"
 							></textarea>
 						</div>
 
