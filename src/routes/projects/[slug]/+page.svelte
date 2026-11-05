@@ -7,6 +7,12 @@
 	const project = $derived(data.project);
 	const prev = $derived(data.prev);
 	const next = $derived(data.next);
+	let imageIndex = $state(0);
+
+	$effect(() => {
+		project.slug;
+		imageIndex = 0;
+	});
 </script>
 
 <svelte:head>
@@ -37,18 +43,33 @@
 			{/if}
 		</div>
 	</header>
-	<div class="detail-image mt-8 overflow-hidden rounded-xl border border-line bg-surface">
-		<img src={project.image.img.src} srcset={project.image.sources.webp}
-			sizes="(min-width: 1264px) 944px, (min-width: 1024px) calc(100vw - 320px), (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
-			alt="{project.name} project artwork" width={project.image.img.w} height={project.image.img.h} class="h-auto w-full" />
-	</div>
-	{#if project.secondaryImage}
-		<div class="mt-4 overflow-hidden rounded-xl border border-line bg-surface">
-			<img src={project.secondaryImage.img.src} srcset={project.secondaryImage.sources.webp}
-				sizes="(min-width: 1264px) 944px, (min-width: 1024px) calc(100vw - 320px), (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
-				alt="Jora Events discovery, categories and event details" width={project.secondaryImage.img.w} height={project.secondaryImage.img.h} loading="lazy" decoding="async" class="h-auto w-full" />
+	<section class="mt-8" aria-label="Project images">
+		<div class="detail-image overflow-hidden rounded-xl border border-line bg-surface">
+			<div class="flex items-center transition-transform duration-500 ease-out motion-reduce:transition-none" style:transform="translateX(-{imageIndex * 100}%)">
+				<img src={project.image.img.src} srcset={project.image.sources.webp}
+					sizes="(min-width: 1264px) 944px, (min-width: 1024px) calc(100vw - 320px), (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
+					alt="{project.name} project artwork" width={project.image.img.w} height={project.image.img.h} class="h-auto w-full shrink-0" />
+				{#if project.secondaryImage}
+					<img src={project.secondaryImage.img.src} srcset={project.secondaryImage.sources.webp}
+						sizes="(min-width: 1264px) 944px, (min-width: 1024px) calc(100vw - 320px), (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
+						alt="Jora Events discovery, categories and event details" width={project.secondaryImage.img.w} height={project.secondaryImage.img.h} loading="lazy" decoding="async" class="h-auto w-full shrink-0" />
+				{/if}
+			</div>
 		</div>
-	{/if}
+		{#if project.secondaryImage}
+			<div class="mt-4 flex items-center justify-between">
+				<p class="text-sm text-muted" aria-live="polite">{imageIndex + 1} / 2</p>
+				<div class="flex gap-2">
+					<button type="button" aria-label="Previous image" disabled={imageIndex === 0} onclick={() => imageIndex = 0} class="rounded-full border border-line p-2.5 text-ink transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-30">
+						<ArrowLeft size={18} />
+					</button>
+					<button type="button" aria-label="Next image" disabled={imageIndex === 1} onclick={() => imageIndex = 1} class="rounded-full border border-line p-2.5 text-ink transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-30">
+						<ArrowRight size={18} />
+					</button>
+				</div>
+			</div>
+		{/if}
+	</section>
 	<div class="mt-8 grid gap-8 border-t border-line pt-8 md:grid-cols-[1fr_240px] md:gap-12">
 		<div>
 			<h2 class="font-display text-xl font-semibold text-ink">About the project</h2>
