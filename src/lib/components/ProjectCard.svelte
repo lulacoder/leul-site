@@ -32,7 +32,7 @@
 			</a>
 		</div>
 	</div>
-	<a href="/projects/{project.slug}" class="project-preview" class:artwork={project.slug === 'jora-events'} aria-label="View {project.name} project details">
+	<a href="/projects/{project.slug}" class="project-preview" class:artwork={project.slug === 'jora-events'} class:wide-artwork={project.slug === 'fixmyaddis'} aria-label="View {project.name} project details">
 		<picture class="block h-full">
 			{#if project.cardImage}
 				<source media={featured ? '(max-width: 767px)' : undefined} type="image/webp" srcset={project.cardImage.sources.webp} sizes="(min-width: 1392px) 622px, (min-width: 768px) calc(50vw - 69px), min(calc(100vw - 69px), 459px)" />
@@ -74,6 +74,7 @@
 		.project-card:hover { transform: translateY(-5px); border-color: color-mix(in srgb, var(--color-ink) 20%, var(--color-line)); }
 		.project-card:hover::before { opacity: 1; }
 		.project-card:hover .project-preview img { transform: scale(1.035); }
+		.project-card:hover .project-preview.wide-artwork img { transform: none; }
 		.project-preview:hover .view-project { opacity: 1; transform: translate(-50%, 0); }
 	}
 	.project-copy { order: 1; flex: 1; min-width: 0; padding: 1.5rem; }
@@ -90,6 +91,8 @@
 	}
 	.project-preview img { transition: transform 500ms var(--motion-ease-out); }
 	.project-preview.artwork img { object-fit: contain; }
+	.project-preview.wide-artwork { background: #005b4b; }
+	.project-preview.wide-artwork img { object-fit: contain; object-position: center; }
 	.view-project {
 		position: absolute;
 		left: 50%;
