@@ -28,25 +28,19 @@ function animateScrollTo(top: number, target: HTMLElement | null) {
 	const startTime = performance.now();
 	let frame = 0;
 
-	const finish = (arrived: boolean) => {
+	const finish = () => {
 		cancelAnimationFrame(frame);
 		for (const type of INTERRUPTS) removeEventListener(type, interrupt);
 		navScroll.target = null;
 		if (stop === interrupt) stop = undefined;
-
-		// The destination settles into place when the scroll lands.
-		if (arrived && target) {
-			target.setAttribute('data-arrived', '');
-			setTimeout(() => target.removeAttribute('data-arrived'), 900);
-		}
 	};
-	const interrupt = () => finish(false);
+	const interrupt = () => finish();
 
 	const tick = (now: number) => {
 		const progress = Math.min(1, (now - startTime) / duration);
 		scrollTo({ top: start + distance * easeInOut(progress), behavior: 'instant' });
 		if (progress < 1) frame = requestAnimationFrame(tick);
-		else finish(true);
+		else finish();
 	};
 
 	// Any user input takes over from the animation.

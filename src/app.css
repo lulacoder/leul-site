@@ -175,10 +175,6 @@ h1, h2, h3 { font-family: var(--font-display); }
 	from { opacity: 0; transform: translateY(110%) rotate(5deg); }
 	to { opacity: 1; transform: none; }
 }
-@keyframes arrive {
-	from { opacity: 0.5; transform: translateY(28px) scale(0.985); }
-	to { opacity: 1; transform: none; }
-}
 /* Stagger with --d (milliseconds). */
 .fade-up { animation: fade-up 0.8s var(--motion-ease-out) var(--d, 0ms) both; }
 .pop-in { animation: pop-in 0.5s var(--motion-ease-spring) both; }
@@ -195,9 +191,6 @@ h1, h2, h3 { font-family: var(--font-display); }
 	display: inline-block;
 	animation: word-rise 0.9s var(--motion-ease-out) var(--d, 0ms) both;
 }
-
-/* The section you just scrolled to settles into place. */
-section[data-arrived] { animation: arrive 0.8s var(--motion-ease-out) both; }
 
 /* ── Scroll progress bar ── */
 .scroll-progress {
@@ -274,7 +267,6 @@ html[data-project-transition='prev']::view-transition-new(root) { animation: pro
 	.btn:hover, .btn:active, .btn:hover .btn-arrow, a:hover > .btn-arrow { transform: none; }
 	.btn::before { transform: none; }
 	.fade-up, .pop-in, .word { animation-name: fade-in; }
-	section[data-arrived] { animation: none; }
 	.chat-panel, .chat-panel[hidden] { transform: none; }
 	.disclosure::details-content { transition: opacity 0.2s ease; block-size: auto; }
 }
