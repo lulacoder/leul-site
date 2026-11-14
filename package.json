@@ -36,7 +36,9 @@
     "@lucide/svelte": "^1.17.0",
     "@tanstack/ai": "^0.64.0",
     "@tanstack/ai-gemini": "^0.34.2",
-    "@tanstack/ai-svelte": "^0.24.4"
+    "@tanstack/ai-svelte": "^0.24.4",
+    "@ui-sdk/core": "^0.1.0-beta.1",
+    "@ui-sdk/svelte": "^0.1.0-beta.1"
   },
   "imports": {
     "#lib/*": "./src/lib/*"
