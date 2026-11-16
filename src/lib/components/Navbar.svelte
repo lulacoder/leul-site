@@ -206,7 +206,7 @@
 
 			<button
 				type="button"
-				class="flex h-9 w-9 items-center justify-center rounded-lg text-ink transition-colors hover:text-accent"
+				class="icon-action flex h-9 w-9 items-center justify-center rounded-lg text-ink"
 				onclick={() => (menuOpen = !menuOpen)}
 				aria-label={menuOpen ? 'Close menu' : 'Open menu'}
 				aria-expanded={menuOpen}
@@ -316,6 +316,7 @@
 		min-height: 44px;
 		display: inline-flex;
 		align-items: center;
+		justify-content: center;
 		background: none;
 		border: none;
 		padding: 0;
@@ -330,7 +331,7 @@
 		border-radius: 9999px;
 		background-color: color-mix(in srgb, var(--color-ink) 12%, transparent);
 		border: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
-		transition: background-color 0.25s ease, border-color 0.25s ease;
+		transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.2s ease;
 	}
 
 	/* Active track tint — accent when light is chosen */
@@ -358,6 +359,13 @@
 	.theme-toggle-thumb--light {
 		transform: translateY(-50%) translateX(1rem);
 		background-color: var(--color-accent);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.theme-toggle:hover .theme-toggle-track {
+			border-color: var(--color-accent);
+			box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 14%, transparent);
+		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {

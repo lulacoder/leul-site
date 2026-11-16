@@ -2,6 +2,7 @@
 	import ScrollFade from './ScrollFade.svelte';
 	import { Mail, Download, Send, Loader2, CheckCircle2, AlertCircle } from '@lucide/svelte';
 	import GithubIcon from './icons/GithubIcon.svelte';
+	import { Button } from '@ui-sdk/svelte/button';
 
 	const EMAIL = 'leultesfaye0755@gmail.com';
 	const GITHUB = 'https://github.com/lulacoder';
@@ -72,13 +73,13 @@
 						</div>
 						<h3 class="font-display text-2xl font-semibold text-ink">Message Sent!</h3>
 						<p class="mt-2 text-muted max-w-sm text-sm sm:text-base">{submitMessage}</p>
-						<button
+						<Button
 							type="button"
 							onclick={() => (submitStatus = 'idle')}
 							class="btn btn-ghost mt-6 text-xs sm:text-sm"
 						>
 							Send another message
-						</button>
+						</Button>
 					</div>
 				{:else}
 					<form onsubmit={handleSubmit} class="space-y-5">
@@ -164,9 +165,11 @@
 							></textarea>
 						</div>
 
-						<button
+						<Button
 							type="submit"
 							disabled={isSubmitting}
+							focusableWhenDisabled
+							aria-busy={isSubmitting}
 							class="w-full btn btn-primary py-4 text-base font-semibold tracking-wide cursor-pointer disabled:cursor-not-allowed"
 						>
 							{#if isSubmitting}
@@ -176,7 +179,7 @@
 								<Send size={16} />
 								Submit
 							{/if}
-						</button>
+						</Button>
 					</form>
 				{/if}
 			</div>

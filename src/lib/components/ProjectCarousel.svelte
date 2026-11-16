@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Button } from '@ui-sdk/svelte/button';
 	import { onMount } from 'svelte';
 	import { ChevronLeft, ChevronRight, Pause, Play } from '@lucide/svelte';
 	import ProjectCard from './ProjectCard.svelte';
@@ -114,12 +115,12 @@
 		</div>
 		<div class="flex items-center gap-1">
 			{#if !reducedMotion}
-				<button type="button" class="carousel-btn" onclick={() => (userPlaying = !userPlaying)} aria-label={userPlaying ? 'Pause auto-advance' : 'Start auto-advance'}>
+				<Button class="carousel-btn icon-action" onclick={() => (userPlaying = !userPlaying)} aria-label={userPlaying ? 'Pause auto-advance' : 'Start auto-advance'}>
 					{#if userPlaying}<Pause size={16} />{:else}<Play size={16} />{/if}
-				</button>
+				</Button>
 			{/if}
-			<button type="button" class="carousel-btn" onclick={() => goTo(active - 1)} aria-label="Previous project"><ChevronLeft size={18} /></button>
-			<button type="button" class="carousel-btn" onclick={() => goTo(active + 1)} aria-label="Next project"><ChevronRight size={18} /></button>
+			<Button class="carousel-btn icon-action" onclick={() => goTo(active - 1)} aria-label="Previous project"><ChevronLeft size={18} /></Button>
+			<Button class="carousel-btn icon-action" onclick={() => goTo(active + 1)} aria-label="Next project"><ChevronRight size={18} /></Button>
 		</div>
 	</div>
 </section>
@@ -165,13 +166,17 @@
 		height: 0.4rem;
 		border-radius: 9999px;
 		background: color-mix(in srgb, var(--color-ink) 28%, transparent);
-		transition: width 0.3s ease, background-color 0.3s ease;
+		transition: width 0.3s ease, background-color 0.3s ease, transform 260ms var(--motion-ease-out);
 	}
 	.carousel-dot span.active {
 		width: 1.25rem;
 		background: var(--color-accent);
 	}
-	.carousel-btn {
+	@media (hover: hover) and (pointer: fine) {
+		.carousel-dot:hover span { background: var(--color-accent); transform: scale(1.3); }
+	}
+	.carousel-dot:active span { transform: scale(0.85); }
+	:global(.carousel-btn) {
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -179,12 +184,9 @@
 		height: 2.75rem;
 		border-radius: 9999px;
 		color: var(--color-muted);
-		transition: color 180ms ease, background-color 180ms ease;
-	}
-	@media (hover: hover) and (pointer: fine) {
-		.carousel-btn:hover { color: var(--color-ink); background: color-mix(in srgb, var(--color-ink) 7%, transparent); }
 	}
 	@media (prefers-reduced-motion: reduce) {
 		.carousel-track { scroll-behavior: auto; }
+		.carousel-dot:hover span, .carousel-dot:active span { transform: none; }
 	}
 </style>
