@@ -45,7 +45,7 @@
 				<button class="certificate-preview" type="button" onclick={() => lightboxOpen = true} aria-label="View Stanford Machine Learning Specialization certificate">
 					<img src={certificate.img.src} srcset={certificate.sources.webp} sizes="(min-width: 768px) 240px, 70vw" width={certificate.img.w} height={certificate.img.h} alt="Stanford Machine Learning Specialization certificate" loading="lazy" decoding="async" />
 				</button>
-				<button class="certificate-link" type="button" onclick={() => lightboxOpen = true}>View certificate <ArrowUpRight size={16} aria-hidden="true" /></button>
+				<button class="certificate-link btn btn-ghost" type="button" onclick={() => lightboxOpen = true}>View certificate <ArrowUpRight size={16} class="btn-arrow" aria-hidden="true" /></button>
 			</article>
 		</ScrollFade>
 	</div>
@@ -55,7 +55,7 @@
 	<dialog bind:this={lightboxDialog} class="certificate-dialog" aria-label="Stanford Machine Learning Specialization certificate" onclose={() => lightboxOpen = false} onclick={(event) => { if (event.target === event.currentTarget) lightboxDialog?.close(); }}>
 		<div class="dialog-content">
 			<img src={certificate.img.src} srcset={certificate.sources.webp} sizes="(min-width: 944px) 896px, 95vw" width={certificate.img.w} height={certificate.img.h} alt="Stanford Machine Learning Specialization certificate" />
-			<button type="button" onclick={() => lightboxDialog?.close()} aria-label="Close certificate"><X size={18} /></button>
+			<button class="icon-action" type="button" onclick={() => lightboxDialog?.close()} aria-label="Close certificate"><X size={18} /></button>
 		</div>
 	</dialog>
 {/if}
@@ -84,10 +84,11 @@
 	.course-card { display: grid; gap: 1.5rem; margin-top: .9rem; padding: 1.7rem 2rem; align-items: center; }
 	.course-card h3 { font-size: 1.4rem; }
 	.course-card .description { max-width: 34rem; font-size: .9rem; }
-	.certificate-preview { width: min(100%, 15rem); padding: .25rem; border: 1px solid var(--color-line); border-radius: .4rem; cursor: pointer; }
+	.certificate-preview { width: min(100%, 15rem); padding: .25rem; border: 1px solid var(--color-line); border-radius: .4rem; cursor: pointer; transition: border-color 260ms ease, transform 260ms var(--motion-ease-out); }
+	@media (hover: hover) and (pointer: fine) { .certificate-preview:hover { border-color: var(--color-accent); transform: translateY(-2px); } }
+	@media (prefers-reduced-motion: reduce) { .certificate-preview:hover { transform: none; } }
 	.certificate-preview img { display: block; width: 100%; height: auto; border-radius: .2rem; }
-	.certificate-link { display: inline-flex; width: fit-content; min-height: 44px; align-items: center; justify-content: center; gap: .5rem; padding: .7rem 1rem; border: 1px solid var(--color-accent); border-radius: .4rem; color: var(--color-accent); font-size: .85rem; cursor: pointer; transition: background .2s; }
-	.certificate-link:hover { background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
+	.certificate-link { width: fit-content; padding: .7rem 1rem; border-color: var(--color-accent); border-radius: .4rem; color: var(--color-accent); font-size: .85rem; }
 	.certificate-dialog { max-width: 95vw; max-height: 95vh; margin: auto; padding: 1rem; border: 0; background: transparent; }
 	.certificate-dialog::backdrop { background: rgba(0, 0, 0, .85); backdrop-filter: blur(12px); }
 	.dialog-content { position: relative; max-width: 56rem; }

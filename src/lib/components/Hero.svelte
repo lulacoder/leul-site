@@ -27,7 +27,7 @@
 			<div class="fade-up mt-7 flex flex-wrap items-center gap-3" style="--d: 830ms">
 				<a href="#projects" class="btn btn-primary">See my work <ArrowRight size={16} class="btn-arrow" /></a>
 				<a href="#contact" class="btn btn-ghost">Get in touch</a>
-				<a href="/resume.pdf" download="Leul_Tesfaye_Resume.pdf" class="btn btn-tertiary"><Download size={15} /> Resume</a>
+				<a href="/resume.pdf" download="Leul_Tesfaye_Resume.pdf" class="btn btn-tertiary"><Download size={15} class="btn-arrow btn-icon-down" /> Resume</a>
 			</div>
 		</div>
 		<div class="fade-up min-w-0" style="--d: 400ms">

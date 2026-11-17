@@ -129,8 +129,8 @@
 			<h2 id="chat-title">Ask about Leul</h2>
 			<p>Projects, experience, and interests</p>
 		</div>
-		<button type="button" class="icon-button" aria-label="New chat" title="New chat" onclick={newChat}><RotateCcw size={16} /></button>
-		<button type="button" class="icon-button" aria-label="Close chat" title="Close chat" onclick={onClose}><X size={19} /></button>
+		<button type="button" class="icon-button icon-action" aria-label="New chat" title="New chat" onclick={newChat}><RotateCcw size={16} /></button>
+		<button type="button" class="icon-button icon-action" aria-label="Close chat" title="Close chat" onclick={onClose}><X size={19} /></button>
 	</header>
 
 	<div class="transcript" bind:this={transcript} role="log" aria-label="Conversation" aria-live="polite" aria-busy={chat.isLoading}
@@ -141,7 +141,7 @@
 				<h3>Ask about Leul</h3>
 				<p>Ask about Leul's projects, experience, or the technologies he works with.</p>
 				<div class="suggestions">
-					{#each suggestions as question}<button type="button" onclick={() => send(question)}>{question}<ArrowUp size={14} class="rotate-45" /></button>{/each}
+					{#each suggestions as question (question)}<button type="button" class="btn btn-ghost" onclick={() => send(question)}>{question}<ArrowUp size={14} class="rotate-45 btn-arrow" /></button>{/each}
 				</div>
 			</div>
 		{/if}
@@ -158,10 +158,10 @@
 			<p class="thinking" role="status"><span class="thinking-dot"></span>{thinkingLines[thinkingIndex]}</p>
 		{/if}
 		{#if error}
-			<div class="chat-error" role="alert"><p>{error}</p>{#if lastQuestion}<button type="button" onclick={retry}>Try again</button>{/if}</div>
+			<div class="chat-error" role="alert"><p>{error}</p>{#if lastQuestion}<button type="button" class="btn btn-tertiary" onclick={retry}>Try again</button>{/if}</div>
 		{/if}
 		{#if atLimit && !chat.isLoading}
-			<div class="chat-error"><p>Ready for more? Start a fresh conversation.</p><button type="button" onclick={newChat}>New chat</button></div>
+			<div class="chat-error"><p>Ready for more? Start a fresh conversation.</p><button type="button" class="btn btn-tertiary" onclick={newChat}>New chat</button></div>
 		{/if}
 	</div>
 
@@ -170,9 +170,9 @@
 		<textarea id="chat-question" bind:this={composer} bind:value={input} rows="2" maxlength={MAX_INPUT_LENGTH}
 			placeholder="Ask anything about Leul..." disabled={atLimit} onkeydown={onComposerKey}></textarea>
 		{#if chat.isLoading}
-			<button type="button" class="send-button" aria-label="Stop response" title="Stop response" onclick={() => chat.stop()}><Square size={14} fill="currentColor" /></button>
+			<button type="button" class="send-button icon-action" aria-label="Stop response" title="Stop response" onclick={() => chat.stop()}><Square size={14} fill="currentColor" /></button>
 		{:else}
-			<button type="submit" class="send-button" aria-label="Send question" title="Send question" disabled={!input.trim() || atLimit}><ArrowUp size={20} /></button>
+			<button type="submit" class="send-button icon-action" aria-label="Send question" title="Send question" disabled={!input.trim() || atLimit}><ArrowUp size={20} /></button>
 		{/if}
 	</form>
 	<footer class="chat-footer"><span>AI assistant for Leul's portfolio</span><a href="/#contact" onclick={onClose}>Contact Leul</a></footer>
@@ -193,11 +193,6 @@
 	.welcome > p { margin-top: 12px; font-size: 13px; line-height: 1.7; color: var(--color-muted); }
 	.suggestions { display: flex; flex-direction: column; gap: 8px; margin-top: 24px; }
 	.suggestions button { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; border: 1px solid var(--color-line); border-radius: 10px; font-size: 12px; text-align: left; cursor: pointer; }
-	.icon-button, .suggestions button { transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease; }
-	@media (hover: hover) and (pointer: fine) {
-		.icon-button:hover { background: var(--color-surface); color: var(--color-ink); }
-		.suggestions button:hover { background: var(--color-surface); border-color: color-mix(in srgb, var(--color-ink) 20%, var(--color-line)); }
-	}
 	.message { margin-bottom: 20px; }
 	.message-label { margin-bottom: 7px; font-size: 10px; font-weight: 500; color: var(--color-faint); }
 	.message-text { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; line-height: 1.75; }
@@ -206,12 +201,12 @@
 	.thinking { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--color-muted); margin-bottom: 14px; }
 	.thinking-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-accent); animation: pulse 1.2s ease-in-out infinite; }
 	.chat-error { margin-bottom: 14px; padding: 12px; border: 1px solid var(--color-line); border-radius: 10px; font-size: 12px; line-height: 1.6; color: var(--color-muted); }
-	.chat-error button { margin-top: 8px; color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+	.chat-error button { margin-top: 8px; min-height: 36px; padding: 6px 10px; color: var(--color-accent); }
 	.composer { display: flex; align-items: flex-end; gap: 8px; margin: 0 14px; padding: 10px 10px 10px 14px; border: 1px solid var(--color-line); border-radius: 13px; background: var(--color-canvas); flex-shrink: 0; }
 	.composer:focus-within { border-color: var(--color-accent); }
 	.composer textarea { width: 100%; min-width: 0; resize: none; max-height: 96px; background: transparent; color: var(--color-ink); font-size: 16px; line-height: 1.5; }
 	.composer textarea::placeholder { color: var(--color-faint); font-size: 12px; }
-	.send-button { display: grid; place-items: center; width: 34px; height: 34px; flex-shrink: 0; border-radius: 10px; background: var(--color-accent-strong); color: #fff; cursor: pointer; }
+	.send-button { --button-reveal: var(--button-inverse); --button-hover-ink: var(--button-inverse-ink); display: grid; place-items: center; width: 34px; height: 34px; flex-shrink: 0; border-radius: 10px; background: var(--color-accent-strong); color: #fff; cursor: pointer; }
 	.send-button:disabled { background: var(--color-surface); color: var(--color-faint); cursor: default; }
 	.chat-footer { display: flex; justify-content: space-between; gap: 12px; padding: 11px 18px 14px; color: var(--color-faint); font-size: 10px; flex-shrink: 0; }
 	.chat-footer a:hover { color: var(--color-ink); }

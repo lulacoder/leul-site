@@ -75,7 +75,7 @@
 <button
 	bind:this={launcher}
 	type="button"
-	class="chat-launcher"
+	class="chat-launcher btn"
 	class:chat-open={open}
 	aria-label="Ask about Leul"
 	aria-expanded={open}
@@ -86,7 +86,7 @@
 	onfocus={preloadChat}
 	onclick={open ? closeChat : openChat}
 >
-	{#if loading}<LoaderCircle size={19} class="animate-spin" />{:else}<MessageCircle size={19} />{/if}
+	{#if loading}<LoaderCircle size={19} class="animate-spin" />{:else}<MessageCircle size={19} class="btn-arrow" />{/if}
 	<span>Ask about Leul</span>
 </button>
 
@@ -112,13 +112,7 @@
 		/* Named so it stays put during route transitions. */
 		view-transition-name: chat-launcher;
 	}
-	.chat-open { background: var(--color-accent-strong); border-color: var(--color-accent-strong); color: #fff; }
-	@media (hover: hover) and (pointer: fine) {
-		.chat-launcher:hover:not(:disabled) { background: var(--color-accent-strong); border-color: var(--color-accent-strong); color: #fff; transform: translateY(-2px); }
-		.chat-open:hover:not(:disabled) { background: color-mix(in srgb, var(--color-accent-strong) 88%, white); }
-	}
-	.chat-launcher:active:not(:disabled) { transform: scale(0.97); transition-duration: 100ms; }
-	@media (prefers-reduced-motion: reduce) { .chat-launcher:hover:not(:disabled), .chat-launcher:active:not(:disabled) { transform: none; } }
+	.chat-open { --button-reveal: var(--button-inverse); --button-hover-ink: var(--button-inverse-ink); background: var(--color-accent-strong); border-color: var(--color-accent-strong); color: #fff; }
 	.chat-launcher:disabled { cursor: wait; }
 	.load-error { position: fixed; z-index: 60; right: 1rem; bottom: 5rem; padding: 12px; border: 1px solid var(--color-line); border-radius: 10px; background: var(--color-panel); color: var(--color-muted); font-size: 12px; }
 	@media (min-width: 640px) { .chat-launcher { right: 1.5rem; bottom: 1.5rem; } }

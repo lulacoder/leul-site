@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { ArrowLeft, ArrowRight, ArrowUpRight, Maximize2, X } from '@lucide/svelte';
 	import { Dialog, DialogTrigger, DialogBackdrop, DialogContent, DialogTitle, DialogClose } from '@ui-sdk/svelte/dialog';
+	import { Button } from '@ui-sdk/svelte/button';
 	import GithubIcon from '#lib/components/icons/GithubIcon.svelte';
 	import type { PageData } from './$types';
 
@@ -36,7 +37,7 @@
 		<div class="mt-5 flex flex-wrap gap-3">
 			{#if project.live}
 				<a href={project.live} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-					Visit live site <ArrowUpRight size={16} />
+					Visit live site <ArrowUpRight size={16} class="btn-arrow" />
 				</a>
 			{/if}
 			{#if project.github}
@@ -68,7 +69,7 @@
 		}}>
 			<div class="viewer-header">
 				<div><p class="viewer-eyebrow">PROJECT GALLERY</p><DialogTitle class="viewer-title">{project.name}</DialogTitle></div>
-				<DialogClose class="viewer-icon" aria-label="Close image viewer"><X size={20} /></DialogClose>
+				<DialogClose class="viewer-icon icon-action" aria-label="Close image viewer"><X size={20} /></DialogClose>
 			</div>
 			<div class="viewer-image">
 				{#if viewerImageIndex === 1 && project.secondaryImage}
@@ -81,7 +82,7 @@
 				<span>{String(viewerImageIndex + 1).padStart(2, '0')} <span class="viewer-muted">/ {project.secondaryImage ? '02' : '01'}</span></span>
 				{#if project.secondaryImage}
 					<span class="viewer-tip">Use arrow keys to navigate</span>
-					<div class="viewer-arrows"><button class="viewer-icon" type="button" aria-label="Previous image" disabled={viewerImageIndex === 0} onclick={() => viewerImageIndex = 0}><ArrowLeft size={18} /></button><button class="viewer-icon" type="button" aria-label="Next image" disabled={viewerImageIndex === 1} onclick={() => viewerImageIndex = 1}><ArrowRight size={18} /></button></div>
+					<div class="viewer-arrows"><Button class="viewer-icon icon-action" aria-label="Previous image" disabled={viewerImageIndex === 0} onclick={() => viewerImageIndex = 0}><ArrowLeft size={18} /></Button><Button class="viewer-icon icon-action" aria-label="Next image" disabled={viewerImageIndex === 1} onclick={() => viewerImageIndex = 1}><ArrowRight size={18} /></Button></div>
 				{:else}<span class="viewer-tip">Press Esc to close</span>{/if}
 			</div>
 		</DialogContent>
@@ -90,12 +91,12 @@
 			<div class="mt-4 flex items-center justify-between">
 				<p class="text-sm text-muted" aria-live="polite">{imageIndex + 1} / 2</p>
 				<div class="flex gap-2">
-					<button type="button" aria-label="Previous image" disabled={imageIndex === 0} onclick={() => imageIndex = 0} class="rounded-full border border-line p-2.5 text-ink transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-30">
+					<Button aria-label="Previous image" disabled={imageIndex === 0} onclick={() => imageIndex = 0} class="icon-action border border-line p-2.5 text-ink disabled:opacity-30">
 						<ArrowLeft size={18} />
-					</button>
-					<button type="button" aria-label="Next image" disabled={imageIndex === 1} onclick={() => imageIndex = 1} class="rounded-full border border-line p-2.5 text-ink transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-30">
+					</Button>
+					<Button aria-label="Next image" disabled={imageIndex === 1} onclick={() => imageIndex = 1} class="icon-action border border-line p-2.5 text-ink disabled:opacity-30">
 						<ArrowRight size={18} />
-					</button>
+					</Button>
 				</div>
 			</div>
 		{/if}
@@ -149,7 +150,6 @@
 	.viewer-eyebrow { color: #aaa9a6; font-size: 10px; font-weight: 600; letter-spacing: .16em; }
 	:global(.viewer-title) { margin-top: 5px; font-size: 18px; font-weight: 600; }
 	:global(.viewer-icon) { display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid rgba(255,255,255,.24); border-radius: 50%; color: white; background: rgba(255,255,255,.05); cursor: pointer; }
-	:global(.viewer-icon:hover) { background: rgba(255,255,255,.16); }
 	:global(.viewer-icon:disabled) { opacity: .3; cursor: default; }
 	:global(.viewer-icon:focus-visible), :global(.image-trigger:focus-visible) { outline: 2px solid #fff; outline-offset: 3px; }
 	.viewer-image { display: flex; min-height: 0; flex: 1; align-items: center; justify-content: center; padding: 24px 0; }
