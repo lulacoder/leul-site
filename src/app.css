@@ -287,6 +287,24 @@ html[data-project-transition='next']::view-transition-new(root) { animation: pro
 html[data-project-transition='prev']::view-transition-old(root) { animation: project-prev-old 180ms ease both; }
 html[data-project-transition='prev']::view-transition-new(root) { animation: project-prev-new 400ms var(--motion-ease-out) 40ms both; }
 
+/* The clicked project image grows into the case study's hero image. */
+html[data-project-transition='enter'][data-hero-transition] [data-project-hero],
+html[data-project-transition='enter'][data-hero-transition] .detail-image { view-transition-name: project-hero; }
+::view-transition-group(project-hero) {
+	animation-duration: 560ms;
+	animation-timing-function: var(--motion-ease-out);
+	border-radius: 0.75rem;
+	overflow: clip;
+}
+::view-transition-old(project-hero),
+::view-transition-new(project-hero) {
+	height: 100%;
+	object-fit: cover;
+	object-position: top;
+	animation-duration: 560ms;
+	animation-timing-function: var(--motion-ease-out);
+}
+
 /* Reduced motion: keep fades, drop movement and scaling. */
 @media (prefers-reduced-motion: reduce) {
 	.btn:hover:not(:disabled):not([aria-disabled='true']), .btn:active:not(:disabled):not([aria-disabled='true']), .icon-action:active:not(:disabled):not([aria-disabled='true']), .btn:hover .btn-arrow, .btn:hover .btn-icon-down, .btn:hover > svg:not(.btn-arrow), .icon-action:hover > svg, a:hover > .btn-arrow { transform: none; }

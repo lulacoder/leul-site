@@ -10,6 +10,7 @@
 	import { afterNavigate, onNavigate } from '$app/navigation';
 	import { handleAnchorClick } from '#lib/scroll.svelte.js';
 	import { projects } from '#lib/projects.js';
+	import { clearProjectHero } from '#lib/project-hero.js';
 	import Navbar from '#lib/components/Navbar.svelte';
 	import Footer from '#lib/components/Footer.svelte';
 	import ChatWidget from '#lib/components/ChatWidget.svelte';
@@ -81,7 +82,9 @@
 				await navigation.complete;
 			});
 			transition.finished.finally(() => {
-				if (navigationSequence === sequence) delete document.documentElement.dataset.projectTransition;
+				if (navigationSequence !== sequence) return;
+				delete document.documentElement.dataset.projectTransition;
+				clearProjectHero();
 			});
 		});
 	});
