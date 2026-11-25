@@ -1,77 +1,148 @@
 <script lang="ts">
-	import { BookOpen, Code2, Database, Gamepad2, Globe, Laptop } from '@lucide/svelte';
+	import { Database, Laptop, Smartphone } from '@lucide/svelte';
 	import ScrollFade from './ScrollFade.svelte';
+
+	const interests = [
+		{ name: 'Tennis', icon: 'tennis' },
+		{ name: 'Football', icon: 'football' },
+		{ name: 'Pool', icon: 'billiards' }
+	];
+	const areas = [
+		{ name: 'Web interfaces', icon: Laptop },
+		{ name: 'Mobile apps', icon: Smartphone },
+		{ name: 'Databases & APIs', icon: Database }
+	];
 </script>
 
-<section id="about" class="bg-panel">
-	<div class="section-shell about-layout">
-		<ScrollFade>
-			<div class="about-copy">
-				<p class="section-label">About <span></span></p>
-				<h2>Curious mind.<br />Builder at <em>heart.</em></h2>
-				<div class="about-text">
-					<p>I'm a software engineering student at Addis Ababa University. I've worked on hotel booking, tourism, civic reporting, and gifting applications, both independently and as part of a team.</p>
-					<p>I enjoy working across the stack, from databases and APIs to web and mobile interfaces. Outside coding, I play tennis, football, and pool.</p>
-				</div>
-				<p class="closing-note">Learning by building.</p>
-			</div>
+<section id="about" class="bg-panel" aria-labelledby="about-heading">
+	<div class="section-shell">
+		<ScrollFade variant="subtle">
+			<h2 id="about-heading" class="about-heading">About</h2>
 		</ScrollFade>
 
-		<ScrollFade delay={120}>
-			<div class="about-panels">
-				<div class="info-panel">
-					<h3><Gamepad2 size={25} aria-hidden="true" /> <span>Interests</span></h3>
-					<div class="interest-grid">
-						<div>
-							<img class="interest-image" src="/interests/tennis.svg" width="52" height="52" alt="" />
-							<span>Tennis</span>
-						</div>
-						<div>
-							<img class="interest-image" src="/interests/football.svg" width="52" height="52" alt="" />
-							<span>Football</span>
-						</div>
-						<div><BookOpen size={32} strokeWidth={1.7} aria-hidden="true" /><span>Technology &amp; learning</span></div>
-						<div>
-							<img class="interest-image" src="/interests/billiards.svg" width="52" height="52" alt="" />
-							<span>Pool (billiards)</span>
-						</div>
+		<div class="about-layout">
+			<ScrollFade variant="subtle">
+				<div class="about-copy">
+					<p class="about-lead">I study software engineering at Addis Ababa University and build web and mobile apps.</p>
+					<p>I like figuring out why an app is slow. That can mean following a request from the interface through the API and into the database.</p>
+					<p>I’m currently learning more about system design, distributed systems, and how to verify changes made by coding agents.</p>
+				</div>
+			</ScrollFade>
+
+			<ScrollFade variant="subtle" delay={75}>
+				<div class="about-panels">
+					<div class="panel">
+						<h3>Outside work</h3>
+						<ul class="interest-grid">
+							{#each interests as interest (interest.name)}
+								<li class="interest">
+									<img src="/interests/{interest.icon}.svg" width="48" height="48" alt="" loading="lazy" />
+									<span>{interest.name}</span>
+								</li>
+							{/each}
+						</ul>
+						<p class="panel-note"><span class="note-dot" aria-hidden="true"></span>Manchester United supporter</p>
+					</div>
+					<div class="panel">
+						<h3>What I build</h3>
+						<ul class="area-list">
+							{#each areas as area (area.name)}
+								<li><area.icon size={18} strokeWidth={1.75} aria-hidden="true" />{area.name}</li>
+							{/each}
+						</ul>
 					</div>
 				</div>
-				<div class="info-panel">
-					<h3><Code2 size={25} aria-hidden="true" /> <span>Working areas</span></h3>
-					<ul class="working-list">
-						<li><Laptop size={23} aria-hidden="true" /> Web interfaces</li>
-						<li><Globe size={23} aria-hidden="true" /> Mobile applications</li>
-						<li><Database size={23} aria-hidden="true" /> Databases &amp; APIs</li>
-					</ul>
-				</div>
-			</div>
-		</ScrollFade>
+			</ScrollFade>
+		</div>
 	</div>
 </section>
 
 <style>
-	.about-layout { display: grid; gap: 3rem; }
-	.section-label { display: flex; align-items: center; gap: 1rem; color: var(--color-ink); font: 500 0.7rem var(--font-mono); letter-spacing: .17em; text-transform: uppercase; }
-	.section-label span { width: 2.5rem; height: 1px; background: var(--color-accent); }
-	h2 { margin-top: 3rem; font-family: Georgia, serif; font-size: clamp(2.8rem, 5.2vw, 4.6rem); font-weight: 400; letter-spacing: -.045em; line-height: 1.03; }
-	h2 em { color: var(--color-accent); font-style: normal; }
-	.about-text { max-width: 36rem; margin-top: 2rem; color: var(--color-muted); font-size: 1.05rem; line-height: 1.8; }
-	.about-text p + p { margin-top: 1.5rem; }
-	.closing-note { margin-top: 3.5rem; color: var(--color-faint); font: 500 .65rem var(--font-mono); letter-spacing: .16em; text-transform: uppercase; }
-	.closing-note::before { content: ''; display: block; width: 3rem; height: 2px; margin-bottom: 1rem; background: var(--color-accent); }
-	.about-panels { display: grid; gap: .9rem; }
-	.info-panel { padding: 1.6rem; border: 1px solid var(--color-line); border-radius: .5rem; }
-	.info-panel h3 { display: flex; align-items: center; gap: 1rem; color: var(--color-accent); }
-	.info-panel h3 span { color: var(--color-ink); font: 500 .68rem var(--font-mono); letter-spacing: .16em; text-transform: uppercase; }
-	.info-panel h3 span::after { content: ''; display: block; width: 2.25rem; height: 1px; margin-top: .65rem; background: var(--color-accent); }
-	.interest-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin-top: 1.25rem; }
-	.interest-grid div { display: flex; min-height: 7rem; flex-direction: column; align-items: center; justify-content: center; gap: .65rem; padding: 1rem; border: 1px solid var(--color-line); border-radius: .4rem; color: var(--color-ink); text-align: center; font-size: .85rem; }
-	.interest-image { width: 52px; height: 52px; object-fit: contain; }
-	.interest-grid div::after { content: ''; width: 1.5rem; height: 1px; background: var(--color-accent); }
-	.working-list { margin-top: 1rem; list-style: none; }
-	.working-list li { display: flex; align-items: center; gap: 1.1rem; padding: .9rem 0; color: var(--color-muted); font-size: .9rem; }
-	.working-list li + li { border-top: 1px solid var(--color-line); }
-	.working-list :global(svg) { flex: none; color: var(--color-accent); }
-	@media (min-width: 768px) { .about-layout { grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: 5rem; align-items: start; } }
+	.about-heading {
+		font-size: clamp(2.6rem, 6vw, 4.65rem);
+		font-weight: 600;
+		line-height: 0.98;
+		letter-spacing: -0.065em;
+	}
+	.about-layout {
+		display: grid;
+		gap: clamp(1.75rem, 5vw, 4rem);
+		margin-top: clamp(1.5rem, 4vw, 2.75rem);
+	}
+	.about-copy {
+		max-width: 36rem;
+		color: var(--color-muted);
+		font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+		line-height: 1.7;
+	}
+	.about-copy p + p { margin-top: 1rem; }
+	.about-lead {
+		max-width: 28ch;
+		color: var(--color-ink);
+		font-family: var(--font-display);
+		font-size: clamp(1.55rem, 3.2vw, 2.55rem);
+		font-weight: 500;
+		line-height: 1.12;
+		letter-spacing: -0.04em;
+		text-wrap: balance;
+	}
+	.about-panels { display: grid; gap: 0.75rem; }
+	.panel {
+		padding: 1.25rem;
+		border: 1px solid var(--color-line);
+		border-radius: 0.75rem;
+		background: var(--color-canvas);
+	}
+	.panel h3 {
+		color: var(--color-muted);
+		font-size: 0.8125rem;
+		font-weight: 500;
+	}
+	.interest-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 0.5rem;
+		margin-top: 0.9rem;
+		list-style: none;
+	}
+	.interest {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.6rem;
+		padding: 1rem 0.5rem 0.85rem;
+		border-radius: 0.55rem;
+		background: var(--color-surface);
+		color: var(--color-ink);
+		font-size: 0.875rem;
+		font-weight: 500;
+	}
+	.interest img { width: 48px; height: 48px; object-fit: contain; }
+	@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+		.interest img { transition: transform 300ms var(--motion-ease-out); }
+		.interest:hover img { transform: translateY(-3px) rotate(-6deg); }
+	}
+	.panel-note {
+		display: flex;
+		align-items: center;
+		gap: 0.55rem;
+		margin-top: 0.9rem;
+		color: var(--color-muted);
+		font-size: 0.8125rem;
+	}
+	.note-dot { width: 6px; height: 6px; border-radius: 50%; background: #da291c; }
+	.area-list { margin-top: 0.4rem; list-style: none; }
+	.area-list li {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.7rem 0;
+		color: var(--color-ink);
+		font-size: 0.9rem;
+	}
+	.area-list li + li { border-top: 1px solid var(--color-line); }
+	.area-list :global(svg) { flex: none; color: var(--color-accent); }
+	@media (min-width: 768px) {
+		.about-layout { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); align-items: start; }
+	}
 </style>

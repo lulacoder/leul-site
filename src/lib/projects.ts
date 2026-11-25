@@ -3,6 +3,9 @@ import fixMyAddisArt from './assets/fixmyaddis-case-study-v2.webp?w=480;768;1080
 import tripwaysArt from './assets/tripways-case-study-v2.webp?w=480;768;1080;1500&format=webp&quality=85&enhanced';
 import kennaArt from './assets/kenna-case-study-v2.webp?w=480;768;1080;1500&format=webp&quality=85&enhanced';
 import moviesArt from './assets/movies-case-study-v2.webp?w=480;768;1080;1500&format=webp&quality=85&enhanced';
+import noteworthyLanding from './assets/noteworthy-landing.webp?w=480;768;1080;1600;1920&format=webp&quality=85&enhanced';
+import noteworthyEditor from './assets/noteworthy-editor.webp?w=480;768;1080;1600;1920&format=webp&quality=85&enhanced';
+import noteworthyThumbnail from './assets/noteworthy-cover.webp?w=160;240;320&format=webp&quality=85&enhanced';
 import jora from './assets/jora-cover-v2.webp?w=480;768;1080;1600;2000&format=webp&quality=85&enhanced';
 import joraDiscover from './assets/jora-discover-v2.webp?w=480;768;1080;1600;2000&format=webp&quality=85&enhanced';
 
@@ -21,9 +24,10 @@ export interface Project {
 	live: string | null;
 	github: string | null;
 	image: typeof oromiaArt;
+	imageAlt?: string;
 	/** Square phone-viewport capture used by carousel and compact grid cards. */
 	cardImage?: typeof oromiaArt;
-	secondaryImage?: typeof oromiaArt;
+	secondaryImage?: { image: typeof oromiaArt; alt: string };
 	thumbnail?: typeof oromiaArt;
 	featured?: boolean;
 }
@@ -62,7 +66,7 @@ export const projects: Project[] = [
 		live: 'https://jora.events/',
 		github: null,
 		image: jora,
-		secondaryImage: joraDiscover,
+		secondaryImage: { image: joraDiscover, alt: 'Jora Events discovery, categories and event details' },
 		featured: true
 	},
 	{
@@ -80,6 +84,31 @@ export const projects: Project[] = [
 		github: null,
 		image: fixMyAddisArt,
 		featured: true
+	},
+	{
+		slug: 'noteworthy',
+		name: 'Noteworthy',
+		role: 'Full-stack developer',
+		tags: ['Next.js', 'Convex', 'Note-taking'],
+		description: 'A workspace for Markdown notes, visual canvases, and task boards.',
+		overview: 'Noteworthy brings writing and planning into one workspace. Write and organize notes, embed them on a freeform canvas, or track tasks on a board.',
+		stack: ['Next.js', 'TypeScript', 'Convex', 'Better Auth', 'Tiptap', 'Tailwind CSS'],
+		stackDescription: 'Next.js, TypeScript, and Tailwind CSS power the interface, with Tiptap for rich-text editing. Convex handles real-time data and Better Auth handles sign-in.',
+		contributions: [
+			'Built rich-text note editing with Markdown support, tags, and search.',
+			'Integrated real-time sync and added note version history.',
+			'Built freeform canvases and task boards for visual planning.'
+		],
+		status: 'Live',
+		live: 'https://notes-app-liart-eight.vercel.app/',
+		github: 'https://github.com/lulacoder/Notes-app-for-reals',
+		image: noteworthyLanding,
+		imageAlt: 'Noteworthy landing page with a visual canvas for a studio website project',
+		secondaryImage: {
+			image: noteworthyEditor,
+			alt: 'Noteworthy landing page showing a rich-text note with a checklist and inspiration photo'
+		},
+		thumbnail: noteworthyThumbnail
 	},
 	{
 		slug: 'hotel-management',

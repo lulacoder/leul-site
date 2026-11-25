@@ -82,7 +82,11 @@ Portfolio: /projects/jora-events
 
 ## Other projects and learning
 
+Noteworthy is a workspace for Markdown notes, freeform canvases, and task boards. It uses Next.js, Convex, Better Auth, and Tiptap. Website: https://notes-app-liart-eight.vercel.app/ Portfolio: /projects/noteworthy
+
 Trending Movies is a solo movie discovery app using Next.js, TypeScript, TMDB, and Tailwind CSS. It includes search, genre filters, movie details, and a locally saved watchlist. The portfolio labels it in development. Portfolio: /projects/trending-movies
+
+Leul is currently learning system design, distributed systems, and agentic engineering. He is interested in making requirements and success criteria explicit and building verification systems that check agents’ work against them.
 
 Leul completed Stanford's Machine Learning Specialization on Coursera on August 27, 2025. This is a specialization certificate, not a Stanford degree. His university program is a Bachelor of Software Engineering at Addis Ababa University.
 

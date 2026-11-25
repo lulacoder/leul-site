@@ -1,136 +1,125 @@
 <script lang="ts">
-	import { ArrowUpRight, ArrowRight } from '@lucide/svelte';
+	import { ArrowRight, ArrowUpRight, Maximize2 } from '@lucide/svelte';
 	import type { Project } from '#lib/projects.js';
+	import ProjectImageDialog from './ProjectImageDialog.svelte';
+	import ScrollFade from './ScrollFade.svelte';
 
-	let { project, featured = false }: { project: Project; featured?: boolean } = $props();
+	let { project, active }: { project: Project; active: boolean } = $props();
 </script>
 
-<article class="project-card group" class:featured>
-	<div class="project-copy">
-		<div class="mb-4 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-muted">
-			<span class="h-1.5 w-1.5 rounded-full" class:bg-emerald-400={project.status === 'Live'} class:bg-amber-400={project.status !== 'Live'} aria-hidden="true"></span>
-			{project.status}
-		</div>
-		<h3 class="font-display text-2xl font-semibold tracking-tight text-ink sm:text-[1.75rem]">
-			<a href="/projects/{project.slug}" class="transition-colors hover:text-accent">{project.name}</a>
-		</h3>
-		<p class="mt-2 text-sm font-medium text-muted">{project.role}</p>
-		<p class="mt-4 max-w-lg text-sm leading-relaxed text-muted">{project.description}</p>
-		<div class="mt-5 flex flex-wrap gap-1.5">
-			{#each project.tags as tag (tag)}
-				<span class="project-tag">{tag}</span>
+<article class="project-chapter" data-feature={project.slug} class:active aria-labelledby="work-{project.slug}">
+	<ScrollFade variant="subtle">
+		<a class="chapter-image" href="/projects/{project.slug}" tabindex="-1" aria-hidden="true">
+			<img src={project.image.img.src} srcset={project.image.sources.webp}
+				sizes="(min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
+				alt="" width={project.image.img.w} height={project.image.img.h} loading="lazy" decoding="async" />
+		</a>
+		<p class="chapter-role">{project.role}</p>
+		<h3 id="work-{project.slug}" class="chapter-title">{project.name}</h3>
+		<p class="chapter-description">{project.overview}</p>
+		<ul class="chapter-technologies" aria-label="Technologies used">
+			{#each project.stack as technology (technology)}
+				<li>{technology}</li>
 			{/each}
-		</div>
-		<div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm">
+		</ul>
+		<div class="chapter-actions">
+			<a class="chapter-case" href="/projects/{project.slug}" aria-label="Read the {project.name} case study">
+				Case study <ArrowRight size={17} class="btn-arrow" aria-hidden="true" />
+			</a>
+			<ProjectImageDialog {project} triggerClass="chapter-preview" triggerLabel="Preview {project.name} images">
+				<Maximize2 size={14} aria-hidden="true" /> Preview
+			</ProjectImageDialog>
 			{#if project.live}
-				<a href={project.live} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-accent transition-colors hover:text-ink">
-					Live site <ArrowUpRight size={15} />
+				<a class="chapter-live" href={project.live} target="_blank" rel="noopener noreferrer"
+					aria-label="{project.name} live site (opens in a new tab)">
+					Live site <ArrowUpRight size={14} aria-hidden="true" />
 				</a>
 			{/if}
-			<a href="/projects/{project.slug}" class="inline-flex items-center gap-1.5 text-muted transition-colors hover:text-ink">
-				Project details <ArrowRight size={14} class="btn-arrow" />
-			</a>
 		</div>
-	</div>
-	<a href="/projects/{project.slug}" class="project-preview" class:artwork={project.slug === 'jora-events'} class:wide-artwork={project.slug === 'fixmyaddis'} aria-label="View {project.name} project details">
-		<picture class="block h-full">
-			{#if project.cardImage}
-				<source media={featured ? '(max-width: 767px)' : undefined} type="image/webp" srcset={project.cardImage.sources.webp} sizes="(min-width: 1392px) 622px, (min-width: 768px) calc(50vw - 69px), min(calc(100vw - 69px), 459px)" />
-			{/if}
-			<img src={project.image.img.src} srcset={project.image.sources.webp}
-				sizes={featured ? '(min-width: 1392px) 588px, (min-width: 1024px) calc(55vw - 186px), (min-width: 768px) calc(55vw - 54px), min(calc(100vw - 69px), 459px)' : '(min-width: 1392px) 224px, (min-width: 1024px) calc(22.5vw - 89px), (min-width: 768px) calc(22.5vw - 35px), min(calc(100vw - 69px), 459px)'}
-				alt="{project.name} project artwork" width={project.image.img.w} height={project.image.img.h}
-				loading="lazy" decoding="async" class="h-full w-full object-cover object-top" />
-		</picture>
-		<span class="view-project" aria-hidden="true">View project <ArrowUpRight size={14} /></span>
-	</a>
+	</ScrollFade>
 </article>
 
 <style>
-	.project-card {
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-		position: relative;
-		isolation: isolate;
-		border: 1px solid var(--color-line);
-		border-radius: 0.75rem;
-		background: color-mix(in srgb, var(--color-ink) 2.5%, var(--color-canvas));
-		transition: transform 320ms var(--motion-ease-out), border-color 240ms ease;
+	.project-chapter {
+		min-width: 0;
+		padding-block: clamp(1.5rem, 4vw, 2.75rem);
+		border-top: 1px solid var(--color-line);
 	}
-	/* A layered, neutral shadow gives the raised card a grounded edge. */
-	.project-card::before {
-		content: '';
-		position: absolute;
-		inset: 0;
-		z-index: -1;
-		border-radius: inherit;
-		box-shadow: 0 18px 36px -16px rgb(0 0 0 / 0.5), 0 5px 12px -5px rgb(0 0 0 / 0.22);
-		opacity: 0;
-		transition: opacity 320ms ease;
-		pointer-events: none;
-	}
-	@media (hover: hover) and (pointer: fine) {
-		.project-card:hover { transform: translateY(-5px); border-color: color-mix(in srgb, var(--color-ink) 20%, var(--color-line)); }
-		.project-card:hover::before { opacity: 1; }
-		.project-card:hover .project-preview img { transform: scale(1.035); }
-		.project-card:hover .project-preview.wide-artwork img { transform: none; }
-		.project-preview:hover .view-project { opacity: 1; transform: translate(-50%, 0); }
-	}
-	.project-copy { order: 1; flex: 1; min-width: 0; padding: 1.5rem; }
-	.project-preview {
-		position: relative;
-		display: block;
-		aspect-ratio: 4 / 3;
-		flex: none;
-		margin: 0.65rem 0.65rem 0;
+	.chapter-image {
+		display: grid;
 		overflow: hidden;
-		border-radius: 0.4rem;
-		border: 1px solid var(--color-line);
-		background: var(--color-surface);
+		place-items: center;
+		margin-bottom: 1.5rem;
+		border-radius: 0.75rem;
+		background: var(--color-panel);
 	}
-	.project-preview img { transition: transform 500ms var(--motion-ease-out); }
-	.project-preview.artwork img { object-fit: contain; }
-	.project-preview.wide-artwork { background: #005b4b; }
-	.project-preview.wide-artwork img { object-fit: contain; object-position: center; }
-	.view-project {
-		position: absolute;
-		left: 50%;
-		bottom: 1rem;
+	.chapter-image img {
+		display: block;
+		width: 100%;
+		aspect-ratio: 16 / 10;
+		object-fit: contain;
+	}
+	.chapter-role {
+		color: var(--color-muted);
+		font-size: 0.8125rem;
+		font-weight: 500;
+	}
+	.chapter-title {
+		margin-top: 0.55rem;
+		color: var(--color-ink);
+		font-size: clamp(2rem, 4vw, 3.5rem);
+		font-weight: 600;
+		line-height: 1;
+		letter-spacing: -0.055em;
+	}
+	.chapter-description {
+		max-width: 34ch;
+		margin-top: 0.95rem;
+		color: var(--color-muted);
+		font-size: 0.9375rem;
+		line-height: 1.65;
+	}
+	.chapter-technologies {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem 1rem;
+		margin-top: 1rem;
+		color: var(--color-faint);
+		font: 0.72rem/1.5 var(--font-mono);
+	}
+	.chapter-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 1rem;
+		margin-top: 0.6rem;
+	}
+	.chapter-actions a, :global(.chapter-preview) {
 		display: inline-flex;
+		min-height: 44px;
 		align-items: center;
 		gap: 0.4rem;
-		padding: 0.55rem 0.85rem;
-		border-radius: 999px;
-		background: var(--color-ink);
-		color: var(--color-canvas);
-		font-size: 0.75rem;
-		font-weight: 600;
-		white-space: nowrap;
-		opacity: 0;
-		transform: translate(-50%, 10px);
-		transition: opacity 200ms ease, transform 300ms var(--motion-ease-out);
-		pointer-events: none;
-	}
-	.project-preview:focus-visible .view-project { opacity: 1; transform: translate(-50%, 0); }
-	@media (prefers-reduced-motion: reduce) {
-		.project-card:hover, .project-card:hover .project-preview img { transform: none; }
-		.view-project, .project-preview:hover .view-project { transform: translate(-50%, 0); }
-	}
-	.project-tag {
-		padding: 0.3rem 0.55rem;
-		border: 1px solid var(--color-line);
-		border-radius: 0.3rem;
 		color: var(--color-muted);
-		font-size: 0.7rem;
+		font-size: 0.8125rem;
 	}
-	@media (min-width: 768px) {
-		.featured {
+	:global(.chapter-preview) { cursor: pointer; }
+	.chapter-actions .chapter-case { color: var(--color-accent); font-weight: 600; }
+	@media (hover: hover) and (pointer: fine) {
+		.chapter-actions a:hover, :global(.chapter-preview:hover) { color: var(--color-ink); }
+	}
+	@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+		.chapter-image img { transition: transform 360ms var(--motion-ease-out); }
+		.chapter-image:hover img { transform: scale(1.035); }
+	}
+	@media (min-width: 1100px) and (min-height: 560px) and (prefers-reduced-motion: no-preference) {
+		:global(.has-project-stage) .project-chapter {
 			display: grid;
-			grid-template-columns: 0.8fr 1.2fr;
+			min-height: clamp(19rem, 48svh, 26rem);
 			align-items: center;
+			padding-inline-start: clamp(1rem, 2.8vw, 2.5rem);
+			border-top: none;
+			border-inline-start: 1px solid var(--color-line);
 		}
-		.featured .project-copy { order: 0; padding: 2rem; }
-		.featured .project-preview { min-height: 0; aspect-ratio: 16 / 10; margin: 0.75rem; }
+		:global(.has-project-stage) .project-chapter.active { border-inline-start-color: var(--color-accent); }
+		:global(.has-project-stage) .chapter-image { display: none; }
 	}
 </style>

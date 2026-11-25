@@ -17,7 +17,7 @@
 			<p class="section-label"><GraduationCap size={25} aria-hidden="true" /> <span>Education</span></p>
 			<div class="education-heading">
 				<h2>A strong foundation<br />and a drive to <em>keep learning.</em></h2>
-				<p>I'm studying software engineering and exploring machine learning alongside the products I build.</p>
+				<p>I’m studying software engineering at Addis Ababa University.</p>
 			</div>
 		</ScrollFade>
 
