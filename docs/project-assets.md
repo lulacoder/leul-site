@@ -20,4 +20,6 @@ Components use the generated `sources.webp` with `srcset` and `sizes`, and `img.
 
 The locally hosted technology logos in `static/stack/` come from [Simple Icons](https://simpleicons.org/) through its SVG CDN, downloaded on the same date. See the [Simple Icons license](https://github.com/simple-icons/simple-icons/blob/develop/LICENSE.md). Neutral Lucide icons represent technologies without a bundled logo, including Durable Objects and D1.
 
+`nuxt.svg`, `redis.svg`, `clerk.svg`, `prisma.svg` and `betterauth.svg` came from the same Simple Icons CDN on November 25, 2026. Prisma and Better Auth were recoloured to the neutral `#9A9AA4` used by the Next.js mark, because their brand colours disappear on one of the two themes. Tiptap, Nitro, BullMQ and Chapa use neutral Lucide icons.
+
 `static/stack/convex.svg` is the unchanged color symbol from the [official Convex logo bundle](https://www.convex.dev/resources/logos.zip), downloaded on October 1, 2026. See the [Convex brand guidelines](https://www.convex.dev/brand).
