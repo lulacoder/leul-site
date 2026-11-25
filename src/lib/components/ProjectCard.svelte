@@ -45,8 +45,8 @@
 				onclick={(event) => markProjectHero(event, heroSource())}>
 				Case study <ArrowRight size={17} class="btn-arrow" aria-hidden="true" />
 			</a>
-			<ProjectImageDialog {project} triggerClass="chapter-preview" triggerLabel="Preview {project.name} images">
-				<Maximize2 size={14} aria-hidden="true" /> Preview
+			<ProjectImageDialog {project} triggerClass="chapter-preview">
+				<Maximize2 size={14} aria-hidden="true" /> View image
 			</ProjectImageDialog>
 			{#if project.live}
 				<a class="chapter-live" href={project.live} target="_blank" rel="noopener noreferrer"

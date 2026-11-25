@@ -85,7 +85,7 @@ Portfolio: /projects/jora-events
 
 Noteworthy is a workspace for Markdown notes, freeform canvases, and task boards. It uses Next.js, Convex, Better Auth, and Tiptap. Website: https://notes-app-liart-eight.vercel.app/ Portfolio: /projects/noteworthy
 
-Trending Movies is a solo movie discovery app using Next.js, TypeScript, TMDB, and Tailwind CSS. It includes search, genre filters, movie details, and a locally saved watchlist. The portfolio labels it in development. Portfolio: /projects/trending-movies
+FlixQuest is a live streaming web app for movies and series. Leul contributed to its Nuxt and Nitro playback stack, including media proxy integration, quality limits and source recovery. Its player supports HLS, MPEG-DASH, subtitles and manual source selection. Website: https://web.flix.quest/ Portfolio: /projects/flixquest
 
 Leul is currently learning system design, distributed systems, and agentic engineering. He is interested in making requirements and success criteria explicit and building verification systems that check agents’ work against them.
 

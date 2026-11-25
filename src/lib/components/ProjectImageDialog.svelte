@@ -9,16 +9,15 @@
 		project: Project;
 		startIndex?: number;
 		triggerClass: string;
-		triggerLabel?: string;
 		children: Snippet;
 	}
 
-	let { project, startIndex = 0, triggerClass, triggerLabel, children }: Props = $props();
+	let { project, startIndex = 0, triggerClass, children }: Props = $props();
 	let imageIndex = $state(0);
 </script>
 
 <Dialog onOpenChange={(open) => { if (open) imageIndex = startIndex; }}>
-	<DialogTrigger class={triggerClass} aria-label={triggerLabel ?? `Enlarge ${project.name} project image`}>
+	<DialogTrigger class={triggerClass} aria-label={`View image for ${project.name}`}>
 		{@render children()}
 	</DialogTrigger>
 	<DialogBackdrop class="project-gallery-backdrop" />

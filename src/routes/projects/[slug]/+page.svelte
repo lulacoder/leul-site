@@ -39,7 +39,7 @@
 					alt={project.secondaryImage.alt} width={project.secondaryImage.image.img.w} height={project.secondaryImage.image.img.h} loading="lazy" decoding="async" class="h-auto w-full shrink-0" />
 			{/if}
 		</div>
-		<span class="expand-hint"><Maximize2 size={15} /> View full size</span>
+		<span class="expand-hint"><Maximize2 size={15} /> View image</span>
 	</ProjectImageDialog>
 	{#if project.secondaryImage}
 		<div class="mt-4 flex items-center justify-between">
@@ -94,11 +94,11 @@
 
 		<section class="mt-10" aria-label="Project images">
 			{#if art}
-				<ProjectImageDialog {project} triggerClass="image-trigger detail-image cs-scene" triggerLabel="View {project.name} screenshots full size">
+				<ProjectImageDialog {project} triggerClass="image-trigger detail-image cs-scene">
 					<img src={art.scene.img.src} srcset={art.scene.sources.webp}
 						sizes="(min-width: 1392px) 1072px, (min-width: 1024px) calc(100vw - 320px), (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
 						alt={art.sceneAlt} width={art.scene.img.w} height={art.scene.img.h} fetchpriority="high" />
-					<span class="expand-hint"><Maximize2 size={15} /> View screenshots</span>
+					<span class="expand-hint"><Maximize2 size={15} /> View image</span>
 				</ProjectImageDialog>
 			{:else}
 				{@render screenshots('image-trigger detail-image relative block w-full overflow-hidden rounded-xl border border-line bg-surface text-left')}
@@ -143,8 +143,7 @@
 
 		{#if art}
 			<section class="mt-20" aria-labelledby="screens-heading">
-				<p class="eyebrow cs-eyebrow">Screens</p>
-				<h2 id="screens-heading" class="mt-3 font-display text-2xl font-semibold tracking-tight text-ink">The real thing</h2>
+				<h2 id="screens-heading" class="eyebrow cs-eyebrow">Screens</h2>
 				<div class="mt-6">
 					{@render screenshots('image-trigger relative block w-full overflow-hidden rounded-xl border border-line bg-surface text-left')}
 				</div>

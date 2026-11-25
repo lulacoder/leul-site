@@ -1,6 +1,6 @@
 # Project preview assets
 
-The project covers combine generated case-study artwork with each project's visual identity. Older screenshots are no longer displayed on the detail pages. Jora uses the supplied cover and discovery artwork. Generated images are illustrative, not literal screenshots.
+The project covers combine generated case-study artwork with each project's visual identity. Older screenshots are no longer displayed on the detail pages. Jora uses a live homepage screenshot for its cover and the supplied discovery artwork in its gallery. Generated images are illustrative, not literal screenshots.
 
 | Asset | Source |
 | --- | --- |
@@ -8,7 +8,7 @@ The project covers combine generated case-study artwork with each project's visu
 | `src/lib/assets/project-jora-discovery.jpg` | https://jora.events/ |
 | `src/lib/assets/project-fixmyaddis.jpg` | https://h56quunh7xlbthjllrv09o3w.sanduq.jirtuu.dev/ |
 
-The project screenshots were refreshed on October 31, 2026 for Visit Oromia, Jora Events, FixMyAddis, Tripways Hotels, and Resume Analyzer. Square card crops use narrow-viewport captures where available; Jora's card uses a crop of its desktop capture. Tripways also has a narrow-viewport detail image. Kenna's admin screenshot and the existing Trending Movies image remain in use.
+The project screenshots were refreshed on October 31, 2026 for Visit Oromia, Jora Events, FixMyAddis, Tripways Hotels, and Resume Analyzer. Square card crops use narrow-viewport captures where available; Jora's card uses a crop of its desktop capture. Tripways also has a narrow-viewport detail image. Kenna’s admin screenshot remains in use. FlixQuest’s catalog and player screenshots were captured from web.flix.quest. The home capture also appears on the laptop in its case-study cover.
 
 Generated covers use the `*-case-study-v2.webp` sources in `src/lib/assets/`. Their responsive variants are produced by enhanced-img.
 

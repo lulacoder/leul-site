@@ -7,53 +7,10 @@
   },
   "scene": {
     "file": "scene.webp",
-    "width": 2400,
-    "height": 1600,
-    "alt": "A laptop and phone on a table at a warmly lit outdoor evening gathering.",
-    "screens": [
-      {
-        "source": "jora-discover-v2.webp",
-        "corners": [
-          [
-            484,
-            449
-          ],
-          [
-            1590,
-            449
-          ],
-          [
-            1590,
-            1138
-          ],
-          [
-            484,
-            1138
-          ]
-        ]
-      },
-      {
-        "source": "jora-cover-v2.webp",
-        "corners": [
-          [
-            1794,
-            670
-          ],
-          [
-            2069,
-            670
-          ],
-          [
-            2069,
-            1275
-          ],
-          [
-            1794,
-            1275
-          ]
-        ]
-      }
-    ]
+    "width": 3200,
+    "height": 2000,
+    "alt": "Jora Events featuring Ethio Jazz Night Live at Fendika Cultural Center, with event search below.",
+    "source": "https://jora.events/"
   },
   "backdrop": {
     "file": "backdrop.webp",
@@ -61,7 +18,6 @@
     "height": 1350
   },
   "prompts": {
-    "scene": "Premium editorial product photograph, wide landscape: laptop and upright phone on a small table at an outdoor evening gathering, both screens facing camera with completely blank uniform light panels and unobstructed corners. Warm bokeh string lights, dusk sky, refined festive mood, cream and amber. No people, text, logos or marks.",
     "backdrop": "Abstract low-contrast background for a premium event website, soft warm cream #efeee5 with a faint dusk gradient and diffuse amber light bokeh, subtle texture, evenly quiet composition and readable space. No objects, text, logos or UI. Wide landscape."
   }
 }

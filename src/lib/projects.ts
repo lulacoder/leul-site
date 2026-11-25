@@ -2,11 +2,13 @@ import oromiaArt from './assets/oromia-case-study-v2.webp?w=480;768;1080;1500&fo
 import fixMyAddisArt from './assets/fixmyaddis-case-study-v2.webp?w=480;768;1080;1500&format=webp&quality=85&enhanced';
 import tripwaysArt from './assets/tripways-case-study-v2.webp?w=480;768;1080;1500&format=webp&quality=85&enhanced';
 import kennaArt from './assets/kenna-case-study-v2.webp?w=480;768;1080;1500&format=webp&quality=85&enhanced';
-import moviesArt from './assets/movies-case-study-v2.webp?w=480;768;1080;1500&format=webp&quality=85&enhanced';
+import flixquestHome from './assets/flixquest-home.webp?w=480;768;1080;1402&format=webp&quality=85&enhanced';
+import flixquestPlayer from './assets/flixquest-player.webp?w=480;768;1080;1402&format=webp&quality=85&enhanced';
+import flixquestThumbnail from './assets/flixquest-home.webp?w=160;240;320&format=webp&quality=85&enhanced';
 import noteworthyLanding from './assets/noteworthy-landing.webp?w=480;768;1080;1600;1920&format=webp&quality=85&enhanced';
 import noteworthyEditor from './assets/noteworthy-editor.webp?w=480;768;1080;1600;1920&format=webp&quality=85&enhanced';
 import noteworthyThumbnail from './assets/noteworthy-cover.webp?w=160;240;320&format=webp&quality=85&enhanced';
-import jora from './assets/jora-cover-v2.webp?w=480;768;1080;1600;2000&format=webp&quality=85&enhanced';
+import jora from './assets/case-studies/jora-events/scene.webp?w=480;768;1080;1600&format=webp&quality=85&enhanced';
 import joraDiscover from './assets/jora-discover-v2.webp?w=480;768;1080;1600;2000&format=webp&quality=85&enhanced';
 
 /** Shared by the home page and the prerendered project pages. */
@@ -66,6 +68,7 @@ export const projects: Project[] = [
 		live: 'https://jora.events/',
 		github: null,
 		image: jora,
+		imageAlt: 'Jora’s live homepage featuring Ethio Jazz Night Live and event search in Addis Ababa',
 		secondaryImage: { image: joraDiscover, alt: 'Jora Events discovery, categories and event details' },
 		featured: true
 	},
@@ -149,23 +152,26 @@ export const projects: Project[] = [
 		image: kennaArt,
 	},
 	{
-		slug: 'trending-movies',
-		name: 'Trending Movies',
-		role: 'Frontend developer, solo',
-		tags: ['Next.js', 'TypeScript', 'TMDB', 'Tailwind CSS'],
-		description: 'Movie discovery with search, genre filters, and a saved watchlist.',
-		overview: 'A movie discovery app powered by TMDB, with server-rendered detail pages and a watchlist saved locally without an account.',
-		stack: ['Next.js', 'Tailwind CSS', 'TMDB API'],
-		stackDescription: 'The app uses Next.js and Tailwind CSS. The TMDB API supplies movie information for discovery, search, and detail pages.',
+		slug: 'flixquest',
+		name: 'FlixQuest',
+		role: 'Full-stack developer',
+		tags: ['Video streaming', 'Movies & series', 'Playback'],
+		description: 'A movie and series catalog with a built-in streaming player.',
+		overview: 'Pick a film or an episode and watch it in the same browser tab. FlixQuest brings the catalog, subtitles, quality controls and source selection into one viewing experience.',
+		stack: ['Nuxt', 'Vue', 'TypeScript', 'Nitro', 'HLS', 'MPEG-DASH'],
+		stackDescription: 'Nuxt and Vue render the catalog and watch screen. Nitro retrieves metadata from TMDB and resolves playback sources. The player uses hls.js, dash.js or native video according to the stream format.',
 		contributions: [
-			'Built the Next.js app and typed TMDB integration.',
-			'Added trending carousels, genre filters, and debounced search.',
-			'Implemented a persistent watchlist and loading states.'
+			'Connected the player to the media proxy for HLS and DASH playback.',
+			'Added fresh source lookups on playback retries so an expired link can be replaced mid-film.',
+			'Implemented playback quality limits and session renewal for longer viewing sessions.'
 		],
-		status: 'In development',
-		live: 'https://trending-movies-iota.vercel.app/',
-		github: 'https://github.com/lulacoder/Trending-Movies',
-		image: moviesArt,
+		status: 'Live',
+		live: 'https://web.flix.quest/',
+		github: null,
+		image: flixquestHome,
+		imageAlt: 'FlixQuest home with The Rings of Power featured above the weekly movie chart',
+		secondaryImage: { image: flixquestPlayer, alt: 'Project Hail Mary paused in FlixQuest with the seek bar, subtitle toggle and player settings visible' },
+		thumbnail: flixquestThumbnail
 	}
 ];
 

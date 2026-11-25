@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { Monitor, Smartphone, Server, Database, KeyRound, CreditCard, Layers, Radio, Workflow, Globe, FilePenLine, Play } from '@lucide/svelte';
 	import { onMount } from 'svelte';
+	import type { Component } from 'svelte';
 	import type { CaseStudy, Owner } from '#lib/case-studies.js';
 
 	interface Props {
@@ -7,19 +9,51 @@
 		/** Nodes and edges ("from>to") to light up. Empty means everything is shown evenly. */
 		activeNodes?: string[];
 		activeEdges?: string[];
+		progress: number;
+		selected: string | null;
+		onselect: (id: string) => void;
 	}
 
-	let { architecture, activeNodes = [], activeEdges = [] }: Props = $props();
+	let { architecture, activeNodes = [], activeEdges = [], progress, selected, onselect }: Props = $props();
 
 	const ownerLabel: Record<Owner, string> = { mine: 'Built by me', team: 'With the team', platform: 'Platform or service' };
 	const edgeKey = (from: string, to: string) => `${from}>${to}`;
 
 	let container: HTMLDivElement;
-	let drawn = $state(false);
+	const icons: Record<string, Component<{ size: number; strokeWidth: number }>> = { web: Monitor, mobile: Smartphone, clerk: KeyRound, auth: KeyRound, convex: Database,
+		chapa: CreditCard, api: Server, db: Database, queue: Workflow, app: Layers, other: Radio,
+		admin: Monitor, editors: FilePenLine, cms: Database, site: Globe, providers: Radio, player: Play, relay: Workflow };
+	const inspectedEdges = $derived(architecture.edges.filter(e => e.from === selected || e.to === selected));
+	const litEdges = $derived(selected ? inspectedEdges.map(e => edgeKey(e.from, e.to)) : activeEdges);
+
+
+	// Independent inputs travel together. A dependent hop waits for its input to arrive.
+	const phases = $derived.by(() => {
+		const phases = new Map<string, number>();
+		for (const key of activeEdges) {
+			const [from] = key.split('>');
+			const previous = [...phases].filter(([edge]) => edge.endsWith('>' + from));
+			phases.set(key, Math.max(-1, ...previous.map(([, phase]) => phase)) + 1);
+		}
+		return phases;
+	});
+	const phaseCount = $derived(Math.max(0, ...phases.values()) + 1);
+	const litNodes = $derived.by(() => {
+		if (selected) return [selected, ...inspectedEdges.flatMap(e => [e.from, e.to])];
+		if (!activeEdges.length) return activeNodes;
+		const lit = new Set<string>();
+		for (const [key, phase] of phases) {
+			const [from, to] = key.split('>');
+			const distance = progress * phaseCount - phase;
+			if (distance >= 0) lit.add(from);
+			if (distance >= 0.87) lit.add(to);
+		}
+		return [...lit];
+	});
 	let size = $state({ width: 0, height: 0 });
 	let paths = $state<{ key: string; d: string; label: string; x: number; y: number }[]>([]);
 
-	const focusing = $derived(activeNodes.length > 0);
+
 	const owners = $derived([...new Set(architecture.nodes.map((node) => node.owner))]);
 
 	type Box = { x: number; y: number; w: number; h: number };
@@ -28,19 +62,19 @@
 	function route(a: Box, b: Box, offset: number) {
 		const ax = a.x + a.w / 2, ay = a.y + a.h / 2;
 		const bx = b.x + b.w / 2, by = b.y + b.h / 2;
-		const horizontal = Math.abs(bx - ax) > Math.abs(by - ay) * 0.8;
+		const horizontal = Math.abs(bx - ax) > (a.w + b.w) / 2;
 		let x1, y1, x2, y2, c1x, c1y, c2x, c2y;
 		if (horizontal) {
 			const dir = Math.sign(bx - ax) || 1;
 			x1 = ax + (dir * a.w) / 2; y1 = ay + offset;
 			x2 = bx - (dir * b.w) / 2; y2 = by + offset;
-			const bend = Math.max(36, Math.abs(x2 - x1) * 0.45);
+			const bend = Math.abs(x2 - x1) * 0.45;
 			c1x = x1 + dir * bend; c1y = y1; c2x = x2 - dir * bend; c2y = y2;
 		} else {
 			const dir = Math.sign(by - ay) || 1;
 			x1 = ax + offset; y1 = ay + (dir * a.h) / 2;
 			x2 = bx + offset; y2 = by - (dir * b.h) / 2;
-			const bend = Math.max(30, Math.abs(y2 - y1) * 0.45);
+			const bend = Math.abs(y2 - y1) * 0.45;
 			c1x = x1; c1y = y1 + dir * bend; c2x = x2; c2y = y2 - dir * bend;
 		}
 		// Midpoint of the cubic, for the label.
@@ -49,26 +83,11 @@
 		return { d: `M${x1},${y1} C${c1x},${c1y} ${c2x},${c2y} ${x2},${y2}`, x: mx, y: my };
 	}
 
-	/** Phones stack the nodes, so connections arc through the left margin instead. */
-	function gutterRoute(a: Box, b: Box, offset: number) {
-		const ay = a.y + a.h / 2 + offset, by = b.y + b.h / 2 + offset;
-		const adjacent = Math.abs(by - ay) < Math.max(a.h, b.h) * 1.9;
-		if (adjacent) {
-			const dir = Math.sign(by - ay) || 1;
-			const x = a.x + a.w * 0.18 + offset;
-			const y1 = ay + (dir * a.h) / 2 - offset, y2 = by - (dir * b.h) / 2 - offset;
-			return { d: `M${x},${y1} L${x},${y2}`, x, y: (y1 + y2) / 2 };
-		}
-		const bend = Math.min(30, a.x - 4);
-		const x = a.x;
-		return { d: `M${x},${ay} C${x - bend},${ay} ${x - bend},${by} ${x},${by}`, x: x - bend, y: (ay + by) / 2 };
-	}
-
 	function measure() {
 		if (!container) return;
-		const stacked = (container.parentElement?.clientWidth ?? 0) < 440;
+
 		size = { width: container.offsetWidth, height: container.offsetHeight };
-		// Layout boxes, not on-screen rects: the nodes' entrance transform must not skew the edges.
+		// Layout coordinates keep the wires anchored while a button is hovered.
 		const boxes = new Map<string, Box>();
 		for (const element of container.querySelectorAll<HTMLElement>('[data-node]')) {
 			boxes.set(element.dataset.node!, { x: element.offsetLeft, y: element.offsetTop, w: element.offsetWidth, h: element.offsetHeight });
@@ -79,7 +98,7 @@
 			if (!a || !b) return [];
 			const twoWay = keys.has(edgeKey(edge.to, edge.from));
 			const offset = twoWay ? (edge.from < edge.to ? -13 : 13) : 0;
-			const shape = stacked ? gutterRoute(a, b, offset) : route(a, b, offset);
+			const shape = route(a, b, offset);
 			return [{ key: edgeKey(edge.from, edge.to), label: edge.label, ...shape }];
 		});
 	}
@@ -90,51 +109,51 @@
 		const resize = new ResizeObserver(measure);
 		resize.observe(container);
 		for (const node of container.querySelectorAll('[data-node]')) resize.observe(node);
-		const view = new IntersectionObserver(([entry]) => {
-			if (entry.isIntersecting) { drawn = true; view.disconnect(); }
-		}, { threshold: 0.3 });
-		view.observe(container);
-		return () => { resize.disconnect(); view.disconnect(); };
+		return () => resize.disconnect();
 	});
 </script>
 
-<figure class="diagram" class:drawn class:focusing aria-label="{architecture.title}: architecture diagram">
+<figure class="diagram" aria-label="{architecture.title} architecture diagram">
 	<div bind:this={container} class="diagram-canvas" style="--columns: {architecture.columns}">
 		<svg class="edges" width={size.width} height={size.height} aria-hidden="true">
 			<defs>
-				<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-					<path d="M1,1 L9,5 L1,9" fill="none" stroke="context-stroke" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+				<marker id="flow-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+					<path d="M0,0 L8,4 L0,8 Z" fill="context-stroke" />
 				</marker>
 			</defs>
-			{#each paths as path, i (path.key)}
-				<path class="edge" class:lit={activeEdges.includes(path.key)} d={path.d} pathLength="1"
-					marker-end="url(#arrow)" style="--i: {i}" />
+			{#each paths as path (path.key)}
+				{@const lit = litEdges.includes(path.key)}
+				{@const t = Math.min(1, Math.max(0, progress * phaseCount - (phases.get(path.key) ?? 0)))}
+				<path class="wire" class:lit d={path.d} marker-end="url(#flow-arrow)" />
+				{#if lit && !selected}
+					<path class="trace" d={path.d} pathLength="1" stroke-dasharray="1" stroke-dashoffset={1 - t}/>
+					{#if t > 0 && t < 1}
+					<circle class="signal" r="7" opacity="0.25" style="offset-path:path('{path.d}');offset-distance:{t * 100}%" />
+					<circle class="signal" r="3" style="offset-path:path('{path.d}');offset-distance:{t * 100}%" />
+					{/if}
+				{/if}
 			{/each}
 		</svg>
-
-		{#each paths as path (path.key)}
-			{#if activeEdges.includes(path.key)}
-				<span class="packet" style="offset-path: path('{path.d}')" aria-hidden="true"></span>
-			{/if}
-			<span class="edge-label" class:lit={activeEdges.includes(path.key)} style="left: {path.x}px; top: {path.y}px">{path.label}</span>
+		{#each paths.filter(path => litEdges.includes(path.key)) as path (path.key)}
+			<span class="edge-label" style="left:{path.x}px;top:{path.y}px">{path.label}</span>
 		{/each}
-
-		{#each architecture.nodes as node, i (node.id)}
-			<div class="node owner-{node.owner}" class:lit={activeNodes.includes(node.id)} data-node={node.id}
-				style="grid-column: {node.col}; grid-row: {node.row}; --i: {i}">
-				<span class="node-owner">{ownerLabel[node.owner]}</span>
+		{#each architecture.nodes as node (node.id)}
+			{@const Icon = icons[node.id] ?? Server}
+			<button type="button" class="node owner-{node.owner}" class:lit={litNodes.includes(node.id)}
+				data-node={node.id} aria-pressed={selected === node.id} onclick={() => onselect(node.id)}
+				aria-label="Inspect {node.label}, {node.detail}, {ownerLabel[node.owner]}"
+				style="grid-column:{node.col};grid-row:{node.row}">
+				<Icon size={20} strokeWidth={1.5}/>
 				<span class="node-label">{node.label}</span>
 				<span class="node-detail">{node.detail}</span>
-				<span class="node-links" aria-hidden="true">
-					{#each architecture.edges.filter((edge) => edge.from === node.id) as edge (edge.to)}
-						<span>→ {architecture.nodes.find((other) => other.id === edge.to)?.label} · {edge.label}</span>
-					{/each}
-				</span>
-			</div>
+				<span class="lamp" aria-hidden="true"></span>
+				{#if !selected && !activeEdges.length && activeNodes.includes(node.id)}
+					<span class="operation" style="transform:scaleX({progress})"></span>
+				{/if}
+			</button>
 		{/each}
 	</div>
-
-	<!-- The same information as text, for screen readers. -->
+	<!-- The same connections as text for screen readers. -->
 	<ul class="sr-only">
 		{#each architecture.edges as edge (edgeKey(edge.from, edge.to))}
 			{@const from = architecture.nodes.find((node) => node.id === edge.from)}
@@ -154,144 +173,51 @@
 <style>
 	.diagram { margin: 0; container-type: inline-size; }
 	.diagram-canvas {
-		position: relative;
-		display: grid;
+		position: relative; display: grid; align-items: center;
 		grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
-		grid-auto-rows: minmax(5.5rem, auto);
-		gap: clamp(2.5rem, 8cqi, 4.5rem) clamp(3.25rem, 12cqi, 6rem);
-		padding: 0.5rem;
+		gap: clamp(1rem, 3cqi, 2rem) clamp(1.35rem, 12cqi, 9rem);
+		padding: 0.5rem clamp(0rem, 2cqi, 1.5rem);
 	}
-	.edges {
-		position: absolute;
-		inset: 0;
-		overflow: visible;
-		pointer-events: none;
-	}
-	.edge {
-		fill: none;
-		stroke: color-mix(in srgb, var(--color-ink) 28%, transparent);
-		stroke-width: 1.25;
-		stroke-dasharray: 1;
-		stroke-dashoffset: 1;
-		transition: stroke 300ms ease, stroke-width 300ms ease, opacity 300ms ease;
-	}
-	.drawn .edge {
-		stroke-dashoffset: 0;
-		transition:
-			stroke-dashoffset 900ms var(--motion-ease-out) calc(300ms + var(--i) * 140ms),
-			stroke 300ms ease, stroke-width 300ms ease, opacity 300ms ease;
-	}
-	.focusing .edge:not(.lit) { opacity: 0.35; }
-	.edge.lit { stroke: var(--cs-accent); stroke-width: 1.75; }
-
-	.packet {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 8px;
-		height: 8px;
-		border-radius: 50%;
-		background: var(--cs-accent);
-		box-shadow: 0 0 0 4px color-mix(in srgb, var(--cs-accent) 25%, transparent), 0 0 18px var(--cs-accent);
-		offset-rotate: 0deg;
-		animation: travel 1.8s var(--motion-ease-in-out) infinite;
-		pointer-events: none;
-	}
-	@keyframes travel {
-		from { offset-distance: 0%; opacity: 0; }
-		12% { opacity: 1; }
-		88% { opacity: 1; }
-		to { offset-distance: 100%; opacity: 0; }
-	}
-
-	.edge-label {
-		position: absolute;
-		z-index: 3;
-		padding: 0.15rem 0.45rem;
-		border-radius: 999px;
-		background: var(--color-canvas);
-		color: var(--color-faint);
-		font: 0.66rem/1.4 var(--font-mono);
-		white-space: nowrap;
-		transform: translate(-50%, -50%);
-		transition: color 300ms ease, opacity 300ms ease;
-	}
-	.focusing .edge-label:not(.lit) { color: var(--color-faint); }
-	.edge-label.lit { color: var(--cs-accent); }
-
+	.edges { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+	.wire, .trace { fill: none; stroke-linecap: round; }
+	.wire { stroke: var(--color-faint); stroke-opacity: 0.45; stroke-width: 1.3; }
+	.wire.lit { stroke: var(--cs-accent); stroke-opacity: 0.8; }
+	.trace { stroke: var(--cs-accent); stroke-width: 2.6; }
+	.signal { fill: var(--cs-accent); }
+	.edge-label { position: absolute; z-index: 1; transform: translate(-50%, -135%); white-space: nowrap;
+		color: var(--cs-accent); background: var(--color-panel); padding: 0 3px; font: 0.66rem/1.4 var(--font-mono); }
 	.node {
-		position: relative;
-		z-index: 2;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		gap: 0.2rem;
-		align-self: center;
-		padding: 0.9rem 1rem;
-		border: 1px solid var(--color-line);
-		border-radius: 0.75rem;
-		background: color-mix(in srgb, var(--color-panel) 92%, transparent);
-		backdrop-filter: blur(6px);
-		opacity: 0;
-		transform: translateY(14px) scale(0.97);
-		transition: opacity 500ms ease, transform 600ms var(--motion-ease-out), border-color 300ms ease, box-shadow 300ms ease;
+		position: relative; display: grid; justify-items: start; align-content: center; text-align: left;
+		gap: 0.25rem; min-width: 0; padding: clamp(.65rem, 1.8cqi, 1.15rem); border-radius: .7rem;
+		border: 1px solid var(--color-line); background: var(--color-panel); color: var(--color-muted);
+		cursor: pointer; transition: transform 180ms var(--motion-ease-out);
 	}
-	.drawn .node {
-		opacity: 1;
-		transform: none;
-		transition-delay: calc(var(--i) * 90ms), calc(var(--i) * 90ms), 0ms, 0ms;
+	.node.owner-team { border-style: dashed; }
+	.node.owner-mine { border-bottom-width: 3px; }
+	.node.lit { border-color: color-mix(in srgb, var(--cs-accent) 70%, var(--color-line));
+		background: linear-gradient(125deg, color-mix(in srgb, var(--cs-accent) 12%, var(--color-panel)), var(--color-panel) 85%);
+		color: var(--cs-accent); box-shadow: 0 5px 20px -14px var(--cs-accent); }
+	.node:focus-visible, .node[aria-pressed="true"] { outline: 2px solid var(--cs-accent); outline-offset: 3px; }
+	@media (hover:hover) { .node:hover { transform: translateY(-2px); } }
+	.node-label { margin-top: .25rem; font: 600 clamp(.8rem, 2.2cqi, 1.1rem)/1.15 var(--font-display); color: var(--color-ink); }
+	.node-detail { color: var(--color-muted); font-size: .75rem; line-height: 1.3; }
+	.lamp { position: absolute; top: .65rem; right: .65rem; width: 5px; height: 5px; border-radius: 50%; background: var(--color-line); }
+	.lit .lamp { background: var(--cs-accent); box-shadow: 0 0 8px var(--cs-accent); }
+	.operation { position: absolute; inset: auto .65rem 4px; height: 2px; background: var(--cs-accent); transform-origin: left; }
+	.legend { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem 1rem; margin-top: 1rem; color: var(--color-muted); font: .65rem/1.4 var(--font-mono); }
+	.legend-item { display: flex; align-items: center; gap: .4rem; }
+	.swatch { width: 12px; height: 8px; border: 1px solid currentColor; border-radius: 2px; }
+	.swatch.owner-mine { border-bottom-width: 3px; }
+	.swatch.owner-team { border-style: dashed; }
+	@container (max-width: 540px) {
+		.diagram-canvas { column-gap: clamp(.8rem, 5cqi, 1.6rem); padding-inline: 0; }
+		.node { padding: .6rem .35rem; justify-items: center; text-align: center; }
+		.node-detail, .edge-label { display: none; }
+		.lamp { right: .35rem; top: .35rem; }
+		.node-label { overflow-wrap: anywhere; }
 	}
-	.node.owner-mine { border-color: color-mix(in srgb, var(--cs-accent) 55%, transparent); }
-	.node.owner-team { border-style: dashed; border-color: color-mix(in srgb, var(--cs-accent) 50%, transparent); }
-	.focusing .node:not(.lit) { border-color: var(--color-line); background: var(--color-panel); }
-	.focusing .node:not(.lit) .node-label { color: var(--color-muted); }
-	.focusing .node:not(.lit) .node-owner { color: var(--color-faint); }
-	.node.lit {
-		border-color: var(--cs-accent);
-		box-shadow: 0 0 0 4px color-mix(in srgb, var(--cs-accent) 14%, transparent), 0 18px 50px -20px var(--cs-accent);
-	}
-	.node-owner {
-		color: var(--color-faint);
-		font: 0.62rem/1.3 var(--font-mono);
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-	}
-	.owner-mine .node-owner, .owner-team .node-owner { color: var(--cs-accent); }
-	.node-label { color: var(--color-ink); font: 600 1rem/1.25 var(--font-display); letter-spacing: -0.01em; transition: color 300ms ease; }
-	.node-detail { color: var(--color-muted); font-size: 0.8rem; line-height: 1.4; }
-
-	.legend {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem 1.25rem;
-		margin-top: 1.25rem;
-		color: var(--color-faint);
-		font: 0.7rem/1.4 var(--font-mono);
-	}
-	.legend-item { display: inline-flex; align-items: center; gap: 0.45rem; }
-	.swatch { width: 0.9rem; height: 0.6rem; border: 1px solid var(--color-line); border-radius: 3px; }
-	.swatch.owner-mine { border-color: var(--cs-accent); background: color-mix(in srgb, var(--cs-accent) 25%, transparent); }
-	.swatch.owner-team { border: 1px dashed var(--cs-accent); }
-
-	/* Phones: one column, in reading order, with the connections redrawn between them. */
-	.node-links { display: none; }
-	@container (max-width: 439px) {
-		.diagram-canvas { grid-template-columns: minmax(0, 1fr); grid-auto-rows: auto; row-gap: 2.25rem; padding-inline: 2rem 0; }
-		.node { grid-column: 1 !important; grid-row: auto !important; }
-		.edge-label { display: none; }
-		.node-links > :first-child { margin-top: 0.4rem; }
-		.node-links {
-			display: flex;
-			flex-direction: column;
-			gap: 0.15rem;
-			color: var(--color-faint);
-			font: 0.68rem/1.45 var(--font-mono);
-		}
-	}
-
 	@media (prefers-reduced-motion: reduce) {
-		.edge, .drawn .edge { stroke-dashoffset: 0; transition: stroke 200ms ease, opacity 200ms ease; }
-		.node, .drawn .node { opacity: 1; transform: none; transition: border-color 200ms ease, opacity 200ms ease; }
-		.packet { display: none; }
+		.trace, .signal, .operation { display: none; }
+		.node, .node:hover { transform: none; transition: none; }
 	}
 </style>
