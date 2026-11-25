@@ -53,18 +53,21 @@ src/
     projects/[slug]/+page.svelte# per-project case study
 static/
   favicon.svg
-  resume.pdf                    # ← replace with your real CV (see TODO below)
+  resume.pdf                    # downloadable résumé
 ```
 
 ## TODOs left for you (search the codebase for `TODO`)
 
-- **Résumé:** drop your real CV at `static/resume.pdf` (a placeholder is included so the link resolves).
 - **Project screenshots:** replace the gradient placeholder blocks in
   `ProjectCard.svelte` and the case-study page with real images.
 - **Case-study copy:** fill in the `Overview`, `My Role`, and
   `Challenges & Learnings` sections in `src/routes/projects/[slug]/+page.svelte`.
 - **GitHub links:** set the `github` field per project in `src/lib/projects.ts`
   to show a GitHub button on case-study pages.
+
+## Updating the résumé
+
+Edit `docs/resume.html` and run `node scripts/gen-resume.cjs` with Chrome installed to regenerate `static/resume.pdf`. Set `CHROME_PATH` for a custom Chrome installation.
 
 ## Editing project data
 
