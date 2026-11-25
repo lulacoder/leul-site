@@ -98,7 +98,8 @@ h1, h2, h3 { font-family: var(--font-display); }
 		z-index: -1;
 		border-radius: inherit;
 		background: var(--button-reveal, var(--color-accent-strong));
-		transform: translateX(-110%) skewX(-12deg) scaleX(1.3);
+		/* Far enough left that the skewed, widened edge never peeks into the button at rest. */
+		transform: translateX(-140%) skewX(-12deg) scaleX(1.3);
 		transition: transform 360ms var(--motion-ease-out);
 		pointer-events: none;
 	}
