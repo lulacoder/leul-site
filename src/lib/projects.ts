@@ -80,7 +80,7 @@ export const projects: Project[] = [
 		stackDescription: 'The web frontend uses Next.js, with NestJS on the backend and Better Auth for authentication. BullMQ uses Redis to run background job queues.',
 		contributions: ['Contributed to the core backend as part of the team.', 'Worked on the web app frontend.'],
 		status: 'Live',
-		live: 'https://h56quunh7xlbthjllrv09o3w.sanduq.jirtuu.dev/',
+		live: 'https://fixmyaddis.com/',
 		github: null,
 		image: fixMyAddisArt,
 		featured: true

@@ -108,7 +108,6 @@
 		width: 1.1rem;
 		height: 1px;
 		background: var(--color-faint);
-		transform-origin: left;
 	}
 	.chapter-title {
 		margin-top: 0.55rem;
@@ -217,8 +216,8 @@
 			transition-duration: 280ms;
 			transition-delay: 0ms;
 		}
-		:global(.has-project-stage) .index-rule { transition: transform 600ms var(--motion-ease-out) 120ms, background-color 300ms ease; }
-		:global(.has-project-stage) .project-chapter:not(.active) .index-rule { transform: scaleX(0.35); transition-delay: 0ms; }
-		:global(.has-project-stage) .project-chapter.active .index-rule { background: var(--color-accent); transform: scaleX(2); }
+		:global(.has-project-stage) .index-rule { transition: width 600ms var(--motion-ease-out) 120ms, background-color 300ms ease; }
+		:global(.has-project-stage) .project-chapter:not(.active) .index-rule { width: 0.45rem; transition-delay: 0ms; }
+		:global(.has-project-stage) .project-chapter.active .index-rule { width: 2rem; background: var(--color-accent); }
 	}
 </style>

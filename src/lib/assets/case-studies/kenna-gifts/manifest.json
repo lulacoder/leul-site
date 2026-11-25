@@ -1,0 +1,46 @@
+{
+  "slug": "kenna-gifts",
+  "palette": {
+    "base": "#F4E8DA",
+    "accent": "#512037",
+    "ink": "#241B20"
+  },
+  "scene": {
+    "file": "scene.webp",
+    "width": 2400,
+    "height": 1155,
+    "alt": "A desktop monitor displaying the Kenna Gifts admin panel on a desk beside plum-ribboned gifts.",
+    "screens": [
+      {
+        "source": "project-kenna.webp",
+        "corners": [
+          [
+            576,
+            70
+          ],
+          [
+            1840,
+            70
+          ],
+          [
+            1840,
+            753
+          ],
+          [
+            576,
+            753
+          ]
+        ]
+      }
+    ]
+  },
+  "backdrop": {
+    "file": "backdrop.webp",
+    "width": 2400,
+    "height": 1350
+  },
+  "prompts": {
+    "scene": "Premium editorial photograph for portfolio case study, wide landscape: large front-facing desktop monitor on a tidy warm cream office desk, slight perspective, screen is a completely blank flat evenly lit light gray panel, all four corners unobstructed, approximately 2.08:1 aspect ratio. Several elegantly wrapped cream gift boxes with deep plum ribbons beside it, no text or logos. Soft studio light, dark ink accents, refined restrained styling, photorealistic.",
+    "backdrop": "Wide landscape abstract backdrop for portfolio headings, soft warm cream wrapping paper and silk textures with very subtle deep plum and dark ink undertones. Low contrast, calm, evenly distributed, generous readable space, no focal object, no text, no logos."
+  }
+}

@@ -64,6 +64,7 @@ A civic platform where people report city problems in Addis Ababa and track thei
 
 Leul worked as a full-stack developer on features involving both the core backend and the web application frontend, as part of a team. The web app uses Next.js and React. The backend uses NestJS, Prisma, and PostgreSQL, with Better Auth for authentication and BullMQ backed by Redis for background job queues. Do not claim he built the whole platform alone or assign him a specific lead title on this project.
 
+Website: https://fixmyaddis.com/
 Portfolio: /projects/fixmyaddis
 
 ## Visit Oromia

@@ -1,0 +1,46 @@
+{
+  "slug": "visit-oromia",
+  "palette": {
+    "base": "#1c231e",
+    "accent": "#cba85c",
+    "ink": "#f2ecd9"
+  },
+  "scene": {
+    "file": "scene.webp",
+    "width": 2400,
+    "height": 1600,
+    "alt": "A laptop on weathered wood overlooks misty green highland hills in the morning light.",
+    "screens": [
+      {
+        "source": "project-visit-oromia.jpg",
+        "corners": [
+          [
+            363,
+            288
+          ],
+          [
+            1591,
+            288
+          ],
+          [
+            1646,
+            1011
+          ],
+          [
+            418,
+            1077
+          ]
+        ]
+      }
+    ]
+  },
+  "backdrop": {
+    "file": "backdrop.webp",
+    "width": 2400,
+    "height": 1350
+  },
+  "prompts": {
+    "scene": "Premium photorealistic wide 3:2 portfolio case study photograph: unbranded laptop resting on weathered wooden surface outdoors, lush green Ethiopian highland hills and soft morning mist out of focus behind, golden early light. Laptop screen facing camera at gentle angle, large flat evenly lit blank dark gray panel, all four corners clearly visible unobstructed, 16:10 screen. No text, logos, people, marks or UI.",
+    "backdrop": "Wide 16:9 abstract atmospheric backdrop for portfolio headings: softly layered misty highland hills in deep forest greens, muted golden light, subtle organic texture, extremely low contrast, calm and spacious, no focal object, no text, logos, people or UI."
+  }
+}
