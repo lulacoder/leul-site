@@ -3,17 +3,26 @@
 	import { Button } from '@ui-sdk/svelte/button';
 	import { Dialog, DialogTrigger, DialogBackdrop, DialogContent, DialogTitle, DialogClose } from '@ui-sdk/svelte/dialog';
 	import type { Snippet } from 'svelte';
-	import type { Project } from '#lib/projects.js';
+	import type { GalleryImage, Project } from '#lib/projects.js';
 
 	interface Props {
 		project: Project;
+		/** Defaults to the project's own screenshots. */
+		images?: GalleryImage[];
 		startIndex?: number;
 		triggerClass: string;
 		children: Snippet;
 	}
 
-	let { project, startIndex = 0, triggerClass, children }: Props = $props();
+	let { project, images, startIndex = 0, triggerClass, children }: Props = $props();
 	let imageIndex = $state(0);
+
+	const list = $derived<GalleryImage[]>(images ?? [
+		{ image: project.image, alt: project.imageAlt ?? `${project.name} project artwork` },
+		...(project.secondaryImage ? [project.secondaryImage] : [])
+	]);
+	const current = $derived(list[Math.min(imageIndex, list.length - 1)]);
+	const pad = (n: number) => String(n).padStart(2, '0');
 </script>
 
 <Dialog onOpenChange={(open) => { if (open) imageIndex = startIndex; }}>
@@ -22,25 +31,21 @@
 	</DialogTrigger>
 	<DialogBackdrop class="project-gallery-backdrop" />
 	<DialogContent class="project-gallery" initialFocus="content" onkeydown={(event: KeyboardEvent) => {
-		if (event.key === 'ArrowRight' && project.secondaryImage) { event.preventDefault(); imageIndex = 1; }
-		if (event.key === 'ArrowLeft' && project.secondaryImage) { event.preventDefault(); imageIndex = 0; }
+		if (event.key === 'ArrowRight' && imageIndex < list.length - 1) { event.preventDefault(); imageIndex++; }
+		if (event.key === 'ArrowLeft' && imageIndex > 0) { event.preventDefault(); imageIndex--; }
 	}}>
 		<div class="viewer-header">
 			<div><p class="viewer-eyebrow">PROJECT GALLERY</p><DialogTitle class="viewer-title">{project.name}</DialogTitle></div>
 			<DialogClose class="viewer-icon icon-action" aria-label="Close image viewer"><X size={20} /></DialogClose>
 		</div>
 		<div class="viewer-image">
-			{#if imageIndex === 1 && project.secondaryImage}
-				<img src={project.secondaryImage.image.img.src} srcset={project.secondaryImage.image.sources.webp} sizes="100vw" alt={project.secondaryImage.alt} />
-			{:else}
-				<img src={project.image.img.src} srcset={project.image.sources.webp} sizes="100vw" alt={project.imageAlt ?? `${project.name} project artwork`} />
-			{/if}
+			<img src={current.image.img.src} srcset={current.image.sources.webp} sizes="100vw" alt={current.alt} />
 		</div>
 		<div class="viewer-footer">
-			<span>{String(imageIndex + 1).padStart(2, '0')} <span class="viewer-muted">/ {project.secondaryImage ? '02' : '01'}</span></span>
-			{#if project.secondaryImage}
+			<span>{pad(imageIndex + 1)} <span class="viewer-muted">/ {pad(list.length)}</span></span>
+			{#if list.length > 1}
 				<span class="viewer-tip">Use arrow keys to navigate</span>
-				<div class="viewer-arrows"><Button class="viewer-icon icon-action" aria-label="Previous image" disabled={imageIndex === 0} onclick={() => imageIndex = 0}><ArrowLeft size={18} /></Button><Button class="viewer-icon icon-action" aria-label="Next image" disabled={imageIndex === 1} onclick={() => imageIndex = 1}><ArrowRight size={18} /></Button></div>
+				<div class="viewer-arrows"><Button class="viewer-icon icon-action" aria-label="Previous image" disabled={imageIndex === 0} onclick={() => imageIndex--}><ArrowLeft size={18} /></Button><Button class="viewer-icon icon-action" aria-label="Next image" disabled={imageIndex === list.length - 1} onclick={() => imageIndex++}><ArrowRight size={18} /></Button></div>
 			{:else}<span class="viewer-tip">Press Esc to close</span>{/if}
 		</div>
 	</DialogContent>

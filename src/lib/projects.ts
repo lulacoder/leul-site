@@ -11,6 +11,12 @@ import noteworthyThumbnail from './assets/noteworthy-cover.webp?w=160;240;320&fo
 import jora from './assets/case-studies/jora-events/scene.webp?w=480;768;1080;1600&format=webp&quality=85&enhanced';
 import joraDiscover from './assets/jora-discover-v2.webp?w=480;768;1080;1600;2000&format=webp&quality=85&enhanced';
 
+/** One image in a project's gallery and full-screen viewer. */
+export interface GalleryImage {
+	image: typeof oromiaArt;
+	alt: string;
+}
+
 /** Shared by the home page and the prerendered project pages. */
 export interface Project {
 	slug: string;
@@ -27,9 +33,13 @@ export interface Project {
 	github: string | null;
 	image: typeof oromiaArt;
 	imageAlt?: string;
+	/** Short name for the main image in the case-study gallery's filmstrip. */
+	imageLabel?: string;
+	/** The main image is the case-study scene itself, so the gallery shouldn't show it twice. */
+	imageIsScene?: boolean;
 	/** Square phone-viewport capture used by carousel and compact grid cards. */
 	cardImage?: typeof oromiaArt;
-	secondaryImage?: { image: typeof oromiaArt; alt: string };
+	secondaryImage?: { image: typeof oromiaArt; alt: string; label: string };
 	thumbnail?: typeof oromiaArt;
 	featured?: boolean;
 }
@@ -71,7 +81,8 @@ export const projects: Project[] = [
 		github: null,
 		image: jora,
 		imageAlt: 'Jora’s live homepage featuring Ethio Jazz Night Live and event search in Addis Ababa',
-		secondaryImage: { image: joraDiscover, alt: 'Jora Events discovery, categories and event details' },
+		imageIsScene: true,
+		secondaryImage: { image: joraDiscover, alt: 'Jora Events discovery, categories and event details', label: 'Discover' },
 		featured: true
 	},
 	{
@@ -109,9 +120,11 @@ export const projects: Project[] = [
 		github: 'https://github.com/lulacoder/Notes-app-for-reals',
 		image: noteworthyLanding,
 		imageAlt: 'Noteworthy landing page with a visual canvas for a studio website project',
+		imageLabel: 'Landing',
 		secondaryImage: {
 			image: noteworthyEditor,
-			alt: 'Noteworthy landing page showing a rich-text note with a checklist and inspiration photo'
+			alt: 'Noteworthy landing page showing a rich-text note with a checklist and inspiration photo',
+			label: 'Editor'
 		},
 		thumbnail: noteworthyThumbnail
 	},
@@ -172,7 +185,8 @@ export const projects: Project[] = [
 		github: null,
 		image: flixquestHome,
 		imageAlt: 'FlixQuest home with The Rings of Power featured above the weekly movie chart',
-		secondaryImage: { image: flixquestPlayer, alt: 'Project Hail Mary paused in FlixQuest with the seek bar, subtitle toggle and player settings visible' },
+		imageLabel: 'Home',
+		secondaryImage: { image: flixquestPlayer, alt: 'Project Hail Mary paused in FlixQuest with the seek bar, subtitle toggle and player settings visible', label: 'Player' },
 		thumbnail: flixquestThumbnail
 	}
 ];

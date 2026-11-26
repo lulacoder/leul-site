@@ -46,7 +46,8 @@
 			if (visible && !frame) frame = requestAnimationFrame(sync);
 		}
 		function measure() {
-			const header = innerWidth < 1024 ? 72 : 16;
+			// Clears the fixed top nav (mobile island / desktop pill).
+			const header = innerWidth < 1024 ? 72 : 84;
 			inset = Math.max(header, (innerHeight - stage.offsetHeight) / 2);
 			pinned = !reduced.matches && stage.offsetHeight + header + 12 <= innerHeight;
 			travel = Math.round(innerHeight * 0.52) * steps.length;

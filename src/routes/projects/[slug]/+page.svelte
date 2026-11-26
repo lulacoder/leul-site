@@ -1,60 +1,71 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { ArrowLeft, ArrowRight, ArrowUpRight, Maximize2 } from '@lucide/svelte';
 	import ProjectImageDialog from '#lib/components/ProjectImageDialog.svelte';
 	import FlowWalkthrough from '#lib/components/case-study/FlowWalkthrough.svelte';
-	import { Button } from '@ui-sdk/svelte/button';
 	import GithubIcon from '#lib/components/icons/GithubIcon.svelte';
 	import { caseStudies } from '#lib/case-studies.js';
 	import { getCaseStudyArt } from '#lib/case-study-art.js';
+	import type { GalleryImage } from '#lib/projects.js';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
+
 	const project = $derived(data.project);
 	const prev = $derived(data.prev);
 	const next = $derived(data.next);
 	const study = $derived(caseStudies[project.slug]);
 	const art = $derived(getCaseStudyArt(project.slug));
-	let imageIndex = $state(0);
+
+	// ── Gallery: the case-study scene first, then the project's real screens ──
+	type Frame = GalleryImage & { label: string };
+	const frames = $derived.by<Frame[]>(() => {
+		const list: Frame[] = [];
+		if (art) list.push({ image: art.scene, alt: art.sceneAlt, label: 'Overview' });
+		if (!(art && project.imageIsScene)) {
+			list.push({
+				image: project.image,
+				alt: project.imageAlt ?? `${project.name} project artwork`,
+				label: project.imageLabel ?? (art ? 'Showcase' : 'Overview')
+			});
+		}
+		if (project.secondaryImage) list.push(project.secondaryImage);
+		return list;
+	});
+	const frameSizes = '(min-width: 1392px) 1072px, (min-width: 1024px) calc(100vw - 320px), (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)';
+	const pad = (n: number) => String(n).padStart(2, '0');
+
+	let frame = $state(0);
+	/** Cycles through the frames until the visitor picks one themselves. */
+	let autoplay = $state(true);
+	let inView = $state(false);
+	let paused = $state(false);
+	let gallery: HTMLElement | undefined = $state();
+	const playing = $derived(autoplay && inView && !paused);
 
 	$effect(() => {
 		project.slug;
-		imageIndex = 0;
+		frame = 0;
+		autoplay = !matchMedia('(prefers-reduced-motion: reduce)').matches;
 	});
 
-	const screenshotSizes = '(min-width: 1264px) 944px, (min-width: 1024px) calc(100vw - 320px), (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)';
+	function select(i: number) {
+		frame = i;
+		autoplay = false;
+	}
+
+	onMount(() => {
+		if (!gallery) return;
+		const observer = new IntersectionObserver(([entry]) => (inView = entry.isIntersecting), { threshold: 0.4 });
+		observer.observe(gallery);
+		return () => observer.disconnect();
+	});
 </script>
 
 <svelte:head>
 	<title>{project.name} | Leul Tesfaye</title>
 	<meta name="description" content={project.description} />
 </svelte:head>
-
-{#snippet screenshots(triggerClass: string)}
-	<ProjectImageDialog {project} startIndex={imageIndex} {triggerClass}>
-		<div class="flex items-center transition-transform duration-500 ease-out motion-reduce:transition-none" style:transform="translateX(-{imageIndex * 100}%)">
-			<img src={project.image.img.src} srcset={project.image.sources.webp} sizes={screenshotSizes}
-				alt={project.imageAlt ?? `${project.name} project artwork`} width={project.image.img.w} height={project.image.img.h} class="h-auto w-full shrink-0" />
-			{#if project.secondaryImage}
-				<img src={project.secondaryImage.image.img.src} srcset={project.secondaryImage.image.sources.webp} sizes={screenshotSizes}
-					alt={project.secondaryImage.alt} width={project.secondaryImage.image.img.w} height={project.secondaryImage.image.img.h} loading="lazy" decoding="async" class="h-auto w-full shrink-0" />
-			{/if}
-		</div>
-		<span class="expand-hint"><Maximize2 size={15} /> View image</span>
-	</ProjectImageDialog>
-	{#if project.secondaryImage}
-		<div class="mt-4 flex items-center justify-between">
-			<p class="text-sm text-muted" aria-live="polite">{imageIndex + 1} / 2</p>
-			<div class="flex gap-2">
-				<Button aria-label="Previous image" disabled={imageIndex === 0} onclick={() => imageIndex = 0} class="icon-action border border-line p-2.5 text-ink disabled:opacity-30">
-					<ArrowLeft size={18} />
-				</Button>
-				<Button aria-label="Next image" disabled={imageIndex === 1} onclick={() => imageIndex = 1} class="icon-action border border-line p-2.5 text-ink disabled:opacity-30">
-					<ArrowRight size={18} />
-				</Button>
-			</div>
-		</div>
-	{/if}
-{/snippet}
 
 <div class="case-study" style:--cs-accent-dark={study?.palette.accent} style:--cs-accent-light={study?.palette.accentLight}
 	style:--cs-glow={study?.palette.glow}>
@@ -92,16 +103,68 @@
 			</div>
 		</header>
 
-		<section class="mt-10" aria-label="Project images">
-			{#if art}
-				<ProjectImageDialog {project} triggerClass="image-trigger detail-image cs-scene">
-					<img src={art.scene.img.src} srcset={art.scene.sources.webp}
-						sizes="(min-width: 1392px) 1072px, (min-width: 1024px) calc(100vw - 320px), (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
-						alt={art.sceneAlt} width={art.scene.img.w} height={art.scene.img.h} fetchpriority="high" />
-					<span class="expand-hint"><Maximize2 size={15} /> View image</span>
-				</ProjectImageDialog>
-			{:else}
-				{@render screenshots('image-trigger detail-image relative block w-full overflow-hidden rounded-xl border border-line bg-surface text-left')}
+		<section
+			class="cs-gallery mt-10"
+			aria-label="Project images"
+			bind:this={gallery}
+			onpointerenter={() => (paused = true)}
+			onpointerleave={() => (paused = false)}
+			onfocusin={() => (paused = true)}
+			onfocusout={() => (paused = false)}
+		>
+			<ProjectImageDialog {project} images={frames} startIndex={frame} triggerClass="image-trigger detail-image cs-gallery-frame">
+				<span class="cs-canvas" style:aspect-ratio="{frames[0].image.img.w} / {frames[0].image.img.h}">
+					{#each frames as f, i (f.image.img.src)}
+						<span class="cs-frame" class:is-active={i === frame}>
+							{#if i > 0}
+								<!-- Screens with a different shape sit on a soft, blurred copy of themselves instead of being cropped. -->
+								<img class="cs-frame-fill" src={f.image.img.src} srcset={f.image.sources.webp} sizes="640px" alt="" loading="lazy" decoding="async" />
+							{/if}
+							<img
+								class="cs-frame-img"
+								src={f.image.img.src}
+								srcset={f.image.sources.webp}
+								sizes={frameSizes}
+								alt={i === frame ? f.alt : ''}
+								width={f.image.img.w}
+								height={f.image.img.h}
+								loading={i === 0 ? 'eager' : 'lazy'}
+								fetchpriority={i === 0 ? 'high' : undefined}
+								decoding="async"
+							/>
+						</span>
+					{/each}
+				</span>
+				<span class="expand-hint"><Maximize2 size={15} /> View image</span>
+			</ProjectImageDialog>
+
+			{#if frames.length > 1}
+				<div class="cs-gallery-bar">
+					<div class="cs-strip" role="group" aria-label="Choose an image">
+						{#each frames as f, i (f.image.img.src)}
+							<button
+								type="button"
+								class="cs-thumb"
+								class:is-active={i === frame}
+								aria-pressed={i === frame}
+								onclick={() => select(i)}
+							>
+								<img src={f.image.img.src} srcset={f.image.sources.webp} sizes="160px" alt="" loading="lazy" decoding="async" />
+								<span class="cs-thumb-label">{f.label}</span>
+								<span
+									class="cs-thumb-bar"
+									class:is-playing={playing}
+									class:is-static={!autoplay}
+									onanimationend={() => (frame = (frame + 1) % frames.length)}
+								></span>
+							</button>
+						{/each}
+					</div>
+					<p class="cs-caption" aria-live="polite">
+						<span class="cs-caption-count">{pad(frame + 1)} / {pad(frames.length)}</span>
+						{frames[frame].alt}
+					</p>
+				</div>
 			{/if}
 		</section>
 
@@ -139,15 +202,6 @@
 			{#key project.slug}
 				<FlowWalkthrough {study} />
 			{/key}
-		{/if}
-
-		{#if art}
-			<section class="mt-20" aria-labelledby="screens-heading">
-				<h2 id="screens-heading" class="eyebrow cs-eyebrow">Screens</h2>
-				<div class="mt-6">
-					{@render screenshots('image-trigger relative block w-full overflow-hidden rounded-xl border border-line bg-surface text-left')}
-				</div>
-			</section>
 		{/if}
 
 		<nav aria-label="Other projects" class="mt-16 flex items-center justify-between gap-6 border-t border-line pt-6">
@@ -219,20 +273,135 @@
 		box-shadow: 0 0 0 3px color-mix(in srgb, var(--cs-accent) 25%, transparent);
 	}
 
-	:global(.cs-scene) {
+	/* ── Gallery ── */
+	:global(.cs-gallery-frame) {
 		position: relative;
 		display: block;
 		width: 100%;
+		padding: 0;
 		overflow: hidden;
+		border: none;
 		border-radius: 1rem;
 		background: var(--color-panel);
 		box-shadow: 0 40px 90px -40px color-mix(in srgb, var(--cs-accent) 55%, transparent);
 	}
-	:global(.cs-scene img) { display: block; width: 100%; height: auto; }
-	/* The scene settles from a slight zoom as it scrolls into place. */
+	.cs-canvas {
+		position: relative;
+		display: block;
+		width: 100%;
+	}
+	.cs-frame {
+		position: absolute;
+		inset: 0;
+		overflow: hidden;
+		opacity: 0;
+		transform: scale(1.025);
+		transition: opacity 0.5s ease, transform 0.8s var(--motion-ease-out);
+	}
+	.cs-frame.is-active { opacity: 1; transform: none; }
+	.cs-frame-img {
+		position: relative;
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+	.cs-frame-fill {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		filter: blur(28px) saturate(1.2) brightness(0.55);
+		transform: scale(1.15);
+	}
+
+	.cs-gallery-bar {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.75rem 1.5rem;
+		margin-top: 0.85rem;
+	}
+	.cs-strip {
+		display: flex;
+		gap: 0.5rem;
+		max-width: 100%;
+		overflow-x: auto;
+		scrollbar-width: none;
+	}
+	.cs-thumb {
+		position: relative;
+		flex: none;
+		width: 8.5rem;
+		padding: 0;
+		overflow: hidden;
+		border: 1px solid var(--color-line);
+		border-radius: 0.65rem;
+		background: var(--color-panel);
+		text-align: left;
+		cursor: pointer;
+		opacity: 0.55;
+		transition: opacity 0.2s ease, border-color 0.2s ease, transform 0.2s var(--motion-ease-out);
+	}
+	.cs-thumb:hover { opacity: 0.85; }
+	.cs-thumb:active { transform: scale(0.97); }
+	.cs-thumb.is-active { opacity: 1; border-color: color-mix(in srgb, var(--cs-accent) 70%, var(--color-line)); }
+	.cs-thumb img {
+		display: block;
+		width: 100%;
+		aspect-ratio: 16 / 10;
+		object-fit: cover;
+		object-position: top;
+	}
+	.cs-thumb-label {
+		display: block;
+		padding: 0.4rem 0.6rem 0.45rem;
+		font-size: 0.75rem;
+		font-weight: 500;
+		color: var(--color-muted);
+	}
+	.cs-thumb.is-active .cs-thumb-label { color: var(--color-ink); }
+	/* Doubles as the autoplay timer: the next frame shows when it fills. */
+	.cs-thumb-bar {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 2px;
+		background: var(--cs-accent);
+		transform: scaleX(0);
+		transform-origin: left;
+	}
+	.cs-thumb.is-active .cs-thumb-bar {
+		animation: thumb-fill 5s linear forwards;
+		animation-play-state: paused;
+	}
+	.cs-thumb.is-active .cs-thumb-bar.is-playing { animation-play-state: running; }
+	.cs-thumb.is-active .cs-thumb-bar.is-static { animation: none; transform: none; }
+	@keyframes thumb-fill { to { transform: scaleX(1); } }
+
+	.cs-caption {
+		flex: 1;
+		min-width: 14rem;
+		font-size: 0.85rem;
+		line-height: 1.5;
+		color: var(--color-muted);
+	}
+	.cs-caption-count {
+		margin-right: 0.5rem;
+		font: 0.72rem var(--font-mono);
+		color: var(--cs-accent);
+	}
+	@media (max-width: 640px) {
+		.cs-thumb { width: 6.5rem; }
+		.cs-caption { min-width: 100%; font-size: 0.8rem; }
+	}
+
+	/* The gallery settles from a slight zoom as it scrolls into place. */
 	@supports (animation-timeline: view()) {
 		@media (prefers-reduced-motion: no-preference) {
-			:global(.cs-scene img) {
+			.cs-canvas {
 				animation: scene-settle linear both;
 				animation-timeline: view();
 				animation-range: entry 0% cover 55%;
@@ -243,6 +412,9 @@
 				animation-range: 0 100svh;
 			}
 		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.cs-frame { transition: opacity 0.2s ease; transform: none; }
 	}
 	@keyframes scene-settle { from { scale: 1.08; } to { scale: 1; } }
 	@keyframes backdrop-drift { from { translate: 0 0; } to { translate: 0 18%; } }
