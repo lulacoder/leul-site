@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Monitor, Smartphone, Server, Database, KeyRound, CreditCard, Layers, Radio, Workflow, Globe, FilePenLine, Play } from '@lucide/svelte';
+	import { Monitor, Smartphone, Server, Database, KeyRound, CreditCard, Layers, Radio, Workflow, Globe, FilePenLine, Play,
+		Wallet, HardDrive, History, CalendarCheck, Timer, MapPin, Search, Bell, HardHat, Compass, Ticket, ShieldCheck, Radar } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import type { Component } from 'svelte';
 	import type { CaseStudy, Owner } from '#lib/case-studies.js';
@@ -21,8 +22,11 @@
 
 	let container: HTMLDivElement;
 	const icons: Record<string, Component<{ size: number; strokeWidth: number }>> = { web: Monitor, mobile: Smartphone, clerk: KeyRound, auth: KeyRound, convex: Database,
-		chapa: CreditCard, api: Server, db: Database, queue: Workflow, app: Layers, other: Radio,
-		admin: Monitor, editors: FilePenLine, cms: Database, site: Globe, providers: Radio, player: Play, relay: Workflow };
+		chapa: Wallet, api: Server, db: Database, queue: Workflow, app: Layers, other: Radio,
+		admin: Monitor, editors: FilePenLine, cms: Database, site: Globe, providers: Radio, player: Play, relay: Workflow,
+		journal: HardDrive, editor: FilePenLine, history: History, bookings: CalendarCheck, checkout: CreditCard, sweeps: Timer,
+		geo: MapPin, search: Search, notify: Bell, crews: HardHat, discover: Compass, tickets: Ticket, redis: Layers, phone: Smartphone,
+		gateway: ShieldCheck, scraper: Radar };
 	const inspectedEdges = $derived(architecture.edges.filter(e => e.from === selected || e.to === selected));
 	const litEdges = $derived(selected ? inspectedEdges.map(e => edgeKey(e.from, e.to)) : activeEdges);
 
@@ -114,7 +118,7 @@
 </script>
 
 <figure class="diagram" aria-label="{architecture.title} architecture diagram">
-	<div bind:this={container} class="diagram-canvas" style="--columns: {architecture.columns}">
+	<div bind:this={container} class="diagram-canvas" class:dense={architecture.columns > 3} style="--columns: {architecture.columns}">
 		<svg class="edges" width={size.width} height={size.height} aria-hidden="true">
 			<defs>
 				<marker id="flow-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="6" markerHeight="6" orient="auto">
@@ -215,6 +219,10 @@
 		.node-detail, .edge-label { display: none; }
 		.lamp { right: .35rem; top: .35rem; }
 		.node-label { overflow-wrap: anywhere; }
+		/* Four columns leave about 70px per node on a phone, so keep whole words on one line. */
+		.dense { column-gap: clamp(.5rem, 3cqi, 1rem); }
+		.dense .node { padding-inline: .2rem; }
+		.dense .node-label { font-size: clamp(.62rem, 3.3cqi, .8rem); overflow-wrap: normal; hyphens: auto; }
 	}
 	@media (prefers-reduced-motion: reduce) {
 		.trace, .signal, .operation { display: none; }

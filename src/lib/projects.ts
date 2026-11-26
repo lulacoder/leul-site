@@ -163,9 +163,9 @@ export const projects: Project[] = [
 		stack: ['Nuxt', 'Vue', 'TypeScript', 'Nitro', 'HLS', 'MPEG-DASH'],
 		stackDescription: 'Nuxt and Vue render the catalog and watch screen. Nitro retrieves metadata from TMDB and resolves playback sources. The player uses hls.js, dash.js or native video according to the stream format.',
 		contributions: [
-			'Connected the player to the media proxy for HLS and DASH playback.',
-			'Added fresh source lookups on playback retries so an expired link can be replaced mid-film.',
-			'Implemented playback quality limits and session renewal for longer viewing sessions.'
+			'Built the playback API’s source lookups, trying sources in order and cancelling stale requests.',
+			'Built the gateway that checks each media request against the viewing session and its view limits.',
+			'Wrote the relay that rewrites HLS playlists into signed links, and timed renewal so long sessions get a fresh link before the old one expires.'
 		],
 		status: 'Live',
 		live: 'https://web.flix.quest/',
