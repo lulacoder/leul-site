@@ -4,6 +4,7 @@
 	import '@fontsource-variable/geist/index.css';
 	import '@fontsource-variable/geist-mono/index.css';
 	import '@fontsource-variable/bricolage-grotesque/index.css';
+	import '../fonts/avalance/avalance.css';
 
 	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
@@ -89,12 +90,6 @@
 		});
 	});
 </script>
-
-<svelte:head>
-	{#if import.meta.env.DEV && import.meta.env.VITE_AVALANCE_PREVIEW === 'true'}
-		<link rel="stylesheet" href="/src/local-font-preview/avalance.css?direct" />
-	{/if}
-</svelte:head>
 
 <svelte:window onclickcapture={handleAnchorClick} onscroll={updateProgress} onresize={updateProgress} />
 
