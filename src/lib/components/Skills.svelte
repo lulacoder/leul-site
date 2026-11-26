@@ -3,7 +3,7 @@
 	import { ArrowRight, Box, X, Code2, CreditCard, Database, PenLine, Server, Workflow } from '@lucide/svelte';
 	import type { Component } from 'svelte';
 	import { projects } from '#lib/projects.js';
-	import { caseStudies, type Owner } from '#lib/case-studies.js';
+	import type { Owner } from '#lib/case-studies.js';
 	import { alsoUsed, layers, learning, paths, tools, type StackTool } from '#lib/stack-map.js';
 	import ScrollFade from './ScrollFade.svelte';
 
@@ -47,8 +47,6 @@
 		return null;
 	});
 	const ownerOf = (id: string) => path?.uses.find((u) => u.tool === id)?.owner;
-
-	const palette = $derived(project ? caseStudies[project]?.palette : undefined);
 
 	function selectProject(slug: string | null) {
 		project = project === slug ? null : slug;
@@ -165,11 +163,11 @@
 			<p class="stack-lede">Where each tool shows up in real projects. Pick a project to trace its path, or a tool to see where it’s used.</p>
 		</ScrollFade>
 
-		<div class="stack-map" class:filtered={!!project} style:--map-accent-dark={palette?.accent} style:--map-accent-light={palette?.accentLight}>
+		<div class="stack-map" class:filtered={!!project} style:--map-accent-dark={path?.accent.dark} style:--map-accent-light={path?.accent.light}>
 			<div class="project-filter" role="group" aria-label="Show one project’s stack">
-				<button type="button" class="project-chip" aria-pressed={project === null} onclick={() => selectProject(null)}>All</button>
+				<button type="button" class="btn project-chip" class:btn-primary={project === null} aria-pressed={project === null} onclick={() => selectProject(null)}>All</button>
 				{#each mapProjects as item (item.slug)}
-					<button type="button" class="project-chip" aria-pressed={project === item.slug}
+					<button type="button" class="btn project-chip" class:btn-primary={project === item.slug} aria-pressed={project === item.slug}
 						class:related={!project && usedIn.includes(item)} onclick={() => selectProject(item.slug)}>
 						{projectBySlug.get(item.slug)?.name}
 					</button>
@@ -308,9 +306,8 @@
 		border-radius: 999px;
 		color: var(--color-muted);
 		font-size: 0.85rem;
+		font-weight: 400;
 		white-space: nowrap;
-		cursor: pointer;
-		transition: color 200ms ease, border-color 200ms ease, background-color 200ms ease;
 	}
 	.project-chip.related { border-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-line)); color: var(--color-ink); }
 	.project-chip[aria-pressed='true'] { border-color: var(--map-accent); background: var(--map-accent); color: #0b0b0d; font-weight: 600; }
@@ -350,15 +347,17 @@
 		min-height: 40px;
 		align-items: center;
 		gap: 0.5rem;
-		padding: 0.45rem 0.8rem;
-		border: 1px solid var(--color-line);
+		--stroke: 1px;
+		/* Keep the node and its connector anchors fixed as the border grows. */
+		padding: calc(0.45rem + 1px - var(--stroke)) calc(0.8rem + 1px - var(--stroke));
+		border: var(--stroke) solid var(--color-line);
 		border-radius: 0.6rem;
 		background: var(--color-panel);
 		color: var(--color-ink);
 		font-size: 0.85rem;
 		line-height: 1.2;
 		cursor: pointer;
-		transition: color 260ms ease, border-color 260ms ease, background-color 260ms ease, box-shadow 260ms ease, opacity 260ms ease, transform 200ms var(--motion-ease-out);
+		transition: color 260ms ease, border-color 260ms ease, background-color 260ms ease, opacity 260ms ease, transform 200ms var(--motion-ease-out);
 	}
 	.tool :global(.logo) { flex: none; transition: opacity 260ms ease, filter 260ms ease; }
 	.tool :global(.glyph) { color: var(--color-muted); }
@@ -367,16 +366,22 @@
 	.tool.lit {
 		border-color: color-mix(in srgb, var(--map-accent) 75%, var(--color-line));
 		background: color-mix(in srgb, var(--map-accent) 10%, var(--color-panel));
-		box-shadow: 0 0 0 1px color-mix(in srgb, var(--map-accent) 25%, transparent), 0 6px 22px -12px var(--map-accent);
 	}
 	/* Owner in the selected project: solid for my work, dashed for team work, quieter for the platform. */
 	.tool.lit.owner-team { border-style: dashed; }
-	.tool.lit.owner-platform { border-color: color-mix(in srgb, var(--map-accent) 40%, var(--color-line)); box-shadow: none; }
-	.tool.inspected { outline: 2px solid var(--map-accent); outline-offset: 2px; }
-	.tool:focus-visible { outline: 2px solid var(--map-accent); outline-offset: 2px; }
+	.tool.lit:where(.owner-platform) { border-color: color-mix(in srgb, var(--map-accent) 40%, var(--color-line)); }
+	.tool:is(.inspected, :focus-visible) {
+		--stroke: 2px;
+		color: var(--color-ink);
+		background: color-mix(in srgb, var(--map-accent) 16%, var(--color-panel));
+	}
+	.tool.inspected, .tool:focus-visible { border-color: var(--map-accent); }
+	.tool:focus-visible { --stroke: 3px; outline: none; }
+	@media (forced-colors: active) {
+		.tool:focus-visible { border-color: Highlight; }
+	}
 	@media (hover: hover) and (pointer: fine) {
 		.tool:hover { transform: translateY(-2px); }
-		.project-chip:not([aria-pressed='true']):hover { color: var(--color-ink); border-color: var(--color-faint); }
 	}
 
 	.legend {

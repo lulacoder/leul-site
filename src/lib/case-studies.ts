@@ -150,13 +150,17 @@ export const caseStudies: Record<string, CaseStudy> = {
 			summary: 'Kenna supports gift campaigns, contributions, recipients and claims. Leul built the React admin interface that connects the people running those programs to the platform’s NestJS API.',
 			columns: 3,
 			nodes: [
-				{ id: 'admin', label: 'Admin app', detail: 'React · TypeScript · Vite', owner: 'mine', col: 1, row: 1 },
-				{ id: 'api', label: 'API', detail: 'NestJS', owner: 'platform', col: 2, row: 1 },
-				{ id: 'db', label: 'Database', detail: 'PostgreSQL · Prisma', owner: 'platform', col: 3, row: 1 }
+				{ id: 'admin', label: 'Admin app', detail: 'React · TypeScript · Vite', owner: 'mine', col: 1, row: 2 },
+				{ id: 'api', label: 'API', detail: 'NestJS', owner: 'platform', col: 2, row: 2 },
+				{ id: 'db', label: 'Database', detail: 'PostgreSQL · Prisma', owner: 'platform', col: 3, row: 1 },
+				{ id: 'auth', label: 'Sign-in', detail: 'Better Auth', owner: 'platform', col: 2, row: 1 },
+				{ id: 'queue', label: 'Job queue', detail: 'BullMQ · Redis', owner: 'platform', col: 3, row: 3 }
 			],
 			edges: [
 				{ from: 'admin', to: 'api', label: 'API integration' },
-				{ from: 'api', to: 'db', label: 'Prisma' }
+				{ from: 'api', to: 'db', label: 'Prisma' },
+				{ from: 'api', to: 'auth', label: 'sign-in' },
+				{ from: 'api', to: 'queue', label: 'background jobs' }
 			]
 		},
 		flow: {
@@ -204,14 +208,18 @@ export const caseStudies: Record<string, CaseStudy> = {
 			summary: 'Jora’s multi-location checkout keeps a buyer in one window while the order moves between the ticket picker, a mobile wallet and the pass screen. Leul contributed to the core frontend team.',
 			columns: 3,
 			nodes: [
-				{ id: 'web', label: 'Frontend', detail: 'React Router · Vite', owner: 'team', col: 1, row: 1 },
-				{ id: 'api', label: 'Backend', detail: 'Laravel', owner: 'platform', col: 2, row: 1 },
-				{ id: 'chapa', label: 'Payment', detail: 'Chapa · mobile wallets', owner: 'platform', col: 3, row: 1 }
+				{ id: 'web', label: 'Frontend', detail: 'React Router · Vite', owner: 'team', col: 1, row: 2 },
+				{ id: 'api', label: 'Backend', detail: 'Laravel', owner: 'platform', col: 2, row: 2 },
+				{ id: 'chapa', label: 'Payment', detail: 'Chapa · mobile wallets', owner: 'platform', col: 3, row: 2 },
+				{ id: 'db', label: 'Database', detail: 'PostgreSQL', owner: 'platform', col: 3, row: 1 },
+				{ id: 'redis', label: 'Data store', detail: 'Redis', owner: 'platform', col: 3, row: 3 }
 			],
 			edges: [
 				{ from: 'web', to: 'api', label: 'order' },
 				{ from: 'api', to: 'chapa', label: 'charge' },
-				{ from: 'api', to: 'web', label: 'order status' }
+				{ from: 'api', to: 'web', label: 'order status' },
+				{ from: 'api', to: 'db', label: 'SQL queries' },
+				{ from: 'api', to: 'redis', label: 'Redis access' }
 			]
 		},
 		flow: {

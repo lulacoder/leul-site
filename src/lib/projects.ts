@@ -34,6 +34,8 @@ export interface Project {
 	featured?: boolean;
 }
 
+const kennaAndFixMyAddisStack = ['TypeScript', 'React', 'Next.js', 'NestJS', 'Prisma', 'PostgreSQL', 'Better Auth', 'BullMQ', 'Redis'];
+
 export const projects: Project[] = [
 	{
 		slug: 'visit-oromia',
@@ -61,8 +63,8 @@ export const projects: Project[] = [
 		tags: ['Events', 'Frontend', 'Team project'],
 		description: 'Event discovery and ticketing for Addis Ababa.',
 		overview: 'An events platform for discovering events in Addis Ababa, getting tickets, and connecting with organizers.',
-		stack: ['React Router', 'Vite', 'Laravel'],
-		stackDescription: 'The frontend uses React Router with Vite. Laravel provides the backend for the event discovery and ticketing platform.',
+		stack: ['React Router', 'Vite', 'Laravel', 'PostgreSQL', 'Redis'],
+		stackDescription: 'The frontend uses React Router with Vite. The Laravel backend uses PostgreSQL and Redis.',
 		contributions: ['Contributed to the platform as a member of the core frontend team.'],
 		status: 'Live',
 		live: 'https://jora.events/',
@@ -79,7 +81,7 @@ export const projects: Project[] = [
 		tags: ['Civic tech', 'Backend', 'Web app'],
 		description: 'Report city issues and track their progress across Addis Ababa.',
 		overview: 'A platform where people report problems across Addis Ababa and follow their progress until they are resolved.',
-		stack: ['Next.js', 'NestJS', 'Better Auth', 'Redis', 'BullMQ'],
+		stack: kennaAndFixMyAddisStack,
 		stackDescription: 'The web frontend uses Next.js, with NestJS on the backend and Better Auth for authentication. BullMQ uses Redis to run background job queues.',
 		contributions: ['Contributed to the core backend as part of the team.', 'Worked on the web app frontend.'],
 		status: 'Live',
@@ -136,11 +138,11 @@ export const projects: Project[] = [
 		slug: 'kenna-gifts',
 		name: 'Kenna Gifts',
 		role: 'Frontend contributor',
-		tags: ['React', 'Vite', 'NestJS', 'TypeScript'],
+		tags: ['React', 'Next.js', 'NestJS', 'TypeScript'],
 		description: 'Admin frontend for a corporate gifting platform.',
 		overview: "A corporate gifting platform for Ethiopia. I built the admin frontend as a React app connected to a NestJS API.",
-		stack: ['React', 'Vite', 'NestJS', 'TypeScript'],
-		stackDescription: 'The admin frontend uses React, TypeScript, and Vite, connected to a NestJS API.',
+		stack: kennaAndFixMyAddisStack,
+		stackDescription: 'The React admin panel connects to a NestJS API. The platform uses Next.js, Better Auth for sign-in, Prisma with PostgreSQL for storage, and BullMQ with Redis for background jobs.',
 		contributions: [
 			'Built the admin app, routing, and API integration.',
 			'Implemented corporate onboarding and user management.',

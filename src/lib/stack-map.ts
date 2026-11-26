@@ -28,6 +28,8 @@ export interface ProjectUse {
 
 export interface ProjectPath {
 	slug: string;
+	/** App UI accents, adjusted for the map background in each theme. */
+	accent: { light: string; dark: string };
 	uses: ProjectUse[];
 	/** Pairs of tools that work together in this project, drawn as lines. */
 	links: [string, string][];
@@ -57,21 +59,32 @@ export const tools: StackTool[] = [
 	{ id: 'convex-functions', name: 'Convex functions', logo: 'convex', layer: 'api', summary: 'Queries, mutations and actions, including a payment flow built without a ready-made guide.' },
 	{ id: 'nitro', name: 'Nitro', layer: 'api', summary: 'FlixQuest’s server: TMDB metadata and playback source lookups.' },
 
-	{ id: 'postgres', name: 'PostgreSQL', logo: 'postgresql', layer: 'data', summary: 'The database under FixMyAddis and Kenna Gifts.' },
+	{ id: 'postgres', name: 'PostgreSQL', logo: 'postgresql', layer: 'data', summary: 'Relational storage for FixMyAddis, Kenna Gifts, and Jora Events.' },
 	{ id: 'prisma', name: 'Prisma', logo: 'prisma', layer: 'data', summary: 'The ORM between those NestJS backends and PostgreSQL.' },
 	{ id: 'convex', name: 'Convex', logo: 'convex', layer: 'data', summary: 'A reactive database: real-time bookings in Tripways, synced notes in Noteworthy.' },
-	{ id: 'redis', name: 'Redis', logo: 'redis', layer: 'data', summary: 'Backs the BullMQ job queues in FixMyAddis.' },
+	{ id: 'redis', name: 'Redis', logo: 'redis', layer: 'data', summary: 'Backs BullMQ queues in FixMyAddis and Kenna Gifts. Jora Events also uses Redis.' },
 
-	{ id: 'better-auth', name: 'Better Auth', logo: 'betterauth', layer: 'platform', summary: 'Sign-in for Noteworthy and FixMyAddis.' },
+	{ id: 'better-auth', name: 'Better Auth', logo: 'betterauth', layer: 'platform', summary: 'Sign-in for Noteworthy, FixMyAddis, and Kenna Gifts.' },
 	{ id: 'clerk', name: 'Clerk', logo: 'clerk', layer: 'platform', summary: 'Authentication for the Tripways web app.' },
-	{ id: 'bullmq', name: 'BullMQ', layer: 'platform', summary: 'Background job queues in FixMyAddis.' },
+	{ id: 'bullmq', name: 'BullMQ', layer: 'platform', summary: 'Background job queues in FixMyAddis and Kenna Gifts.' },
 	{ id: 'chapa', name: 'Chapa', layer: 'platform', summary: 'Ethiopian payments, wired into Convex for Tripways.' },
 	{ id: 'vercel', name: 'Vercel', logo: 'vercel', layer: 'platform', summary: 'Hosting for Noteworthy.' }
 ];
 
+const sharedPlatformTools: ProjectUse[] = [
+	{ tool: 'postgres', owner: 'platform' },
+	{ tool: 'prisma', owner: 'platform' },
+	{ tool: 'redis', owner: 'platform', note: 'Backs the BullMQ queues.' },
+	{ tool: 'better-auth', owner: 'platform', note: 'Handles sign-in.' },
+	{ tool: 'bullmq', owner: 'platform', note: 'Runs background jobs, backed by Redis.' }
+];
+
+const sharedPlatformLinks: ProjectPath['links'] = [['nextjs', 'nestjs'], ['nestjs', 'prisma'], ['prisma', 'postgres'], ['nestjs', 'bullmq'], ['bullmq', 'redis'], ['nestjs', 'better-auth']];
+
 export const paths: ProjectPath[] = [
 	{
 		slug: 'visit-oromia',
+		accent: { light: '#c51f23', dark: '#ff7272' },
 		uses: [
 			{ tool: 'nextjs', owner: 'mine', note: 'Rebuilt the site from scratch in Next.js.' },
 			{ tool: 'strapi', owner: 'mine', note: 'Integrated the CMS that powers destinations, stories, and the rest of the content.' }
@@ -80,30 +93,32 @@ export const paths: ProjectPath[] = [
 	},
 	{
 		slug: 'jora-events',
+		accent: { light: '#276523', dark: '#d4f282' },
 		uses: [
 			{ tool: 'react', owner: 'team', note: 'The frontend uses React Router. I worked on it as part of the core frontend team.' },
 			{ tool: 'vite', owner: 'team' },
 			{ tool: 'laravel', owner: 'platform', note: 'The platform’s backend. The frontend team builds against it.' },
+			{ tool: 'postgres', owner: 'platform', note: 'Relational database for the Laravel backend.' },
+			{ tool: 'redis', owner: 'platform', note: 'Redis data store used by the Laravel backend.' },
 			{ tool: 'chapa', owner: 'platform', note: 'Ticket payments.' }
 		],
-		links: [['react', 'laravel'], ['laravel', 'chapa']]
+		links: [['react', 'laravel'], ['laravel', 'postgres'], ['laravel', 'redis'], ['laravel', 'chapa']]
 	},
 	{
 		slug: 'fixmyaddis',
+		accent: { light: '#00734d', dark: '#00b87c' },
 		uses: [
+			{ tool: 'typescript', owner: 'team' },
 			{ tool: 'nextjs', owner: 'team', note: 'Worked on the web app frontend with the team.' },
 			{ tool: 'react', owner: 'team' },
 			{ tool: 'nestjs', owner: 'team', note: 'Contributed to the core backend as part of the team.' },
-			{ tool: 'postgres', owner: 'platform' },
-			{ tool: 'prisma', owner: 'platform' },
-			{ tool: 'redis', owner: 'platform', note: 'Backs the BullMQ queues.' },
-			{ tool: 'better-auth', owner: 'platform', note: 'Handles sign-in.' },
-			{ tool: 'bullmq', owner: 'platform', note: 'Runs background jobs, backed by Redis.' }
+			...sharedPlatformTools
 		],
-		links: [['nextjs', 'nestjs'], ['nestjs', 'prisma'], ['prisma', 'postgres'], ['nestjs', 'bullmq'], ['bullmq', 'redis'], ['nestjs', 'better-auth']]
+		links: sharedPlatformLinks
 	},
 	{
 		slug: 'noteworthy',
+		accent: { light: '#bc1741', dark: '#ff7697' },
 		uses: [
 			{ tool: 'typescript', owner: 'mine' },
 			{ tool: 'nextjs', owner: 'mine', note: 'The workspace for notes, canvases, and boards.' },
@@ -118,6 +133,7 @@ export const paths: ProjectPath[] = [
 	},
 	{
 		slug: 'hotel-management',
+		accent: { light: '#7720ec', dark: '#b88aff' },
 		uses: [
 			{ tool: 'typescript', owner: 'mine' },
 			{ tool: 'react', owner: 'mine', note: 'The web app, routed with TanStack Router.' },
@@ -132,18 +148,19 @@ export const paths: ProjectPath[] = [
 	},
 	{
 		slug: 'kenna-gifts',
+		accent: { light: '#76004f', dark: '#ea84c6' },
 		uses: [
 			{ tool: 'typescript', owner: 'mine' },
 			{ tool: 'react', owner: 'mine', note: 'Built the admin app: routing, onboarding, user management, dashboards, and role-based access.' },
-			{ tool: 'vite', owner: 'mine' },
+			{ tool: 'nextjs', owner: 'platform', note: 'Web framework shared with FixMyAddis.' },
 			{ tool: 'nestjs', owner: 'platform', note: 'The platform’s API, which the admin app is built on.' },
-			{ tool: 'prisma', owner: 'platform' },
-			{ tool: 'postgres', owner: 'platform' }
+			...sharedPlatformTools
 		],
-		links: [['react', 'nestjs'], ['nestjs', 'prisma'], ['prisma', 'postgres']]
+		links: sharedPlatformLinks
 	},
 	{
 		slug: 'flixquest',
+		accent: { light: '#9c4900', dark: '#ff961f' },
 		uses: [
 			{ tool: 'typescript', owner: 'team' },
 			{ tool: 'nuxt', owner: 'team', note: 'The catalog and watch screen, with an HLS and DASH player.' },

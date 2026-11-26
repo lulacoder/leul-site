@@ -25,6 +25,14 @@
 	let diff: HTMLElement;
 	let rc: HTMLElement;
 	let meter: HTMLElement;
+	let meterTrack: HTMLSpanElement;
+	let meterPointer = $state<number | null>(null);
+
+	function followMeterPointer(event: PointerEvent) {
+		if (event.pointerType !== 'mouse') return;
+		const { left, width } = meterTrack.getBoundingClientRect();
+		if (width > 0) meterPointer = Math.max(0, Math.min(1, (event.clientX - left) / width));
+	}
 
 	/** How far the timeline line has filled, in pixels, and how many stops it has reached. */
 	let fill = $state<number | null>(null);
@@ -166,13 +174,16 @@
 				<p class="hobby-text">Djokovic is the GOAT.</p>
 				<p class="hobby-aside">Favourite moment: Olympic gold in Paris, beating Alcaraz in two tie-break sets.</p>
 			</li>
-			<li class="hobby football">
+			<li class="hobby football" onpointerenter={followMeterPointer} onpointermove={followMeterPointer}
+				onpointerleave={() => (meterPointer = null)} onpointercancel={() => (meterPointer = null)}>
 				<img src="/interests/football.svg" width="40" height="40" alt="" loading="lazy" class="hobby-icon" />
 				<h4>Football</h4>
 				<p class="hobby-text">Manchester United supporter (sadly).</p>
 				<div bind:this={meter} class="meter" class:played={played.meter} role="img" aria-label="Supporter mood: mostly pain">
 					<span>hope</span>
-					<span class="meter-track"><span class="meter-needle"></span></span>
+					<span bind:this={meterTrack} class="meter-track"><span class="meter-needle"
+						class:tracking={meterPointer !== null}
+						style:--pointer-position={meterPointer === null ? null : `${meterPointer * 100}%`}></span></span>
 					<span class="pain">pain</span>
 				</div>
 			</li>
@@ -398,8 +409,15 @@
 	}
 	.meter-needle {
 		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		transform: translateX(var(--pointer-position, var(--rest-position, 88%)));
+	}
+	.meter-needle::after {
+		content: '';
+		position: absolute;
 		top: 50%;
-		left: 88%;
+		left: 0;
 		width: 3px;
 		height: 1.2rem;
 		border-radius: 2px;
@@ -429,9 +447,9 @@
 		.rc:not(.played) .rc-rule > span { clip-path: inset(0 100% 0 0); opacity: 0; }
 
 		/* The mood starts hopeful and settles where it always does. */
-		.meter-needle { transition: left 1.6s cubic-bezier(0.5, 0, 0.2, 1) 300ms; }
-		.meter:not(.played) .meter-needle { left: 8%; }
-		.football:hover .meter.played .meter-needle { left: 30%; transition-duration: 500ms; transition-delay: 0ms; }
+		.meter-needle { transition: transform 350ms var(--motion-ease-out); }
+		.meter:not(.played) .meter-needle { --rest-position: 8%; }
+		.meter-needle.tracking { transition: none; }
 
 		.pool-photo { transition: transform 900ms var(--motion-ease-out); }
 		.pool:hover .pool-photo { transform: scale(1.06) translateX(-1.5%); }
