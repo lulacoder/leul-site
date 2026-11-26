@@ -90,6 +90,12 @@
 	});
 </script>
 
+<svelte:head>
+	{#if import.meta.env.DEV && import.meta.env.VITE_AVALANCE_PREVIEW === 'true'}
+		<link rel="stylesheet" href="/src/local-font-preview/avalance.css?direct" />
+	{/if}
+</svelte:head>
+
 <svelte:window onclickcapture={handleAnchorClick} onscroll={updateProgress} onresize={updateProgress} />
 
 <div bind:this={progressBar} class="scroll-progress" aria-hidden="true"></div>
