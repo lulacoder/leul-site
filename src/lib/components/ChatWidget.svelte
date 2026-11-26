@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { MessageCircle, LoaderCircle } from '@lucide/svelte';
 	import { onMount, type Component } from 'svelte';
+	import { OPEN_CHAT_EVENT } from '#lib/chat-events.js';
 
 	let Panel = $state<Component<{ open: boolean; onClose: () => void }> | undefined>();
 	let open = $state(false);
@@ -13,7 +14,15 @@
 
 	onMount(() => {
 		ready = true;
-		return cancelPreload;
+		// Other parts of the page (like the Contact section) can open the chat too.
+		const onOpenRequest = () => {
+			if (!open) void openChat();
+		};
+		addEventListener(OPEN_CHAT_EVENT, onOpenRequest);
+		return () => {
+			cancelPreload();
+			removeEventListener(OPEN_CHAT_EVENT, onOpenRequest);
+		};
 	});
 
 	/** Shares an in-flight download between preloading and opening. */
