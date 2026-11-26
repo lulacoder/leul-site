@@ -185,7 +185,7 @@
 		.hero-grid { grid-template-columns: 1.2fr 0.9fr; }
 	}
 	@media (min-width: 1024px) {
-		.hero-grid { padding-top: 5rem; padding-bottom: 5rem; min-height: 620px; }
+		.hero-grid { padding-top: 8rem; padding-bottom: 5rem; min-height: 680px; }
 	}
 
 	.who { position: relative; overflow: hidden; }

@@ -65,7 +65,7 @@
 		</div>
 	{/if}
 
-	<article class="relative mx-auto max-w-6xl px-6 pb-20 pt-28 sm:px-10 lg:pt-16">
+	<article class="relative mx-auto max-w-6xl px-6 pb-20 pt-28 sm:px-10">
 		<a href="/#projects" class="group inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-accent">
 			<ArrowLeft size={15} class="transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-x-1.5" /> Back to work
 		</a>

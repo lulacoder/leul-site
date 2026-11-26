@@ -97,8 +97,7 @@
 
 <Navbar {theme} {toggleTheme} />
 
-<!-- Offset content to the right of the fixed left sidebar on desktop. -->
-<div class="lg:pl-60">
+<div>
 	<main>
 		{@render children()}
 	</main>

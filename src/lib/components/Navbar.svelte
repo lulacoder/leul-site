@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
-	import { Menu, X, Mail, Download, Sun, Moon } from '@lucide/svelte';
+	import { afterNavigate } from '$app/navigation';
+	import { X, Download, Sun, Moon, ArrowUpRight } from '@lucide/svelte';
 	import GithubIcon from './icons/GithubIcon.svelte';
 	import { navScroll } from '#lib/scroll.svelte.js';
 
@@ -14,28 +15,29 @@
 	} = $props();
 
 	const links = [
-		{ id: 'projects', label: 'Projects' },
-		{ id: 'skills', label: 'Tech stack' },
+		{ id: 'projects', label: 'Work' },
+		{ id: 'skills', label: 'Stack' },
 		{ id: 'about', label: 'About' },
 		{ id: 'education', label: 'Education' },
 		{ id: 'contact', label: 'Contact' }
 	];
 
-	const EMAIL = 'leultesfaye0755@gmail.com';
 	const GITHUB = 'https://github.com/lulacoder';
 
 	let active = $state('');
+	let hovered = $state<string | null>(null);
 	let menuOpen = $state(false);
 	let scrolled = $state(false);
+	let progress = $state(0);
 
 	const onHome = $derived(page.url.pathname === '/');
 	const href = (id: string) => (onHome ? `#${id}` : `/#${id}`);
 
-	// Reconnect section tracking when returning from a project page.
+	// Scroll-spy. Reconnects when returning from a project page.
 	$effect(() => {
-		const sections = onHome ? links
-			.map((l) => document.getElementById(l.id))
-			.filter((s): s is HTMLElement => s !== null) : [];
+		const sections = onHome
+			? links.map((l) => document.getElementById(l.id)).filter((s): s is HTMLElement => s !== null)
+			: [];
 		active = onHome ? '' : 'projects';
 
 		const observer = new IntersectionObserver(
@@ -51,324 +53,599 @@
 		return () => observer.disconnect();
 	});
 
-	// One highlight that slides between links instead of each link fading on and off.
-	let linkEls: HTMLAnchorElement[] = $state([]);
-	let indicator = $state({ y: 0, h: 0, visible: false, instant: true });
-	let placed = false;
-
-	$effect(() => {
-		const el = linkEls[links.findIndex((l) => l.id === active)];
-		if (!el) {
-			indicator.visible = false;
-			placed = false;
-			return;
-		}
-		// First placement snaps into position; every later move slides.
-		indicator = { y: el.offsetTop, h: el.offsetHeight, visible: true, instant: !placed };
-		placed = true;
-	});
-
 	// While a nav click is scrolling, jump the marker straight to its destination.
 	$effect(() => {
 		const target = navScroll.target;
 		if (target && links.some((l) => l.id === target)) active = target;
 	});
 
-	onMount(() => {
-		const onScroll = () => (scrolled = window.scrollY > 8);
-		onScroll();
-		window.addEventListener('scroll', onScroll, { passive: true });
+	// ── Desktop: one highlight that follows the pointer, then settles back on the active section ──
+	let linkEls: HTMLAnchorElement[] = $state([]);
+	let indicator = $state({ x: 0, w: 0, visible: false, instant: true });
+	let placed = false;
+	const target = $derived(hovered ?? active);
 
+	$effect(() => {
+		const el = linkEls[links.findIndex((l) => l.id === target)];
+		if (!el) {
+			indicator.visible = false;
+			placed = false;
+			return;
+		}
+		// First placement snaps into position; every later move slides.
+		indicator = { x: el.offsetLeft, w: el.offsetWidth, visible: true, instant: !placed };
+		placed = true;
+	});
+
+	// ── Mobile: the island shows where you are and grows into the menu ──
+	const sectionLabel = $derived(
+		onHome ? (links.find((l) => l.id === active)?.label ?? 'Home') : 'Case study'
+	);
+	const RING = 2 * Math.PI * 9;
+
+	let viewport = $state(390);
+	let barWidth = $state(0);
+	let panelHeight = $state(0);
+	const BAR_HEIGHT = 44;
+	const openWidth = $derived(Math.min(viewport - 24, 384));
+	// Width and height are animated as explicit pixels, since CSS can't transition to `auto`.
+	const islandWidth = $derived(menuOpen ? openWidth : barWidth ? barWidth + 2 : null); // +2 for the border
+	const islandHeight = $derived(menuOpen ? BAR_HEIGHT + panelHeight : BAR_HEIGHT);
+
+	afterNavigate(() => (menuOpen = false));
+
+	onMount(() => {
+		let frame = 0;
+		const onScroll = () => {
+			cancelAnimationFrame(frame);
+			frame = requestAnimationFrame(() => {
+				scrolled = scrollY > 8;
+				const max = document.documentElement.scrollHeight - innerHeight;
+				progress = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+			});
+		};
+		const onKey = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') menuOpen = false;
+		};
+		onScroll();
+		addEventListener('scroll', onScroll, { passive: true });
+		addEventListener('resize', onScroll, { passive: true });
+		addEventListener('keydown', onKey);
 		return () => {
-			window.removeEventListener('scroll', onScroll);
+			cancelAnimationFrame(frame);
+			removeEventListener('scroll', onScroll);
+			removeEventListener('resize', onScroll);
+			removeEventListener('keydown', onKey);
 		};
 	});
 </script>
 
-<!-- ════════ DESKTOP: fixed left sidebar ════════ -->
-<aside class="sidebar fixed inset-y-0 left-0 z-50 hidden w-60 flex-col justify-between border-r border-line px-7 py-8 lg:flex">
-	<div>
-		<!-- Brand -->
-		<a href={onHome ? '#top' : '/'} class="group flex items-center gap-2.5">
-			<span
-				class="h-2.5 w-2.5 rounded-full bg-accent"
-			></span>
-			<span class="leading-tight">
-				<span class="block font-display text-base font-semibold tracking-tight text-ink">Leul Tesfaye</span>
-				<span class="block font-mono text-[11px] text-faint">Software Engineer</span>
-			</span>
-		</a>
+<svelte:window bind:innerWidth={viewport} />
 
-		<!-- Nav links -->
-		<nav class="relative mt-14">
-			<span
-				class="nav-indicator"
-				class:instant={indicator.instant}
-				aria-hidden="true"
-				style="transform: translateY({indicator.y}px); height: {indicator.h}px; opacity: {indicator.visible ? 1 : 0};"
-			></span>
-			<ul class="space-y-1">
+{#if menuOpen}
+	<button type="button" class="nav-backdrop mobile-only" aria-label="Close menu" onclick={() => (menuOpen = false)}></button>
+{/if}
+
+<header class="nav-shell">
+	<!-- ════════ DESKTOP: floating pill ════════ -->
+	<div class="nav-pill glass desktop-only" class:glass--raised={scrolled}>
+		<nav class="pill-row" aria-label="Main">
+			<a href={onHome ? '#top' : '/'} class="brand">
+				<span class="brand-dot"></span>
+				<span>Leul Tesfaye</span>
+			</a>
+
+			<span class="divider" aria-hidden="true"></span>
+
+			<ul class="links" onpointerleave={() => (hovered = null)}>
+				<li
+					class="indicator"
+					class:instant={indicator.instant}
+					class:at-active={target === active}
+					aria-hidden="true"
+					style="transform: translateX({indicator.x}px); width: {indicator.w}px; opacity: {indicator.visible ? 1 : 0};"
+				></li>
 				{#each links as link, i (link.id)}
 					<li>
 						<a
 							bind:this={linkEls[i]}
 							href={href(link.id)}
-							class="nav-link group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium"
-							class:text-accent={active === link.id}
-							class:text-muted={active !== link.id}
+							class="link"
+							class:link--active={active === link.id}
+							aria-current={active === link.id ? 'location' : undefined}
+							onpointerenter={() => (hovered = link.id)}
+							onfocus={() => (hovered = link.id)}
+							onblur={() => (hovered = null)}
 						>
-							<span class="font-mono text-xs transition-colors duration-200" class:text-accent={active === link.id} class:text-faint={active !== link.id}>0{i + 1}</span>
-							<span class="nav-label transition-colors group-hover:text-ink">{link.label}</span>
-						</a>
-					</li>
-				{/each}
-			</ul>
-		</nav>
-	</div>
-
-	<!-- Bottom section -->
-	<div class="space-y-5">
-		<!-- Resume -->
-		<a
-			href="/resume.pdf"
-			download="Leul_Tesfaye_Resume.pdf"
-			class="group inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-ink"
-		>
-			<Download size={14} class="btn-arrow" />
-			Résumé
-		</a>
-
-		<!-- Socials + theme toggle in one row -->
-		<div class="flex items-center justify-between">
-			<div class="flex items-center gap-3">
-				<a href={GITHUB} target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="text-muted transition-[color,transform] duration-200 hover:-translate-y-0.5 hover:text-accent">
-					<GithubIcon size={17} />
-				</a>
-				<a href="mailto:{EMAIL}" aria-label="Email" class="text-muted transition-[color,transform] duration-200 hover:-translate-y-0.5 hover:text-accent">
-					<Mail size={17} />
-				</a>
-			</div>
-
-			<!-- Single icon toggle — no box, no label -->
-			<button
-				type="button"
-				onclick={toggleTheme}
-				aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-				class="theme-toggle"
-			>
-				<span class="theme-toggle-track">
-					<span class="theme-toggle-thumb" class:theme-toggle-thumb--light={theme === 'light'}>
-						{#if theme === 'dark'}
-							<Moon size={11} />
-						{:else}
-							<Sun size={11} />
-						{/if}
-					</span>
-				</span>
-			</button>
-		</div>
-
-		<p class="font-mono text-[11px] text-faint">© 2026</p>
-	</div>
-</aside>
-
-<!-- ════════ MOBILE: top bar ════════ -->
-<header
-	class="mobile-header fixed inset-x-0 top-0 z-50 lg:hidden"
-	class:border-b={scrolled || menuOpen}
-	class:border-line={scrolled || menuOpen}
-	class:mobile-header--scrolled={scrolled || menuOpen}
->
-	<nav class="flex h-16 items-center justify-between px-5">
-		<a href={onHome ? '#top' : '/'} class="flex items-center gap-2 font-display text-sm font-semibold text-ink">
-			<span class="h-2 w-2 rounded-full bg-accent"></span>
-			Leul Tesfaye
-		</a>
-
-		<div class="flex items-center gap-2">
-			<!-- Compact toggle -->
-			<button
-				type="button"
-				onclick={toggleTheme}
-				aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-				class="theme-toggle"
-			>
-				<span class="theme-toggle-track">
-					<span class="theme-toggle-thumb" class:theme-toggle-thumb--light={theme === 'light'}>
-						{#if theme === 'dark'}
-							<Moon size={11} />
-						{:else}
-							<Sun size={11} />
-						{/if}
-					</span>
-				</span>
-			</button>
-
-			<button
-				type="button"
-				class="icon-action flex h-9 w-9 items-center justify-center rounded-lg text-ink"
-				onclick={() => (menuOpen = !menuOpen)}
-				aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-				aria-expanded={menuOpen}
-			>
-				{#if menuOpen}<X size={19} />{:else}<Menu size={19} />{/if}
-			</button>
-		</div>
-	</nav>
-
-	{#if menuOpen}
-		<div class="mobile-menu-panel border-t border-line">
-			<ul class="flex flex-col px-5 py-2">
-				{#each links as link, i (link.id)}
-					<li>
-						<a
-							href={href(link.id)}
-							onclick={() => (menuOpen = false)}
-							class="flex items-center gap-3 py-3 text-sm font-medium transition-colors"
-							class:text-accent={active === link.id}
-							class:text-ink={active !== link.id}
-						>
-							<span class="font-mono text-xs text-faint">0{i + 1}</span>
 							{link.label}
 						</a>
 					</li>
 				{/each}
 			</ul>
-			<div class="border-t border-line px-5 py-3.5">
-				<a href="/resume.pdf" download="Leul_Tesfaye_Resume.pdf" class="inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-ink">
-					<Download size={13} />
-					Download Résumé
+
+			<span class="divider" aria-hidden="true"></span>
+
+			<div class="actions">
+				<a href={GITHUB} target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="icon-btn">
+					<GithubIcon size={16} />
+				</a>
+				<button
+					type="button"
+					onclick={toggleTheme}
+					aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+					class="icon-btn theme-btn"
+					data-mode={theme}
+				>
+					<span class="theme-icon theme-icon--moon"><Moon size={16} /></span>
+					<span class="theme-icon theme-icon--sun"><Sun size={16} /></span>
+				</button>
+				<a href="/resume.pdf" download="Leul_Tesfaye_Resume.pdf" class="cta">
+					<Download size={14} />
+					Résumé
+				</a>
+			</div>
+		</nav>
+	</div>
+
+	<!-- ════════ MOBILE: section island ════════ -->
+	<div
+		class="island glass mobile-only"
+		class:glass--raised={scrolled || menuOpen}
+		class:island--open={menuOpen}
+		style:width={islandWidth ? `${islandWidth}px` : null}
+		style:height="{islandHeight}px"
+	>
+		<button
+			type="button"
+			class="island-bar"
+			onclick={() => (menuOpen = !menuOpen)}
+			aria-expanded={menuOpen}
+			aria-controls="mobile-menu"
+			aria-label={menuOpen ? 'Close menu' : `Open menu. Current section: ${sectionLabel}`}
+		>
+			<span class="island-bar-inner" bind:clientWidth={barWidth}>
+				<span class="brand-dot"></span>
+				<span class="island-name">Leul</span>
+				<span class="island-sep" aria-hidden="true">·</span>
+				{#key sectionLabel}
+					<span class="island-section">{sectionLabel}</span>
+				{/key}
+			</span>
+			<span class="island-icon" aria-hidden="true">
+				<svg class="island-ring" viewBox="0 0 24 24">
+					<circle cx="12" cy="12" r="9" class="ring-track" />
+					<circle
+						cx="12"
+						cy="12"
+						r="9"
+						class="ring-fill"
+						stroke-dasharray={RING}
+						stroke-dashoffset={RING * (1 - progress)}
+					/>
+				</svg>
+				<span class="island-close"><X size={16} /></span>
+			</span>
+		</button>
+
+		<div id="mobile-menu" class="island-panel" style:width="{openWidth}px" bind:clientHeight={panelHeight} inert={!menuOpen}>
+			<ul class="tiles">
+				{#each links as link, i (link.id)}
+					<li style="--i: {i}">
+						<a
+							href={href(link.id)}
+							onclick={() => (menuOpen = false)}
+							class="tile"
+							class:tile--active={active === link.id}
+							aria-current={active === link.id ? 'location' : undefined}
+						>
+							<span class="tile-num">0{i + 1}</span>
+							{link.label}
+						</a>
+					</li>
+				{/each}
+				<li style="--i: 5">
+					<button type="button" class="tile" onclick={toggleTheme}>
+						<span class="tile-num">{#if theme === 'dark'}<Moon size={13} />{:else}<Sun size={13} />{/if}</span>
+						{theme === 'dark' ? 'Dark' : 'Light'} mode
+					</button>
+				</li>
+			</ul>
+			<div class="island-foot" style="--i: 6">
+				<a href="/resume.pdf" download="Leul_Tesfaye_Resume.pdf" class="cta island-cta">
+					<Download size={15} />
+					Résumé
+				</a>
+				<a href={GITHUB} target="_blank" rel="noopener noreferrer" class="tile tile--github">
+					<GithubIcon size={15} />
+					<ArrowUpRight size={13} class="text-faint" />
 				</a>
 			</div>
 		</div>
-	{/if}
+	</div>
 </header>
 
 <style>
-	/* ── Sidebar ── */
-	.sidebar {
-		background-color: var(--color-canvas);
-		transition: background-color 0.3s ease;
-		/* Named so it stays put during route transitions. */
-		view-transition-name: site-sidebar;
-	}
-
-	/* ── Sliding active highlight ── */
-	.nav-indicator {
-		position: absolute;
+	/* ── Shell: pins the nav to the top and centers it ── */
+	.nav-shell {
+		position: fixed;
 		top: 0;
 		left: 0;
-		width: 100%;
-		border-radius: 0.5rem;
-		background: color-mix(in srgb, var(--color-accent) 11%, transparent);
+		right: 0;
+		z-index: 50;
+		display: flex;
+		justify-content: center;
+		padding: 0.75rem 0.75rem 0;
 		pointer-events: none;
-		transition:
-			transform 0.55s var(--motion-ease-spring),
-			height 0.3s var(--motion-ease-out),
-			opacity 0.2s ease;
+		/* Named so it stays put during route transitions. */
+		view-transition-name: site-nav;
 	}
-	.nav-indicator.instant { transition: opacity 0.2s ease; }
-	.nav-indicator::before {
-		content: '';
-		position: absolute;
-		left: 0;
-		top: 50%;
-		width: 2px;
-		height: 1.25rem;
-		margin-top: -0.625rem;
+	@media (min-width: 1024px) {
+		.nav-shell { padding-top: 1rem; }
+	}
+
+	/* ── Shared frosted surface ── */
+	.glass {
+		pointer-events: auto;
+		border: 1px solid color-mix(in srgb, var(--color-ink) 9%, transparent);
+		background: color-mix(in srgb, var(--color-panel) 70%, transparent);
+		backdrop-filter: blur(16px) saturate(1.4);
+		-webkit-backdrop-filter: blur(16px) saturate(1.4);
+		box-shadow: inset 0 1px 0 color-mix(in srgb, var(--color-ink) 5%, transparent);
+		transition:
+			background-color 0.3s ease,
+			box-shadow 0.3s ease;
+	}
+	.glass--raised {
+		background: color-mix(in srgb, var(--color-panel) 84%, transparent);
+		box-shadow:
+			0 12px 32px -14px rgb(0 0 0 / 0.55),
+			inset 0 1px 0 color-mix(in srgb, var(--color-ink) 6%, transparent);
+	}
+	:global([data-theme='light']) .glass--raised {
+		box-shadow:
+			0 12px 32px -16px rgb(40 30 20 / 0.22),
+			inset 0 1px 0 rgb(255 255 255 / 0.6);
+	}
+
+	/* ════════ Desktop pill ════════ */
+	.nav-pill { border-radius: 9999px; }
+
+	.pill-row {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		padding: 0.3rem 0.3rem 0.3rem 0.95rem;
+	}
+
+	.brand {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
+		padding-right: 0.5rem;
+		font-family: var(--font-display);
+		font-size: 0.9rem;
+		font-weight: 600;
+		letter-spacing: -0.01em;
+		color: var(--color-ink);
+		white-space: nowrap;
+	}
+	.brand-dot {
+		flex: none;
+		width: 0.5rem;
+		height: 0.5rem;
 		border-radius: 9999px;
 		background: var(--color-accent);
+		transition: transform 0.4s var(--motion-ease-spring);
 	}
-	.nav-link { transition: color 0.2s; }
-	.nav-label { display: inline-block; transition: color 0.2s, transform 0.4s var(--motion-ease-spring); }
 	@media (hover: hover) and (pointer: fine) {
-		.nav-link:hover .nav-label { transform: translateX(4px); }
-	}
-	.nav-link:active .nav-label { transform: scale(0.96); transition-duration: 0.12s; }
-	@media (prefers-reduced-motion: reduce) {
-		.nav-indicator { transition: opacity 0.2s ease; }
-		.nav-link:hover .nav-label, .nav-link:active .nav-label { transform: none; }
+		.brand:hover .brand-dot { transform: scale(1.5); }
 	}
 
-	/* ── Mobile header ── */
-	.mobile-header {
-		transition: background-color 0.3s ease;
-		view-transition-name: site-header;
-	}
-	.mobile-header--scrolled {
-		background-color: color-mix(in srgb, var(--color-canvas) 90%, transparent);
-		backdrop-filter: blur(16px);
-		-webkit-backdrop-filter: blur(16px);
+	.divider {
+		width: 1px;
+		height: 1.1rem;
+		margin: 0 0.35rem;
+		background: var(--color-line);
 	}
 
-	/* ── Mobile menu panel ── */
-	.mobile-menu-panel {
-		background-color: color-mix(in srgb, var(--color-canvas) 97%, transparent);
-		backdrop-filter: blur(16px);
-		-webkit-backdrop-filter: blur(16px);
+	.links {
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
+	.link {
+		position: relative;
+		z-index: 1;
+		display: block;
+		padding: 0.5rem 0.85rem;
+		border-radius: 9999px;
+		font-size: 0.84rem;
+		font-weight: 500;
+		color: var(--color-muted);
+		transition: color 0.2s ease;
+	}
+	.link:hover, .link--active { color: var(--color-ink); }
+	.link:focus-visible { outline-offset: 0; }
+
+	.indicator {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		border-radius: 9999px;
+		background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+		pointer-events: none;
+		transition:
+			transform 0.5s var(--motion-ease-spring),
+			width 0.35s var(--motion-ease-out),
+			opacity 0.2s ease;
+	}
+	.indicator.instant { transition: opacity 0.2s ease; }
+	/* A small accent dot marks the section you're actually in. */
+	.indicator::after {
+		content: '';
+		position: absolute;
+		left: 50%;
+		bottom: 0.2rem;
+		width: 0.25rem;
+		height: 0.25rem;
+		margin-left: -0.125rem;
+		border-radius: 9999px;
+		background: var(--color-accent);
+		opacity: 0;
+		transform: scale(0.4);
+		transition: opacity 0.2s ease, transform 0.3s var(--motion-ease-spring);
+	}
+	.indicator.at-active::after { opacity: 1; transform: scale(1); }
+
+	.actions {
+		display: flex;
+		align-items: center;
+		gap: 0.15rem;
+	}
+	.icon-btn {
+		display: grid;
+		place-items: center;
+		width: 2.25rem;
+		height: 2.25rem;
+		border-radius: 9999px;
+		color: var(--color-muted);
+		background: none;
+		border: none;
+		cursor: pointer;
+		transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s var(--motion-ease-out);
+	}
+	.icon-btn:hover {
+		color: var(--color-ink);
+		background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+	}
+	.icon-btn:active { transform: scale(0.92); }
+	.icon-btn:focus-visible { outline-offset: 0; }
+
+	.theme-btn { position: relative; }
+	.theme-icon {
+		position: absolute;
+		inset: 0;
+		display: grid;
+		place-items: center;
+		transition: opacity 0.25s ease, transform 0.45s var(--motion-ease-spring);
+	}
+	.theme-btn[data-mode='dark'] .theme-icon--sun,
+	.theme-btn[data-mode='light'] .theme-icon--moon {
+		opacity: 0;
+		transform: rotate(-90deg) scale(0.5);
 	}
 
-	/* ────────────────────────────────────────────
-	   THEME TOGGLE — pill/track style
-	   ────────────────────────────────────────── */
-	.theme-toggle {
-		min-width: 44px;
-		min-height: 44px;
+	.cta {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		background: none;
-		border: none;
-		padding: 0;
-		cursor: pointer;
+		gap: 0.4rem;
+		height: 2.25rem;
+		margin-left: 0.2rem;
+		padding: 0 0.95rem;
+		border-radius: 9999px;
+		background: var(--color-accent-strong);
+		color: #fff;
+		font-size: 0.82rem;
+		font-weight: 500;
+		white-space: nowrap;
+		transition: background-color 0.2s ease, transform 0.2s var(--motion-ease-out);
 	}
+	.cta:hover { background: color-mix(in srgb, var(--color-accent-strong) 85%, #fff); }
+	.cta:active { transform: scale(0.96); }
 
-	.theme-toggle-track {
+	/* ════════ Mobile island ════════ */
+	.island {
 		position: relative;
-		display: block;
-		width: 2.25rem;  /* 36px */
-		height: 1.25rem; /* 20px */
-		border-radius: 9999px;
-		background-color: color-mix(in srgb, var(--color-ink) 12%, transparent);
-		border: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
-		transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.2s ease;
+		overflow: hidden;
+		border-radius: 22px;
+		transition:
+			width 0.55s var(--island-ease),
+			height 0.55s var(--island-ease),
+			border-radius 0.45s var(--motion-ease-out),
+			background-color 0.3s ease,
+			box-shadow 0.3s ease;
+		--island-ease: cubic-bezier(0.32, 1.25, 0.5, 1);
 	}
+	.island--open { border-radius: 26px; }
 
-	/* Active track tint — accent when light is chosen */
-	:global([data-theme='light']) .theme-toggle-track {
-		background-color: color-mix(in srgb, var(--color-accent) 15%, transparent);
-		border-color: color-mix(in srgb, var(--color-accent) 35%, transparent);
-	}
-
-	.theme-toggle-thumb {
-		position: absolute;
-		top: 50%;
-		left: 0.15rem;
-		transform: translateY(-50%);
-		width: 0.9rem;
-		height: 0.9rem;
-		border-radius: 9999px;
-		background-color: var(--color-faint);
+	.island-bar {
+		position: relative;
 		display: flex;
 		align-items: center;
+		width: 100%;
+		height: 44px;
+		padding: 0;
+		border: none;
+		background: none;
+		color: var(--color-ink);
+		cursor: pointer;
+		-webkit-tap-highlight-color: transparent;
+	}
+	.island-bar:focus-visible { outline-offset: -3px; border-radius: 22px; }
+
+	/* Measured to size the closed island, so it hugs its content as the section label changes. */
+	.island-bar-inner {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0 2.9rem 0 1rem;
+		white-space: nowrap;
+	}
+	.island-name {
+		font-family: var(--font-display);
+		font-size: 0.9rem;
+		font-weight: 600;
+		letter-spacing: -0.01em;
+	}
+	.island-sep { color: var(--color-faint); margin: 0 -0.15rem; }
+	.island-section {
+		font-size: 0.85rem;
+		font-weight: 500;
+		color: var(--color-muted);
+		animation: label-in 0.4s var(--motion-ease-out) both;
+	}
+	@keyframes label-in {
+		from { opacity: 0; transform: translateY(6px); filter: blur(2px); }
+	}
+
+	.island-icon {
+		position: absolute;
+		right: 0.4rem;
+		top: 50%;
+		width: 2rem;
+		height: 2rem;
+		margin-top: -1rem;
+		display: grid;
+		place-items: center;
+	}
+	.island-ring, .island-close {
+		grid-area: 1 / 1;
+		transition: opacity 0.25s ease, transform 0.45s var(--motion-ease-spring);
+	}
+	.island-ring { width: 1.5rem; height: 1.5rem; transform: rotate(-90deg); }
+	.ring-track { fill: none; stroke: var(--color-line); stroke-width: 2.5; }
+	.ring-fill {
+		fill: none;
+		stroke: var(--color-accent);
+		stroke-width: 2.5;
+		stroke-linecap: round;
+		transition: stroke-dashoffset 0.15s linear;
+	}
+	.island-close {
+		display: grid;
+		place-items: center;
+		width: 2rem;
+		height: 2rem;
+		border-radius: 9999px;
+		background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+		opacity: 0;
+		transform: rotate(-90deg) scale(0.5);
+	}
+	.island--open .island-ring { opacity: 0; transform: rotate(0deg) scale(0.5); }
+	.island--open .island-close { opacity: 1; transform: none; }
+
+	.island-panel {
+		position: absolute;
+		top: 44px;
+		left: 0;
+		padding: 0.25rem 0.5rem 0.5rem;
+	}
+	.tiles {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.375rem;
+	}
+	.tiles li, .island-foot {
+		opacity: 0;
+		transform: translateY(-8px) scale(0.97);
+		transition: opacity 0.15s ease, transform 0.3s var(--motion-ease-out);
+	}
+	.island--open .tiles li, .island--open .island-foot {
+		opacity: 1;
+		transform: none;
+		transition-duration: 0.3s, 0.45s;
+		transition-delay: calc(120ms + var(--i) * 30ms);
+	}
+
+	.tile {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: 0.9rem;
+		width: 100%;
+		padding: 0.75rem 0.85rem;
+		border: none;
+		border-radius: 1rem;
+		background: color-mix(in srgb, var(--color-ink) 5%, transparent);
+		color: var(--color-ink);
+		font-size: 0.92rem;
+		font-weight: 500;
+		text-align: left;
+		cursor: pointer;
+		transition: background-color 0.2s ease, transform 0.2s var(--motion-ease-out);
+		-webkit-tap-highlight-color: transparent;
+	}
+	.tile:active { transform: scale(0.96); background: color-mix(in srgb, var(--color-ink) 9%, transparent); }
+	.tile-num {
+		display: flex;
+		align-items: center;
+		height: 0.9rem;
+		font-family: var(--font-mono);
+		font-size: 0.68rem;
+		color: var(--color-faint);
+	}
+	.tile--active {
+		background: color-mix(in srgb, var(--color-accent) 15%, transparent);
+		color: var(--color-accent);
+	}
+	.tile--active .tile-num { color: var(--color-accent); }
+
+	.island-foot {
+		display: flex;
+		gap: 0.375rem;
+		margin-top: 0.375rem;
+	}
+	.island-cta {
+		flex: 1;
+		height: 3rem;
+		margin: 0;
+		border-radius: 1rem;
+		font-size: 0.92rem;
+	}
+	.tile--github {
+		flex-direction: row;
+		align-items: center;
 		justify-content: center;
-		color: var(--color-canvas);
-		transition: transform 0.25s var(--motion-ease-out), background-color 0.25s ease;
+		gap: 0.25rem;
+		width: 4.5rem;
+		height: 3rem;
+		padding: 0;
 	}
 
-	.theme-toggle-thumb--light {
-		transform: translateY(-50%) translateX(1rem);
-		background-color: var(--color-accent);
+	.nav-backdrop {
+		position: fixed;
+		inset: 0;
+		z-index: 49;
+		border: none;
+		background: color-mix(in srgb, var(--color-canvas) 45%, transparent);
+		backdrop-filter: blur(3px);
+		-webkit-backdrop-filter: blur(3px);
+		animation: fade-in 0.3s ease both;
 	}
+	@keyframes fade-in { from { opacity: 0; } }
 
-	@media (hover: hover) and (pointer: fine) {
-		.theme-toggle:hover .theme-toggle-track {
-			border-color: var(--color-accent);
-			box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 14%, transparent);
-		}
+	/* Breakpoint switches live here, not as Tailwind utilities, so the scoped display rules above can't override them. */
+	@media (max-width: 1023px) {
+		.desktop-only { display: none; }
+	}
+	@media (min-width: 1024px) {
+		.mobile-only { display: none; }
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.theme-toggle-thumb { transition: background-color 0.25s ease; }
+		.indicator, .island, .tiles li, .island-foot, .theme-icon, .island-ring, .island-close { transition-duration: 0.01ms; }
+		.island-section { animation: none; }
 	}
 </style>
