@@ -10,7 +10,7 @@ const easeInOut = (t: number) => (t < 0.5 ? 8 * t ** 4 : 1 - (-2 * t + 2) ** 4 /
 
 let stop: (() => void) | undefined;
 
-function animateScrollTo(top: number, target: HTMLElement | null) {
+export function animateScrollTo(top: number, target: HTMLElement | null = null) {
 	stop?.();
 
 	const end = Math.min(Math.max(0, top), document.documentElement.scrollHeight - innerHeight);

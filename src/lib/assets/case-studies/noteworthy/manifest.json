@@ -1,0 +1,67 @@
+{
+  "slug": "noteworthy",
+  "palette": {
+    "base": "#F6F2E9",
+    "accent": "#C58A3B",
+    "ink": "#292927"
+  },
+  "scene": {
+    "file": "scene.webp",
+    "width": 2400,
+    "height": 1351,
+    "alt": "A laptop and tablet display Noteworthy on a sunlit studio desk with sketches and a pencil.",
+    "screens": [
+      {
+        "source": "noteworthy-landing.webp",
+        "corners": [
+          [
+            406,
+            217
+          ],
+          [
+            1302,
+            217
+          ],
+          [
+            1302,
+            759
+          ],
+          [
+            408,
+            767
+          ]
+        ]
+      },
+      {
+        "source": "noteworthy-editor.webp",
+        "corners": [
+          [
+            1496,
+            376
+          ],
+          [
+            2192,
+            388
+          ],
+          [
+            2160,
+            884
+          ],
+          [
+            1457,
+            850
+          ]
+        ]
+      }
+    ]
+  },
+  "backdrop": {
+    "file": "backdrop.webp",
+    "width": 2400,
+    "height": 1350
+  },
+  "prompts": {
+    "scene": "Photorealistic premium case study photograph, wide landscape, slightly elevated studio desk. Laptop and separate tablet side by side, both facing camera, each display a uniform blank pale white rectangle, four corners unobstructed and clearly visible, no screen content. Paper sketches with abstract marks, blank sticky notes and pencil, soft diffused daylight, paper white and graphite with subtle amber. No text, logos, brand marks, readable UI or people.",
+    "backdrop": "Abstract low contrast paper off-white backdrop with extremely subtle fine dotted grid paper texture, warm daylight tonal variation and restrained amber undertones. Calm uniform wide landscape background for text and diagrams, no focal objects, no text, logos or UI."
+  }
+}

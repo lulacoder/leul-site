@@ -53,7 +53,7 @@ Portfolio: /projects/hotel-management
 
 A digital gifting platform in Ethiopia, supporting group and corporate gifting. The platform includes gift campaigns, contributions, recipient management, gift claims, and organization roles and permissions.
 
-Leul built the entire frontend layer of its large admin panel, including routing, API integration, corporate onboarding, user management, dashboards, and role-based UI access. The admin frontend uses React, TypeScript, and Vite, connected to a NestJS API. The backend uses Prisma and PostgreSQL. These are platform technologies; do not claim Leul built the backend or the entire platform.
+Leul built the entire frontend layer of its large admin panel, including routing, API integration, corporate onboarding, user management, dashboards, and role-based UI access. The admin frontend uses React, TypeScript, and Vite, connected to a NestJS API. Kenna shares its platform stack with FixMyAddis, including Next.js, NestJS, Prisma, PostgreSQL, Better Auth, and Redis-backed BullMQ queues. These are platform technologies; do not claim Leul built the backend or the entire platform.
 
 Website: https://w08o4w0k44okk488k0s8o8g8.sanduq.jirtuu.dev/
 Portfolio: /projects/kenna-gifts
@@ -64,6 +64,7 @@ A civic platform where people report city problems in Addis Ababa and track thei
 
 Leul worked as a full-stack developer on features involving both the core backend and the web application frontend, as part of a team. The web app uses Next.js and React. The backend uses NestJS, Prisma, and PostgreSQL, with Better Auth for authentication and BullMQ backed by Redis for background job queues. Do not claim he built the whole platform alone or assign him a specific lead title on this project.
 
+Website: https://fixmyaddis.com/
 Portfolio: /projects/fixmyaddis
 
 ## Visit Oromia
@@ -75,14 +76,18 @@ Portfolio: /projects/visit-oromia
 
 ## Jora Events
 
-An event discovery and ticketing platform for Addis Ababa. The frontend uses React Router with Vite, and the backend uses Laravel. Leul contributed as a member of the core frontend team. Do not claim he built it alone.
+An event discovery and ticketing platform for Addis Ababa. The frontend uses React Router with Vite, and the Laravel backend uses PostgreSQL and Redis. Leul contributed as a member of the core frontend team. Do not claim he built it alone.
 
 Website: https://jora.events/
 Portfolio: /projects/jora-events
 
 ## Other projects and learning
 
-Trending Movies is a solo movie discovery app using Next.js, TypeScript, TMDB, and Tailwind CSS. It includes search, genre filters, movie details, and a locally saved watchlist. The portfolio labels it in development. Portfolio: /projects/trending-movies
+Noteworthy is a workspace for Markdown notes, freeform canvases, and task boards. It uses Next.js, Convex, Better Auth, and Tiptap. Website: https://notes-app-liart-eight.vercel.app/ Portfolio: /projects/noteworthy
+
+FlixQuest is a live streaming web app for movies and series. Leul contributed to its Nuxt and Nitro playback stack, including media proxy integration, quality limits and source recovery. Its player supports HLS, MPEG-DASH, subtitles and manual source selection. Website: https://web.flix.quest/ Portfolio: /projects/flixquest
+
+Leul is currently learning system design, distributed systems, and agentic engineering. He is interested in making requirements and success criteria explicit and building verification systems that check agents’ work against them.
 
 Leul completed Stanford's Machine Learning Specialization on Coursera on August 27, 2025. This is a specialization certificate, not a Stanford degree. His university program is a Bachelor of Software Engineering at Addis Ababa University.
 

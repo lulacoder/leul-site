@@ -12,20 +12,21 @@
 	interface Props {
 		/** Stagger delay, in milliseconds, before the reveal runs. */
 		delay?: number;
+		variant?: 'default' | 'subtle';
 		/** Extra classes forwarded to the wrapper element. */
 		class?: string;
 		/** Content to reveal. */
 		children?: Snippet;
 	}
 
-	let { delay = 0, class: className = '', children }: Props = $props();
+	let { delay = 0, variant = 'default', class: className = '', children }: Props = $props();
 
 	let el: HTMLDivElement | undefined = $state();
 	let armed = $state(false);
 	let revealed = $state(false);
 
 	onMount(() => {
-		if (!el || el.getBoundingClientRect().top < window.innerHeight) return;
+		if (!el || !('IntersectionObserver' in window) || el.getBoundingClientRect().top < window.innerHeight) return;
 		armed = true;
 
 		const observer = new IntersectionObserver(
@@ -48,20 +49,21 @@
 	class={className}
 	class:armed
 	class:revealed
+	class:subtle={variant === 'subtle'}
 	style="--reveal-delay: {delay}ms"
 >
 	{@render children?.()}
 </div>
 
 <style>
-	.armed {
+	.armed:not(.subtle) {
 		opacity: 0;
 		transform: translateY(56px) scale(0.96);
 		filter: blur(8px);
 		will-change: transform, opacity, filter;
 	}
 	/* The transition lives on the revealed state, so arming is instant and only the reveal animates. */
-	.armed.revealed {
+	.armed.revealed:not(.subtle) {
 		opacity: 1;
 		transform: none;
 		filter: none;
@@ -71,7 +73,25 @@
 			transform 1s var(--motion-ease-out) var(--reveal-delay),
 			filter 0.8s var(--motion-ease-out) var(--reveal-delay);
 	}
+	@media (prefers-reduced-motion: no-preference) {
+		.subtle.armed {
+			opacity: 0;
+			transform: translateY(18px);
+		}
+		.subtle.armed.revealed {
+			opacity: 1;
+			transform: none;
+			transition:
+				opacity 360ms var(--motion-ease-out) var(--reveal-delay),
+				transform 480ms var(--motion-ease-out) var(--reveal-delay);
+		}
+		.subtle.armed:focus-within {
+			opacity: 1;
+			transform: none;
+			transition: none;
+		}
+	}
 	@media (prefers-reduced-motion: reduce) {
-		.armed { transform: none; filter: none; }
+		.armed:not(.subtle) { transform: none; filter: none; }
 	}
 </style>

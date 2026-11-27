@@ -1,6 +1,6 @@
 # Project preview assets
 
-The project covers combine generated case-study artwork with each project's visual identity. Older screenshots are no longer displayed on the detail pages. Jora uses the supplied cover and discovery artwork. Generated images are illustrative, not literal screenshots.
+The project covers combine generated case-study artwork with each project's visual identity. Older screenshots are no longer displayed on the detail pages. Jora uses a live homepage screenshot for its cover and the supplied discovery artwork in its gallery. Generated images are illustrative, not literal screenshots.
 
 | Asset | Source |
 | --- | --- |
@@ -8,7 +8,7 @@ The project covers combine generated case-study artwork with each project's visu
 | `src/lib/assets/project-jora-discovery.jpg` | https://jora.events/ |
 | `src/lib/assets/project-fixmyaddis.jpg` | https://h56quunh7xlbthjllrv09o3w.sanduq.jirtuu.dev/ |
 
-The project screenshots were refreshed on October 31, 2026 for Visit Oromia, Jora Events, FixMyAddis, Tripways Hotels, and Resume Analyzer. Square card crops use narrow-viewport captures where available; Jora's card uses a crop of its desktop capture. Tripways also has a narrow-viewport detail image. Kenna's admin screenshot and the existing Trending Movies image remain in use.
+The project screenshots were refreshed on October 31, 2026 for Visit Oromia, Jora Events, FixMyAddis, Tripways Hotels, and Resume Analyzer. Square card crops use narrow-viewport captures where available; Jora's card uses a crop of its desktop capture. Tripways also has a narrow-viewport detail image. Kenna’s admin screenshot remains in use. FlixQuest’s catalog and player screenshots were captured from web.flix.quest. The home capture also appears on the laptop in its case-study cover.
 
 Generated covers use the `*-case-study-v2.webp` sources in `src/lib/assets/`. Their responsive variants are produced by enhanced-img.
 
@@ -19,5 +19,7 @@ Active screenshot and certificate sources live in `src/lib/assets/`. Keep these 
 Components use the generated `sources.webp` with `srcset` and `sizes`, and `img.w`/`img.h` for the image's actual dimensions. Small project thumbnails have separate 56, 112, and 168 pixel variants. Certificate previews load lazily; the full lightbox is only mounted when opened. No manual conversion step is needed.
 
 The locally hosted technology logos in `static/stack/` come from [Simple Icons](https://simpleicons.org/) through its SVG CDN, downloaded on the same date. See the [Simple Icons license](https://github.com/simple-icons/simple-icons/blob/develop/LICENSE.md). Neutral Lucide icons represent technologies without a bundled logo, including Durable Objects and D1.
+
+`nuxt.svg`, `redis.svg`, `clerk.svg`, `prisma.svg` and `betterauth.svg` came from the same Simple Icons CDN on November 25, 2026. Prisma and Better Auth were recoloured to the neutral `#9A9AA4` used by the Next.js mark, because their brand colours disappear on one of the two themes. Tiptap, Nitro, BullMQ and Chapa use neutral Lucide icons.
 
 `static/stack/convex.svg` is the unchanged color symbol from the [official Convex logo bundle](https://www.convex.dev/resources/logos.zip), downloaded on October 1, 2026. See the [Convex brand guidelines](https://www.convex.dev/brand).

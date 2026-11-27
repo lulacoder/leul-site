@@ -1,0 +1,67 @@
+{
+  "slug": "hotel-management",
+  "palette": {
+    "base": "#D7BC95",
+    "accent": "#24483F",
+    "ink": "#202925"
+  },
+  "scene": {
+    "file": "scene.webp",
+    "width": 2400,
+    "height": 1351,
+    "alt": "A laptop and phone on a stone reception desk in a warmly lit boutique hotel lobby.",
+    "screens": [
+      {
+        "source": "project-tripways.jpg",
+        "corners": [
+          [
+            665,
+            260
+          ],
+          [
+            1618,
+            246
+          ],
+          [
+            1582,
+            894
+          ],
+          [
+            616,
+            859
+          ]
+        ]
+      },
+      {
+        "source": "project-tripways-mobile.jpg",
+        "corners": [
+          [
+            1767,
+            402
+          ],
+          [
+            2033,
+            402
+          ],
+          [
+            2030,
+            1021
+          ],
+          [
+            1763,
+            1015
+          ]
+        ]
+      }
+    ]
+  },
+  "backdrop": {
+    "file": "backdrop.webp",
+    "width": 2400,
+    "height": 1351
+  },
+  "prompts": {
+    "scene": "Photorealistic laptop and phone on a stone concierge desk in an upscale boutique hotel lobby, brass details, warm late afternoon light and soft depth of field. Both devices face the camera with blank unobstructed screens. Warm sand, deep teal and dark ink; no text, logos, interface or people.",
+    "backdrop": "Abstract minimal warm sand linen and plaster texture, faint warm gradient with subtle deep teal undertone, low contrast, no focal object, text, logos or interface."
+  }
+}

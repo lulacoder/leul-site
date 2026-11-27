@@ -1,0 +1,46 @@
+{
+  "slug": "flixquest",
+  "palette": {
+    "base": "#100b0d",
+    "accent": "#801b2a",
+    "ink": "#f5eee8"
+  },
+  "scene": {
+    "file": "scene.webp",
+    "width": 2400,
+    "height": 1500,
+    "alt": "FlixQuest’s movie and series catalog on a laptop in a dark home cinema.",
+    "screens": [
+      {
+        "source": "flixquest-home.webp",
+        "corners": [
+          [
+            521,
+            275
+          ],
+          [
+            1876,
+            275
+          ],
+          [
+            1876,
+            1089
+          ],
+          [
+            521,
+            1089
+          ]
+        ]
+      }
+    ]
+  },
+  "backdrop": {
+    "file": "backdrop.webp",
+    "width": 2400,
+    "height": 1350
+  },
+  "prompts": {
+    "scene": "Premium photorealistic case study hero, wide landscape: a laptop on a low table in a dark home cinema, facing camera nearly straight on. Its large screen is a perfectly flat evenly lit blank dark gray rectangle, four corners clearly visible and unobstructed, 16:10 aspect ratio. Popcorn bowl, deep velvet red tones, faint projector haze behind, screen glow illuminates room. No text, logos, UI, posters, people or brand marks.",
+    "backdrop": "Premium abstract dark film grain texture for a movie discovery website backdrop, near black with subtle deep velvet red and faint projector light gradient, extremely low contrast, evenly distributed, no focal object, no text, no logos, no UI, wide landscape."
+  }
+}

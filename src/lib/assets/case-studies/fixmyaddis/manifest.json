@@ -1,0 +1,46 @@
+{
+  "slug": "fixmyaddis",
+  "palette": {
+    "base": "#00574b",
+    "accent": "#a8e6cf",
+    "ink": "#101b19"
+  },
+  "scene": {
+    "file": "scene.webp",
+    "width": 2400,
+    "height": 1520,
+    "alt": "A laptop on a balcony table overlooking a city street at blue hour.",
+    "screens": [
+      {
+        "source": "project-fixmyaddis.jpg",
+        "corners": [
+          [
+            1153,
+            364
+          ],
+          [
+            2170,
+            340
+          ],
+          [
+            2124,
+            1045
+          ],
+          [
+            1091,
+            992
+          ]
+        ]
+      }
+    ]
+  },
+  "backdrop": {
+    "file": "backdrop.webp",
+    "width": 2400,
+    "height": 1350
+  },
+  "prompts": {
+    "scene": "Premium photorealistic portfolio case study hero, wide landscape. A laptop on a cafe balcony table overlooking an East African highland city street at blue hour, soft bokeh streetlights, restrained deep green and mint tones. Laptop facing camera at gentle angle, large flat evenly lit blank light gray screen with all four corners clearly visible, screen aspect ratio 1264:800. No text, logos, UI, people, signs or recognizable landmarks.",
+    "backdrop": "Wide abstract background for a premium civic design case study, calm low-contrast deep forest green topographic contour lines evoking an unlabeled city map, subtle tactile texture, ample even readable space, no focal object, no text, no symbols, no UI."
+  }
+}

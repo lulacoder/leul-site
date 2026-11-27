@@ -1,8 +1,9 @@
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import { projects } from '#lib/projects.js';
 import type { EntryGenerator, PageLoad } from './$types';
 
 export const load: PageLoad = ({ params }) => {
+	if (params.slug === 'trending-movies') redirect(308, '/projects/flixquest');
 	const index = projects.findIndex((p) => p.slug === params.slug);
 	if (index === -1) throw error(404, 'Project not found');
 
@@ -14,6 +15,6 @@ export const load: PageLoad = ({ params }) => {
 };
 
 // Tell the prerenderer which slugs to build (one HTML file per project).
-export const entries: EntryGenerator = () => projects.map((p) => ({ slug: p.slug }));
+export const entries: EntryGenerator = () => [...projects.map((p) => ({ slug: p.slug })), { slug: 'trending-movies' }];
 
 export const prerender = true;

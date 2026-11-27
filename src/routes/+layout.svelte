@@ -4,12 +4,14 @@
 	import '@fontsource-variable/geist/index.css';
 	import '@fontsource-variable/geist-mono/index.css';
 	import '@fontsource-variable/bricolage-grotesque/index.css';
+	import '../fonts/avalance/avalance.css';
 
 	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
 	import { afterNavigate, onNavigate } from '$app/navigation';
 	import { handleAnchorClick } from '#lib/scroll.svelte.js';
 	import { projects } from '#lib/projects.js';
+	import { clearProjectHero } from '#lib/project-hero.js';
 	import Navbar from '#lib/components/Navbar.svelte';
 	import Footer from '#lib/components/Footer.svelte';
 	import ChatWidget from '#lib/components/ChatWidget.svelte';
@@ -81,7 +83,9 @@
 				await navigation.complete;
 			});
 			transition.finished.finally(() => {
-				if (navigationSequence === sequence) delete document.documentElement.dataset.projectTransition;
+				if (navigationSequence !== sequence) return;
+				delete document.documentElement.dataset.projectTransition;
+				clearProjectHero();
 			});
 		});
 	});
@@ -93,8 +97,7 @@
 
 <Navbar {theme} {toggleTheme} />
 
-<!-- Offset content to the right of the fixed left sidebar on desktop. -->
-<div class="lg:pl-60">
+<div>
 	<main>
 		{@render children()}
 	</main>

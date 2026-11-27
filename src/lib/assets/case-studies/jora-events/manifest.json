@@ -1,0 +1,23 @@
+{
+  "slug": "jora-events",
+  "palette": {
+    "base": "#efeee5",
+    "accent": "#d89545",
+    "ink": "#191b19"
+  },
+  "scene": {
+    "file": "scene.webp",
+    "width": 3200,
+    "height": 2000,
+    "alt": "Jora Events featuring Ethio Jazz Night Live at Fendika Cultural Center, with event search below.",
+    "source": "https://jora.events/"
+  },
+  "backdrop": {
+    "file": "backdrop.webp",
+    "width": 2400,
+    "height": 1350
+  },
+  "prompts": {
+    "backdrop": "Abstract low-contrast background for a premium event website, soft warm cream #efeee5 with a faint dusk gradient and diffuse amber light bokeh, subtle texture, evenly quiet composition and readable space. No objects, text, logos or UI. Wide landscape."
+  }
+}

@@ -2,9 +2,20 @@ import oromiaArt from './assets/oromia-case-study-v2.webp?w=480;768;1080;1500&fo
 import fixMyAddisArt from './assets/fixmyaddis-case-study-v2.webp?w=480;768;1080;1500&format=webp&quality=85&enhanced';
 import tripwaysArt from './assets/tripways-case-study-v2.webp?w=480;768;1080;1500&format=webp&quality=85&enhanced';
 import kennaArt from './assets/kenna-case-study-v2.webp?w=480;768;1080;1500&format=webp&quality=85&enhanced';
-import moviesArt from './assets/movies-case-study-v2.webp?w=480;768;1080;1500&format=webp&quality=85&enhanced';
-import jora from './assets/jora-cover-v2.webp?w=480;768;1080;1600;2000&format=webp&quality=85&enhanced';
+import flixquestHome from './assets/flixquest-home.webp?w=480;768;1080;1402&format=webp&quality=85&enhanced';
+import flixquestPlayer from './assets/flixquest-player.webp?w=480;768;1080;1402&format=webp&quality=85&enhanced';
+import flixquestThumbnail from './assets/flixquest-home.webp?w=160;240;320&format=webp&quality=85&enhanced';
+import noteworthyLanding from './assets/noteworthy-landing.webp?w=480;768;1080;1600;1920&format=webp&quality=85&enhanced';
+import noteworthyEditor from './assets/noteworthy-editor.webp?w=480;768;1080;1600;1920&format=webp&quality=85&enhanced';
+import noteworthyThumbnail from './assets/noteworthy-cover.webp?w=160;240;320&format=webp&quality=85&enhanced';
+import jora from './assets/case-studies/jora-events/scene.webp?w=480;768;1080;1600&format=webp&quality=85&enhanced';
 import joraDiscover from './assets/jora-discover-v2.webp?w=480;768;1080;1600;2000&format=webp&quality=85&enhanced';
+
+/** One image in a project's gallery and full-screen viewer. */
+export interface GalleryImage {
+	image: typeof oromiaArt;
+	alt: string;
+}
 
 /** Shared by the home page and the prerendered project pages. */
 export interface Project {
@@ -21,12 +32,19 @@ export interface Project {
 	live: string | null;
 	github: string | null;
 	image: typeof oromiaArt;
+	imageAlt?: string;
+	/** Short name for the main image in the case-study gallery's filmstrip. */
+	imageLabel?: string;
+	/** The main image is the case-study scene itself, so the gallery shouldn't show it twice. */
+	imageIsScene?: boolean;
 	/** Square phone-viewport capture used by carousel and compact grid cards. */
 	cardImage?: typeof oromiaArt;
-	secondaryImage?: typeof oromiaArt;
+	secondaryImage?: { image: typeof oromiaArt; alt: string; label: string };
 	thumbnail?: typeof oromiaArt;
 	featured?: boolean;
 }
+
+const kennaAndFixMyAddisStack = ['TypeScript', 'React', 'Next.js', 'NestJS', 'Prisma', 'PostgreSQL', 'Better Auth', 'BullMQ', 'Redis'];
 
 export const projects: Project[] = [
 	{
@@ -55,14 +73,16 @@ export const projects: Project[] = [
 		tags: ['Events', 'Frontend', 'Team project'],
 		description: 'Event discovery and ticketing for Addis Ababa.',
 		overview: 'An events platform for discovering events in Addis Ababa, getting tickets, and connecting with organizers.',
-		stack: ['React Router', 'Vite', 'Laravel'],
-		stackDescription: 'The frontend uses React Router with Vite. Laravel provides the backend for the event discovery and ticketing platform.',
+		stack: ['React Router', 'Vite', 'Laravel', 'PostgreSQL', 'Redis'],
+		stackDescription: 'The frontend uses React Router with Vite. The Laravel backend uses PostgreSQL and Redis.',
 		contributions: ['Contributed to the platform as a member of the core frontend team.'],
 		status: 'Live',
 		live: 'https://jora.events/',
 		github: null,
 		image: jora,
-		secondaryImage: joraDiscover,
+		imageAlt: 'Jora’s live homepage featuring Ethio Jazz Night Live and event search in Addis Ababa',
+		imageIsScene: true,
+		secondaryImage: { image: joraDiscover, alt: 'Jora Events discovery, categories and event details', label: 'Discover' },
 		featured: true
 	},
 	{
@@ -72,14 +92,41 @@ export const projects: Project[] = [
 		tags: ['Civic tech', 'Backend', 'Web app'],
 		description: 'Report city issues and track their progress across Addis Ababa.',
 		overview: 'A platform where people report problems across Addis Ababa and follow their progress until they are resolved.',
-		stack: ['Next.js', 'NestJS', 'Better Auth', 'Redis', 'BullMQ'],
+		stack: kennaAndFixMyAddisStack,
 		stackDescription: 'The web frontend uses Next.js, with NestJS on the backend and Better Auth for authentication. BullMQ uses Redis to run background job queues.',
 		contributions: ['Contributed to the core backend as part of the team.', 'Worked on the web app frontend.'],
 		status: 'Live',
-		live: 'https://h56quunh7xlbthjllrv09o3w.sanduq.jirtuu.dev/',
+		live: 'https://fixmyaddis.com/',
 		github: null,
 		image: fixMyAddisArt,
 		featured: true
+	},
+	{
+		slug: 'noteworthy',
+		name: 'Noteworthy',
+		role: 'Full-stack developer',
+		tags: ['Next.js', 'Convex', 'Note-taking'],
+		description: 'A workspace for Markdown notes, visual canvases, and task boards.',
+		overview: 'Noteworthy brings writing and planning into one workspace. Write and organize notes, embed them on a freeform canvas, or track tasks on a board.',
+		stack: ['Next.js', 'TypeScript', 'Convex', 'Better Auth', 'Tiptap', 'Tailwind CSS'],
+		stackDescription: 'Next.js, TypeScript, and Tailwind CSS power the interface, with Tiptap for rich-text editing. Convex handles real-time data and Better Auth handles sign-in.',
+		contributions: [
+			'Built rich-text note editing with Markdown support, tags, and search.',
+			'Integrated real-time sync and added note version history.',
+			'Built freeform canvases and task boards for visual planning.'
+		],
+		status: 'Live',
+		live: 'https://notes-app-liart-eight.vercel.app/',
+		github: 'https://github.com/lulacoder/Notes-app-for-reals',
+		image: noteworthyLanding,
+		imageAlt: 'Noteworthy landing page with a visual canvas for a studio website project',
+		imageLabel: 'Landing',
+		secondaryImage: {
+			image: noteworthyEditor,
+			alt: 'Noteworthy landing page showing a rich-text note with a checklist and inspiration photo',
+			label: 'Editor'
+		},
+		thumbnail: noteworthyThumbnail
 	},
 	{
 		slug: 'hotel-management',
@@ -104,11 +151,11 @@ export const projects: Project[] = [
 		slug: 'kenna-gifts',
 		name: 'Kenna Gifts',
 		role: 'Frontend contributor',
-		tags: ['React', 'Vite', 'NestJS', 'TypeScript'],
+		tags: ['React', 'Next.js', 'NestJS', 'TypeScript'],
 		description: 'Admin frontend for a corporate gifting platform.',
 		overview: "A corporate gifting platform for Ethiopia. I built the admin frontend as a React app connected to a NestJS API.",
-		stack: ['React', 'Vite', 'NestJS', 'TypeScript'],
-		stackDescription: 'The admin frontend uses React, TypeScript, and Vite, connected to a NestJS API.',
+		stack: kennaAndFixMyAddisStack,
+		stackDescription: 'The React admin panel connects to a NestJS API. The platform uses Next.js, Better Auth for sign-in, Prisma with PostgreSQL for storage, and BullMQ with Redis for background jobs.',
 		contributions: [
 			'Built the admin app, routing, and API integration.',
 			'Implemented corporate onboarding and user management.',
@@ -120,23 +167,27 @@ export const projects: Project[] = [
 		image: kennaArt,
 	},
 	{
-		slug: 'trending-movies',
-		name: 'Trending Movies',
-		role: 'Frontend developer, solo',
-		tags: ['Next.js', 'TypeScript', 'TMDB', 'Tailwind CSS'],
-		description: 'Movie discovery with search, genre filters, and a saved watchlist.',
-		overview: 'A movie discovery app powered by TMDB, with server-rendered detail pages and a watchlist saved locally without an account.',
-		stack: ['Next.js', 'Tailwind CSS', 'TMDB API'],
-		stackDescription: 'The app uses Next.js and Tailwind CSS. The TMDB API supplies movie information for discovery, search, and detail pages.',
+		slug: 'flixquest',
+		name: 'FlixQuest',
+		role: 'Full-stack developer',
+		tags: ['Video streaming', 'Movies & series', 'Playback'],
+		description: 'A movie and series catalog with a built-in streaming player.',
+		overview: 'Pick a film or an episode and watch it in the same browser tab. FlixQuest brings the catalog, subtitles, quality controls and source selection into one viewing experience.',
+		stack: ['Nuxt', 'Vue', 'TypeScript', 'Nitro', 'HLS', 'MPEG-DASH'],
+		stackDescription: 'Nuxt and Vue render the catalog and watch screen. Nitro retrieves metadata from TMDB and resolves playback sources. The player uses hls.js, dash.js or native video according to the stream format.',
 		contributions: [
-			'Built the Next.js app and typed TMDB integration.',
-			'Added trending carousels, genre filters, and debounced search.',
-			'Implemented a persistent watchlist and loading states.'
+			'Built the playback API’s source lookups, trying sources in order and cancelling stale requests.',
+			'Built the gateway that checks each media request against the viewing session and its view limits.',
+			'Wrote the relay that rewrites HLS playlists into signed links, and timed renewal so long sessions get a fresh link before the old one expires.'
 		],
-		status: 'In development',
-		live: 'https://trending-movies-iota.vercel.app/',
-		github: 'https://github.com/lulacoder/Trending-Movies',
-		image: moviesArt,
+		status: 'Live',
+		live: 'https://web.flix.quest/',
+		github: null,
+		image: flixquestHome,
+		imageAlt: 'FlixQuest home with The Rings of Power featured above the weekly movie chart',
+		imageLabel: 'Home',
+		secondaryImage: { image: flixquestPlayer, alt: 'Project Hail Mary paused in FlixQuest with the seek bar, subtitle toggle and player settings visible', label: 'Player' },
+		thumbnail: flixquestThumbnail
 	}
 ];
 
