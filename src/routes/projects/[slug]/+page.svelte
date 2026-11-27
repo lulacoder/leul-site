@@ -35,7 +35,11 @@
 	const frameSizes = '(min-width: 1392px) 1072px, (min-width: 1024px) calc(100vw - 320px), (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)';
 	const pad = (n: number) => String(n).padStart(2, '0');
 
-	let frame = $state(0);
+	// SvelteKit reuses this component when going from one project to another, so the
+	// index has to reset in the same update that swaps the frames. Resetting it in an
+	// $effect ran one render too late: a 3-image project left on its 3rd image made
+	// the next 2-image project read frames[2].alt, which crashed into a 500.
+	let frame = $derived((project.slug, 0));
 	/** Cycles through the frames until the visitor picks one themselves. */
 	let autoplay = $state(true);
 	let inView = $state(false);
@@ -45,7 +49,6 @@
 
 	$effect(() => {
 		project.slug;
-		frame = 0;
 		autoplay = !matchMedia('(prefers-reduced-motion: reduce)').matches;
 	});
 
